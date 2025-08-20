@@ -247,6 +247,7 @@
         <div class="sub-tabs-container">
             <button class="sub-tab active">NORMAL ITEMS</button>
             <button class="sub-tab">NON-NORMAL ITEMS</button>
+            <button class="sub-tab">PREPARATION ITEMS</button>
         </div>
         
         <div class="page-content">
@@ -276,6 +277,22 @@
                         <a href="abort-mission.html" class="home-nav-tab">
                             <span class="tab-title">Abort Mission</span>
                             <span class="tab-description">Procedure for aborting the mission.</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="page">
+                    <div class="home-nav-container">
+                        <a href="#" class="home-nav-tab">
+                            <span class="tab-title">EQUIPMENT INSPECTION</span>
+                            <span class="tab-description">Verify all equipment is present and functional.</span>
+                        </a>
+                        <a href="#" class="home-nav-tab">
+                            <span class="tab-title">SITE PREPARATION</span>
+                            <span class="tab-description">Prepare deployment site and safety equipment.</span>
+                        </a>
+                        <a href="#" class="home-nav-tab">
+                            <span class="tab-title">PERSONNEL BRIEFING</span>
+                            <span class="tab-description">Brief team on mission objectives and safety.</span>
                         </a>
                     </div>
                 </div>
@@ -361,7 +378,7 @@
                 currentZoom = savedZoom;
                 applyZoom(currentZoom);
 
-                // Show the first page by default
+                // Show the first page by default (NORMAL ITEMS)
                 showPage(0);
             }
 

@@ -175,6 +175,10 @@
             transition: transform 0.4s ease-in-out;
         }
         
+        .scroll-wrapper table {
+            padding-bottom: 300px; /* Extra padding to prevent last items being cut off */
+        }
+        
         .page {
             display: none;
         }
@@ -666,6 +670,7 @@
                 const contentHeight = activeWrapper.scrollHeight;
                 const containerHeight = pageContent.clientHeight;
                 const currentScroll = scrollPositions[currentPage];
+                const footerBuffer = 150;
                 
                 if (contentHeight <= containerHeight) {
                     scrollUpBtn.disabled = true;
@@ -674,8 +679,7 @@
                 }
 
                 scrollUpBtn.disabled = currentScroll === 0;
-                
-                const maxScroll = -(contentHeight - containerHeight);
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
                 scrollDownBtn.disabled = currentScroll <= maxScroll;
             }
 
@@ -694,15 +698,10 @@
                     newScrollY += scrollStep;
                 }
 
-                // A static buffer to ensure the last item is always visible above the footer.
+                // Add extra buffer to ensure content is never cut off by footer
                 const footerBuffer = 150; 
-                let maxScroll = -(contentHeight - containerHeight + footerBuffer);
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
                 
-                // Ensure the maxScroll doesn't go positive if the content is short.
-                if (maxScroll > 0) {
-                    maxScroll = 0;
-                }
-
                 newScrollY = Math.max(newScrollY, maxScroll);
                 newScrollY = Math.min(newScrollY, 0);
 

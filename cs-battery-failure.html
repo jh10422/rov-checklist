@@ -137,6 +137,10 @@
             transform: translateY(0);
             transition: transform 0.4s ease-in-out;
         }
+        
+        .scroll-wrapper table {
+            padding-bottom: 300px; /* Extra padding to prevent last items being cut off */
+        }
 
         .page {
             display: block;
@@ -245,8 +249,13 @@
             font-size: 1.1em;
         }
 
-        .options-row td, .action-row td {
+        .options-row td {
             padding-left: 58px;
+        }
+        
+        .action-row td {
+            padding-left: 58px;
+            text-align: center;
         }
 
         .option-btn, .action-btn {
@@ -383,16 +392,14 @@
                             </tr>
 
                             <!-- Path for "No" to Q1 -->
-                            <tr class="checklist-item conditional" data-path="q1-no" data-reveals="q1-no-actions">
+                            <tr class="checklist-item conditional" data-path="q1-no" id="battery-power-button-item">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Power Button</span><span class="dots"></span><span class="item-status">HOLD for 5 Seconds</span></td>
                             </tr>
-                            <tr class="instruction conditional" id="q1-no-actions" data-path="q1-no">
-                                <td colspan="2">If battery screen is still OFF, try 3 more times:</td>
+                            <!-- These instructions only show when Battery Power Button is checked -->
+                            <tr class="instruction" id="battery-instructions" style="display: none;">
+                                <td colspan="2">If battery screen is still OFF, try 3 more times: If ON, Re-Select YES on the item above. If STILL OFF:</td>
                             </tr>
-                             <tr class="instruction conditional" data-path="q1-no" id="q1-no-actions2">
-                                <td colspan="2">If ON, Re-Select YES on the item above. If STILL OFF:</td>
-                            </tr>
-                            <tr class="action-row conditional" data-path="q1-no" id="q1-no-actions3">
+                            <tr class="action-row" id="battery-abort-action" style="display: none;">
                                <td colspan="2">
                                    <a href="abort-mission.html" class="action-btn">GO TO ABORT MISSION CHECKLIST</a>
                                </td>
@@ -428,23 +435,21 @@
                                 </td>
                             </tr>
 
-                            <!-- Path for "No" to Q3 -->
-                            <tr class="checklist-item conditional" data-path="q3-no" data-reveals="q3-no-actions">
+                            <!-- Path for "No" to Q3 - ONLY the troubleshooting items, NO automatic instructions -->
+                            <tr class="checklist-item conditional" data-path="q3-no" id="q3-battery-off-item">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Power Button</span><span class="dots"></span><span class="item-status">HOLD until OFF</span></td>
                             </tr>
-                             <tr class="checklist-item conditional" data-path="q3-no" data-reveals="q3-no-actions">
+                             <tr class="checklist-item conditional" data-path="q3-no" id="q3-battery-on-item">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Power Button</span><span class="dots"></span><span class="item-status">HOLD until ON</span></td>
                             </tr>
-                             <tr class="checklist-item conditional" data-path="q3-no" data-reveals="q3-no-actions">
+                             <tr class="checklist-item conditional" data-path="q3-no" id="q3-dc-output-item">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">DC Output</span><span class="dots"></span><span class="item-status">Set ON, Set to 12V / 5A</span></td>
                             </tr>
-                            <tr class="instruction conditional" id="q3-no-actions" data-path="q3-no">
-                                <td colspan="2">If DC Light is still OFF, try 3 more times:</td>
+                            <!-- These Q3 instructions only show when all Q3 troubleshooting items are checked -->
+                            <tr class="instruction" id="q3-instructions" style="display: none;">
+                                <td colspan="2">If DC Light is still OFF, try 3 more times: If ON, Re-Select YES on the item above. If STILL OFF:</td>
                             </tr>
-                            <tr class="instruction conditional" data-path="q3-no" id="q3-no-actions2">
-                                <td colspan="2">If ON, Re-Select YES on the item above. If STILL OFF:</td>
-                            </tr>
-                            <tr class="action-row conditional" data-path="q3-no" id="q3-no-actions3">
+                            <tr class="action-row" id="q3-abort-action" style="display: none;">
                                <td colspan="2"><a href="abort-mission.html" class="action-btn">GO TO ABORT MISSION CHECKLIST</a></td>
                             </tr>
 
@@ -542,6 +547,7 @@
             function updateScrollState() {
                 const contentHeight = scrollWrapper.scrollHeight;
                 const containerHeight = pageContent.clientHeight;
+                const footerBuffer = 150;
                 
                 if (contentHeight <= containerHeight) {
                     scrollUpBtn.disabled = true;
@@ -550,7 +556,8 @@
                 }
 
                 scrollUpBtn.disabled = scrollPosition === 0;
-                scrollDownBtn.disabled = scrollPosition <= -(contentHeight - containerHeight);
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
+                scrollDownBtn.disabled = scrollPosition <= maxScroll;
             }
 
             function scrollContent(direction, amount = null) {
@@ -565,7 +572,11 @@
                     newScrollY += scrollStep;
                 }
 
-                newScrollY = Math.max(newScrollY, -(contentHeight - containerHeight));
+                // Add extra buffer to ensure content is never cut off by footer
+                const footerBuffer = 150; 
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
+                
+                newScrollY = Math.max(newScrollY, maxScroll);
                 newScrollY = Math.min(newScrollY, 0);
 
                 scrollPosition = newScrollY;
@@ -575,7 +586,6 @@
 
             scrollUpBtn.addEventListener('click', () => scrollContent('up'));
             scrollDownBtn.addEventListener('click', () => scrollContent('down'));
-
 
             // --- CHECKLIST LOGIC ---
             function checkPrerequisites() {
@@ -610,6 +620,79 @@
                         item.classList.toggle('checked');
                         updateProgress();
 
+                        // Special handling for the specific Battery Power Button item (Q1)
+                        if (item.id === 'battery-power-button-item') {
+                            const instructionElements = [
+                                document.getElementById('battery-instructions'),
+                                document.getElementById('battery-abort-action')
+                            ];
+                            
+                            // Get the first question's option buttons
+                            const q1OptionsRow = document.querySelector('[data-question="q1"]');
+                            const q1Buttons = q1OptionsRow.querySelectorAll('.option-btn');
+                            
+                            if (item.classList.contains('checked')) {
+                                // Show the instructions when checked
+                                instructionElements.forEach(el => {
+                                    if (el) el.style.display = 'table-row';
+                                });
+                                
+                                // Re-enable the YES/NO buttons so user can select YES if battery comes back on
+                                q1Buttons.forEach(btn => {
+                                    btn.disabled = false;
+                                    btn.classList.remove('selected');
+                                });
+                                q1OptionsRow.classList.remove('selection-made');
+                                
+                            } else {
+                                // Hide the instructions when unchecked
+                                instructionElements.forEach(el => {
+                                    if (el) el.style.display = 'none';
+                                });
+                            }
+                        }
+
+                        // Check if any of the Q3 troubleshooting items were clicked
+                        if (item.id === 'q3-battery-off-item' || item.id === 'q3-battery-on-item' || item.id === 'q3-dc-output-item') {
+                            // Check if all three Q3 troubleshooting items are checked
+                            const q3Item1 = document.getElementById('q3-battery-off-item');
+                            const q3Item2 = document.getElementById('q3-battery-on-item');
+                            const q3Item3 = document.getElementById('q3-dc-output-item');
+                            
+                            if (q3Item1 && q3Item2 && q3Item3 &&
+                                q3Item1.classList.contains('checked') && 
+                                q3Item2.classList.contains('checked') && 
+                                q3Item3.classList.contains('checked')) {
+                                
+                                // Show Q3 troubleshooting instructions
+                                document.getElementById('q3-instructions').style.display = 'table-row';
+                                document.getElementById('q3-abort-action').style.display = 'table-row';
+                                
+                                // Re-enable Q3 YES/NO buttons
+                                const q3OptionsRow = document.querySelector('[data-question="q3"]');
+                                if (q3OptionsRow) {
+                                    const q3Buttons = q3OptionsRow.querySelectorAll('.option-btn');
+                                    q3Buttons.forEach(btn => {
+                                        btn.disabled = false;
+                                        btn.classList.remove('selected');
+                                    });
+                                    q3OptionsRow.classList.remove('selection-made');
+                                }
+                                
+                                // Auto-scroll to show the new instructions
+                                setTimeout(() => {
+                                    updateScrollState();
+                                    const abortButton = document.getElementById('q3-abort-action');
+                                    const itemRect = abortButton.getBoundingClientRect();
+                                    const containerRect = pageContent.getBoundingClientRect();
+                                    if (itemRect.bottom > containerRect.bottom - 100) { // Extra margin from bottom
+                                        const scrollAmount = itemRect.bottom - containerRect.bottom + 150; // More buffer
+                                        scrollContent('down', scrollAmount);
+                                    }
+                                }, 100);
+                            }
+                        }
+
                         const prereqFor = item.dataset.prereqFor;
                         if (prereqFor) {
                             const allPrereqs = document.querySelectorAll(`[data-prereq-for="${prereqFor}"]`);
@@ -626,17 +709,6 @@
                                     }
                                 }, 100);
                             }
-                        }
-                        
-                        const reveals = item.dataset.reveals;
-                        if(reveals) {
-                            const allReveals = document.querySelectorAll(`[data-reveals="${reveals}"]`);
-                             const allMet = [...allReveals].every(pr => pr.classList.contains('checked'));
-                             if(allMet){
-                                 document.getElementById(reveals).style.display = 'table-row';
-                                 document.getElementById(reveals + '2').style.display = 'table-row';
-                                 document.getElementById(reveals + '3').style.display = 'table-row';
-                             }
                         }
                     });
                 }
@@ -658,6 +730,22 @@
                     e.target.classList.add('selected');
                     questionRow.classList.add('selection-made');
                     questionRow.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+                    
+                    // Hide battery instructions when YES is selected for question 1
+                    if (questionId === 'q1' && choice === 'yes') {
+                        const batteryInstructions = document.getElementById('battery-instructions');
+                        const batteryAbortAction = document.getElementById('battery-abort-action');
+                        if (batteryInstructions) batteryInstructions.style.display = 'none';
+                        if (batteryAbortAction) batteryAbortAction.style.display = 'none';
+                    }
+                    
+                    // Hide Q3 troubleshooting instructions when YES is selected for question 3
+                    if (questionId === 'q3' && choice === 'yes') {
+                        const q3Instructions = document.getElementById('q3-instructions');
+                        const q3AbortAction = document.getElementById('q3-abort-action');
+                        if (q3Instructions) q3Instructions.style.display = 'none';
+                        if (q3AbortAction) q3AbortAction.style.display = 'none';
+                    }
                     
                     document.querySelectorAll(`[data-path]`).forEach(el => {
                        if(el.dataset.path.startsWith(questionId) && el.dataset.path !== `${questionId}-${choice}`) {

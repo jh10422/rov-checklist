@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROV Checklist - HOME</title>
+    <style>
+        :root {
+            --display-bg: #000000;
+            --text-color: #FFFFFF;
+            --dim-text-color: #999;
+            --complete-color: #00ff7f;
+            --border-color: #333333;
+            --note-color: #d0a0d0;
+            --danger-color: #ff4d4d;
+            --inactive-tab-bg: #444;
+            --active-tab-bg: #777;
+            --inactive-checkbox-bg: #5a5a6a;
+        }
+
+        body.light-mode {
+            --display-bg: #FFFFFF;
+            --text-color: #000000;
+            --dim-text-color: #666666;
+            --border-color: #DDDDDD;
+            --note-color: #550055;
+            --inactive-tab-bg: #EEEEEE;
+            --active-tab-bg: #CCCCCC;
+            --inactive-checkbox-bg: #CCCCCC;
+        }
+
+        body {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            background-color: var(--display-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 1rem;
+            font-size: 22px; 
+            font-weight: 500;
+            line-height: 1.6; 
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cline x1='16' y1='4' x2='16' y2='28' stroke='%239400D3' stroke-width='3'/%3E%3Cline x1='4' y1='16' x2='28' y2='16' stroke='%239400D3' stroke-width='3'/%3E%3C/svg%3E") 16 16, crosshair;
+            transition: background-color 0.3s, color 0.3s, zoom 0.2s;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            border: 2px solid var(--border-color);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            height: 850px; /* Fixed height */
+            box-sizing: border-box;
+        }
+
+        header {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 0.5rem;
+            flex-shrink: 0;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2rem; 
+            margin: 0;
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .sub-tabs-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 5px;
+            margin-bottom: 1rem;
+            flex-shrink: 0;
+        }
+
+        .sub-tab {
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 0;
+            color: var(--dim-text-color);
+            font-family: inherit;
+            font-size: 1.2rem;
+            font-weight: 500;
+            padding: 0.75rem;
+            cursor: inherit;
+            text-transform: uppercase;
+            transition: color 0.2s, background-color 0.2s;
+            flex-grow: 1;
+            text-align: center;
+        }
+        
+        .sub-tab:hover:not(.active) {
+            background-color: var(--active-tab-bg);
+            color: var(--text-color);
+        }
+
+        .sub-tab.active {
+            background-color: var(--active-tab-bg);
+            color: var(--text-color);
+        }
+        
+        .page-content {
+            flex-grow: 1;
+            overflow: hidden;
+            border-top: 2px solid var(--border-color);
+            padding: 1rem 0;
+            position: relative;
+            display: flex;
+        }
+        
+        .scroll-wrapper {
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+        }
+
+        .home-nav-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            gap: 2rem;
+        }
+
+        .home-nav-tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 80%;
+            padding: 2.5rem;
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            text-decoration: none;
+            cursor: inherit;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+            text-align: center;
+        }
+
+        .home-nav-tab:hover {
+            background-color: var(--active-tab-bg);
+            border-color: var(--note-color);
+        }
+
+        .home-nav-tab .tab-title {
+            font-size: 1.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .home-nav-tab .tab-description {
+            font-size: 1rem;
+            color: var(--dim-text-color);
+            font-weight: 400;
+        }
+        
+        .theme-footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 1rem;
+            text-transform: uppercase;
+            font-size: 1.2em; 
+            flex-shrink: 0;
+            margin-top: auto;
+        }
+
+        .footer-btn {
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 0;
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            cursor: inherit;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .footer-btn:hover:not(:disabled) {
+            background-color: var(--active-tab-bg);
+        }
+
+        .scroll-controls {
+            flex-shrink: 0;
+            width: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        .scroll-btn {
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 1.5rem;
+            width: 40px;
+            height: 48%;
+            cursor: inherit;
+        }
+        .scroll-btn:hover:not(:disabled) {
+            background-color: var(--active-tab-bg);
+        }
+        .scroll-btn:disabled {
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="light-mode">
+
+    <div class="container">
+        <header>
+            <h1>► HOME ◄</h1>
+        </header>
+
+        <div class="sub-tabs-container">
+            <button class="sub-tab active">NORMAL ITEMS</button>
+            <button class="sub-tab">NON-NORMAL ITEMS</button>
+        </div>
+        
+        <div class="page-content">
+            <div class="scroll-wrapper">
+                <div class="page active">
+                    <div class="home-nav-container">
+                        <a href="pre-flight.html" class="home-nav-tab">
+                            <span class="tab-title">PRE-FLIGHT</span>
+                            <span class="tab-description">Complete before vehicle deployment.</span>
+                        </a>
+                        <a href="during-flight.html" class="home-nav-tab">
+                            <span class="tab-title">DURING-FLIGHT</span>
+                            <span class="tab-description">Procedures for vehicle operation.</span>
+                        </a>
+                        <a href="post-flight.html" class="home-nav-tab">
+                            <span class="tab-title">POST-FLIGHT</span>
+                            <span class="tab-description">After vehicle retrieval.</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="page">
+                     <div class="home-nav-container">
+                        <a href="cs-battery-failure.html" class="home-nav-tab">
+                            <span class="tab-title">Control Station Battery Failure</span>
+                            <span class="tab-description">Procedure for control station power loss.</span>
+                        </a>
+                        <a href="abort-mission.html" class="home-nav-tab">
+                            <span class="tab-title">Abort Mission</span>
+                            <span class="tab-description">Procedure for aborting the mission.</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-controls">
+                <button id="scroll-up-btn" class="scroll-btn" disabled>▲</button>
+                <button id="scroll-down-btn" class="scroll-btn" disabled>▼</button>
+            </div>
+        </div>
+        
+        <footer class="theme-footer">
+            <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
+            <span style="padding: 0 10px;">ZOOM</span>
+            <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
+            <span style="width: 20px;"></span>
+            <button id="theme-toggle" class="footer-btn">DARK MODE</button>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const zoomInBtn = document.getElementById('zoom-in-btn');
+            const zoomOutBtn = document.getElementById('zoom-out-btn');
+            
+            const pages = document.querySelectorAll('.page');
+            const subTabs = document.querySelectorAll('.sub-tab');
+
+            function showPage(pageIndex) {
+                pages.forEach((page, index) => {
+                    page.classList.toggle('active', index === pageIndex);
+                });
+                subTabs.forEach((tab, index) => {
+                    tab.classList.toggle('active', index === pageIndex);
+                });
+            }
+
+            subTabs.forEach((tab, index) => {
+                tab.addEventListener('click', () => {
+                    showPage(index);
+                });
+            });
+
+            // --- ZOOM FUNCTIONALITY ---
+            let currentZoom = 1.0;
+
+            function applyZoom(zoomLevel) {
+                body.style.zoom = zoomLevel;
+            }
+
+            function saveAndApplyZoom(zoomLevel) {
+                const clampedZoom = Math.max(0.5, Math.min(zoomLevel, 2.0));
+                currentZoom = clampedZoom;
+                applyZoom(currentZoom);
+                localStorage.setItem('rovChecklistZoom', currentZoom);
+            }
+
+            zoomInBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom + 0.1));
+            zoomOutBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom - 0.1));
+
+            // --- THEME FUNCTIONALITY ---
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : 'dark-mode';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+                localStorage.setItem('theme', currentTheme);
+            });
+
+            // --- INITIAL LOAD ---
+            function initialize() {
+                // Load saved theme
+                const savedTheme = localStorage.getItem('theme') || 'light-mode';
+                if (savedTheme === 'dark-mode') {
+                    body.classList.remove('light-mode');
+                } else {
+                    body.classList.add('light-mode');
+                }
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+
+                // Load saved zoom
+                const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
+                currentZoom = savedZoom;
+                applyZoom(currentZoom);
+
+                // Show the first page by default
+                showPage(0);
+            }
+
+            initialize();
+        });
+    </script>
+
+</body>
+</html>

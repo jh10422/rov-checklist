@@ -609,7 +609,17 @@
             function updateProgress() {
                 const checkedCount = document.querySelectorAll('.checklist-item:not(.is-question).checked').length;
                 const totalCheckableItems = document.querySelectorAll('.checklist-item:not(.is-question)').length;
+                
                 progressText.textContent = `${checkedCount} / ${totalCheckableItems} ITEMS COMPLETE`;
+                
+                // Add completion message when all items are checked
+                if (checkedCount === totalCheckableItems) {
+                    progressText.textContent += ' -- CHECKLIST COMPLETE';
+                    progressText.style.color = 'var(--complete-color)';
+                } else {
+                    progressText.style.color = 'var(--dim-text-color)';
+                }
+                
                 checkPrerequisites();
             }
 

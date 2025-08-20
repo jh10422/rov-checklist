@@ -402,6 +402,14 @@
             function updateProgress() {
                 const checkedCount = document.querySelectorAll('.checklist-item.checked').length;
                 progressText.textContent = `${checkedCount} / ${totalItems} ITEMS COMPLETE`;
+                
+                // Add completion message when all items are checked
+                if (checkedCount === totalItems) {
+                    progressText.textContent += ' -- CHECKLIST COMPLETE';
+                    progressText.style.color = 'var(--complete-color)';
+                } else {
+                    progressText.style.color = 'var(--dim-text-color)';
+                }
             }
             
             checklistItems.forEach(item => {

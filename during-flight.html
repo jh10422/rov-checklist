@@ -338,6 +338,19 @@
             background-color: var(--active-tab-bg);
         }
         
+        .footer-btn.highlighted {
+            background-color: var(--note-color);
+            border-color: var(--note-color);
+            color: var(--display-bg);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
         .scroll-controls {
             flex-shrink: 0;
             width: 60px;
@@ -403,6 +416,9 @@
                             <tr class="checklist-item">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Bubble Check</span><span class="dots"></span><span class="item-status">Check for any abnormal large air bubbles</span></td>
                             </tr>
+                            <tr class="instruction" id="deployment-proceed" style="display: none;">
+                                <td colspan="2">Proceed to next page</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -426,6 +442,9 @@
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Mode</span><span class="dots"></span><span class="item-status">SET to Depth Hold</span></td>
                             </tr>
                             <tr><td class="instruction">- Operate the Vehicle for the Specified Mission -</td></tr>
+                            <tr class="instruction" id="piloting-proceed" style="display: none;">
+                                <td colspan="2">Proceed to next page</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -450,6 +469,9 @@
                             </tr>
                             <tr>
                                 <td class="item-cell-monitor"><div class="monitor-content"><span class="item-name">Tether</span><span class="dots"></span><span class="item-status">Managing and Ensure Untangled</span></div></td>
+                            </tr>
+                            <tr class="instruction" id="monitoring-complete" style="display: none;">
+                                <td colspan="2">DURING-FLIGHT CHECKLIST COMPLETE</td>
                             </tr>
                         </tbody>
                     </table>
@@ -579,6 +601,45 @@
             scrollUpBtn.addEventListener('click', () => scrollContent('up'));
             scrollDownBtn.addEventListener('click', () => scrollContent('down'));
 
+            // --- TAB COMPLETION CHECK ---
+            function checkTabCompletion() {
+                const currentPageElement = document.querySelector('.page.active');
+                const visibleCheckableItems = currentPageElement.querySelectorAll('.checklist-item');
+                const checkedVisibleItems = [...visibleCheckableItems].filter(item => item.classList.contains('checked'));
+                
+                const totalVisible = visibleCheckableItems.length;
+                const checkedCount = checkedVisibleItems.length;
+                const isTabComplete = checkedCount === totalVisible && totalVisible > 0;
+                
+                // Show "Proceed to next page" for each tab (except the last one)
+                if (currentPage === 0) { // Deployment
+                    const proceedElement = document.getElementById('deployment-proceed');
+                    if (proceedElement) {
+                        proceedElement.style.display = isTabComplete ? 'table-row' : 'none';
+                    }
+                } else if (currentPage === 1) { // Piloting
+                    const proceedElement = document.getElementById('piloting-proceed');
+                    if (proceedElement) {
+                        proceedElement.style.display = isTabComplete ? 'table-row' : 'none';
+                    }
+                } else if (currentPage === 2) { // Monitoring (last page)
+                    const completeElement = document.getElementById('monitoring-complete');
+                    if (completeElement) {
+                        completeElement.style.display = isTabComplete ? 'table-row' : 'none';
+                    }
+                }
+                
+                // Highlight next page button
+                const nextPageBtn = document.getElementById('next-page-btn');
+                if (nextPageBtn) {
+                    if (isTabComplete && currentPage < totalPages - 1) {
+                        nextPageBtn.classList.add('highlighted');
+                    } else {
+                        nextPageBtn.classList.remove('highlighted');
+                    }
+                }
+            }
+
             // --- CHECKLIST & FOOTER LOGIC ---
             function updateFooter() {
                 const checkedCount = document.querySelectorAll('.checklist-item.checked').length;
@@ -596,6 +657,8 @@
             function updateProgress() {
                 const checkedCount = document.querySelectorAll('.checklist-item.checked').length;
                 progressText.textContent = `${checkedCount} / ${totalItems} ITEMS COMPLETE`;
+                
+                checkTabCompletion();
                 
                 // Add completion message when all items are checked
                 if (checkedCount === totalItems) {
@@ -617,8 +680,19 @@
                 pageIndicator.textContent = `${pageIndex + 1} / ${totalPages}`;
                 prevBtn.disabled = pageIndex === 0;
                 nextBtn.disabled = pageIndex === totalPages - 1;
+                
+                // Remove highlighting when switching pages
+                const nextPageBtn = document.getElementById('next-page-btn');
+                if (nextPageBtn) {
+                    nextPageBtn.classList.remove('highlighted');
+                }
+                
                 updateFooter();
                 updateScrollState();
+                
+                setTimeout(() => {
+                    updateProgress();
+                }, 50);
             }
 
             checklistItems.forEach(item => {

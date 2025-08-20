@@ -364,9 +364,21 @@
             cursor: inherit;
         }
         
-        .sub-tab:hover, .footer-btn:hover:not(:disabled) {
+        .footer-btn:hover:not(:disabled) {
             background-color: var(--active-tab-bg);
-            color: var(--text-color);
+        }
+        
+        .footer-btn.highlighted {
+            background-color: var(--note-color);
+            border-color: var(--note-color);
+            color: var(--display-bg);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
         }
 
         .scroll-controls {
@@ -462,6 +474,9 @@
                              <tr class="checklist-item">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Joystick Frame</span><span class="dots"></span><span class="item-status">Secured in holder</span></td>
                             </tr>
+                            <tr class="instruction" id="control-proceed" style="display: none;">
+                                <td colspan="2">Proceed to next page</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -494,6 +509,9 @@
                             <tr class="checklist-item">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Camera Lens Cap</span><span class="dots"></span><span class="item-status">REMOVED</span></td>
                             </tr>
+                            <tr class="instruction" id="vehicle-proceed" style="display: none;">
+                                <td colspan="2">Proceed to next page</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -507,6 +525,9 @@
                             </tr>
                             <tr class="checklist-item">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Tether</span><span class="dots"></span><span class="item-status">VERIFY Clear and untangled</span></td>
+                            </tr>
+                            <tr class="instruction" id="tether-proceed" style="display: none;">
+                                <td colspan="2">Proceed to next page</td>
                             </tr>
                          </tbody>
                     </table>
@@ -542,6 +563,9 @@
                             </tr>
                             <tr class="checklist-item">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Recording Configuration</span><span class="dots"></span><span class="item-status">VERIFIED</span></td>
+                            </tr>
+                            <tr class="instruction" id="software-proceed" style="display: none;">
+                                <td colspan="2">Proceed to next page</td>
                             </tr>
                         </tbody>
                     </table>
@@ -713,10 +737,41 @@
             scrollUpBtn.addEventListener('click', () => scrollContent('up'));
             scrollDownBtn.addEventListener('click', () => scrollContent('down'));
 
+            // --- TAB COMPLETION CHECK ---
+            function checkTabCompletion() {
+                const currentPageElement = document.querySelector('.page.active');
+                const visibleCheckableItems = currentPageElement.querySelectorAll('.checklist-item');
+                const checkedVisibleItems = [...visibleCheckableItems].filter(item => item.classList.contains('checked'));
+                
+                const totalVisible = visibleCheckableItems.length;
+                const checkedCount = checkedVisibleItems.length;
+                const isTabComplete = checkedCount === totalVisible && totalVisible > 0;
+                
+                // Show "Proceed to next page" for each tab
+                const proceedElements = ['control-proceed', 'vehicle-proceed', 'tether-proceed', 'software-proceed'];
+                const proceedElement = document.getElementById(proceedElements[currentPage]);
+                if (proceedElement) {
+                    proceedElement.style.display = isTabComplete ? 'table-row' : 'none';
+                }
+                
+                // Highlight next page button
+                const nextPageBtn = document.getElementById('next-page-btn');
+                if (nextPageBtn) {
+                    if (isTabComplete && currentPage < totalPages - 1) {
+                        nextPageBtn.classList.add('highlighted');
+                    } else {
+                        nextPageBtn.classList.remove('highlighted');
+                    }
+                }
+            }
+
             // --- CHECKLIST FUNCTIONALITY ---
             function updateProgress() {
                 const checkedCount = document.querySelectorAll('.checklist-item.checked').length;
                 progressText.textContent = `${checkedCount} / ${totalItems} ITEMS COMPLETE`;
+                
+                checkTabCompletion();
+                
                 if (checkedCount === totalItems) {
                     progressText.textContent += ' -- CHECKLIST COMPLETE';
                     progressText.style.color = 'var(--complete-color)';
@@ -741,7 +796,16 @@
                 prevBtn.disabled = pageIndex === 0;
                 nextBtn.disabled = pageIndex === totalPages - 1;
                 
-                setTimeout(updateScrollState, 50);
+                // Remove highlighting when switching pages
+                const nextPageBtn = document.getElementById('next-page-btn');
+                if (nextPageBtn) {
+                    nextPageBtn.classList.remove('highlighted');
+                }
+                
+                setTimeout(() => {
+                    updateScrollState();
+                    updateProgress();
+                }, 50);
             }
 
             checklistItems.forEach(item => {

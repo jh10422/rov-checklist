@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROV Checklist - HOME</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-mode">
+
+    <div class="container">
+        <header>
+            <h1>► HOME ◄</h1>
+        </header>
+
+        <div class="sub-tabs-container">
+            <button class="sub-tab active">NORMAL ITEMS</button>
+            <button class="sub-tab">NON-NORMAL ITEMS</button>
+            <button class="sub-tab">PREPARATION ITEMS</button>
+        </div>
+        
+        <div class="page-content">
+            <div class="page home-page active">
+                <div class="scroll-wrapper">
+                    <div class="home-nav-container">
+                        <a href="pre-flight.html" class="home-nav-tab">
+                            <span class="tab-title">PRE-FLIGHT</span>
+                            <span class="tab-description">Complete before vehicle deployment.</span>
+                        </a>
+                        <a href="during-flight.html" class="home-nav-tab">
+                            <span class="tab-title">DURING-FLIGHT</span>
+                            <span class="tab-description">Procedures for vehicle operation.</span>
+                        </a>
+                        <a href="post-flight.html" class="home-nav-tab">
+                            <span class="tab-title">POST-FLIGHT</span>
+                            <span class="tab-description">After vehicle retrieval.</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="page home-page">
+                 <div class="scroll-wrapper">
+                     <div class="home-nav-container">
+                        <a href="cs-battery-failure.html" class="home-nav-tab">
+                            <span class="tab-title">Control Station Battery Failure</span>
+                            <span class="tab-description">Procedure for control station power loss.</span>
+                        </a>
+                        <a href="veh-connect-issues.html" class="home-nav-tab">
+                            <span class="tab-title">Vehicle Connection Issues</span>
+                            <span class="tab-description">Troubleshoot physical, software, and vehicle connectivity problems.</span>
+                        </a>
+                        <a href="veh-function.html" class="home-nav-tab">
+                            <span class="tab-title">Vehicle Function Issue</span>
+                            <span class="tab-description">Vehicle having control issues.</span>
+                        </a>
+                        <a href="veh-arming.html" class="home-nav-tab">
+                            <span class="tab-title">Vehicle Arming Issue</span>
+                            <span class="tab-description">Not being able to arm or randomly disarming without input.</span>
+                        </a>
+                        <a href="abort-mission.html" class="home-nav-tab">
+                            <span class="tab-title">Abort Mission</span>
+                            <span class="tab-description">Procedure for aborting the mission.</span>
+                        </a>
+                    </div>
+                 </div>
+            </div>
+            <div class="page home-page">
+                <div class="scroll-wrapper">
+                    <div class="home-nav-container">
+                        <a href="#" class="home-nav-tab">
+                            <span class="tab-title">EQUIPMENT INSPECTION</span>
+                            <span class="tab-description">Verify all equipment is present and functional.</span>
+                        </a>
+                        <a href="#" class="home-nav-tab">
+                            <span class="tab-title">SITE PREPARATION</span>
+                            <span class="tab-description">Prepare deployment site and safety equipment.</span>
+                        </a>
+                        <a href="#" class="home-nav-tab">
+                            <span class="tab-title">PERSONNEL BRIEFING</span>
+                            <span class="tab-description">Brief team on mission objectives and safety.</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-controls">
+                <button id="scroll-up-btn" class="scroll-btn" disabled>▲</button>
+                <button id="scroll-down-btn" class="scroll-btn" disabled>▼</button>
+            </div>
+        </div>
+        
+        <footer class="theme-footer">
+            <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
+            <span style="padding: 0 10px;">ZOOM</span>
+            <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
+            <span style="width: 20px;"></span>
+            <button id="theme-toggle" class="footer-btn">DARK MODE</button>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize the home page
+        document.addEventListener('DOMContentLoaded', () => {
+            new HomePageApp();
+        });
+    </script>
+
+</body>
+</html>

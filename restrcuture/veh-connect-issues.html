@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROV Vehicle Connection Issues - B777 Interface</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-mode">
+
+    <div class="container">
+        <header>
+            <a href="home.html" class="nav-arrow left">&lt;</a>
+            <h1>► VEHICLE CONNECTION ISSUES ◄</h1>
+            <a href="#" class="nav-arrow right disabled">&gt;</a>
+        </header>
+
+        <div class="sub-tabs-container">
+            <button class="sub-tab">Physical Connection</button>
+            <button class="sub-tab">Software Connection</button>
+            <button class="sub-tab">Vehicle Connection</button>
+        </div>
+
+        <div class="progress-text" id="progress-text">0 / 1 ITEMS COMPLETE</div>
+        <div class="tab-title" id="tab-title"></div>
+        
+        <div class="page-content" id="page-content">
+            <!-- Physical Connection Tab -->
+            <div class="page active">
+                <div class="scroll-wrapper">
+                    <table>
+                        <tbody>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">MODE</span><span class="dots"></span><span class="item-status">Manual</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Confirm DISARMED</span></td>
+                            </tr>
+                            <tr class="checklist-item" data-prereq-for="q1">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Station Cable</span><span class="dots"></span><span class="item-status">Disconnected</span></td>
+                            </tr>
+                            <tr class="instruction">
+                                <td colspan="2">- Wait 5 Seconds -</td>
+                            </tr>
+                            <tr class="checklist-item" data-prereq-for="q1">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Station Cable</span><span class="dots"></span><span class="item-status">Connected</span></td>
+                            </tr>
+                            <tr class="checklist-item" data-prereq-for="q1">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Tether Spool Cable</span><span class="dots"></span><span class="item-status">Disconnected</span></td>
+                            </tr>
+                            <tr class="instruction">
+                                <td colspan="2">- Wait 5 Seconds -</td>
+                            </tr>
+                            <tr class="checklist-item" data-prereq-for="q1">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Tether Spool Cable</span><span class="dots"></span><span class="item-status">Connected</span></td>
+                            </tr>
+
+                            <!-- Question 1: Is connection restored? -->
+                            <tr class="checklist-item is-question" id="q1">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Is connection restored?</span></td>
+                            </tr>
+                            <tr class="options-row" data-question="q1">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes" disabled>YES</button>
+                                    <button class="option-btn" data-choice="no" disabled>NO</button>
+                                </td>
+                            </tr>
+
+                            <!-- Path for "No" to Q1 -->
+                            <tr class="instruction conditional" data-path="q1-no">
+                                <td colspan="2">PROCEED TO THE NEXT PAGE</td>
+                            </tr>
+
+                            <!-- Path for "Yes" to Q1 -->
+                            <tr class="checklist-item conditional" data-path="q1-yes" data-prereq-for="q2">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Pilot Gain</span><span class="dots"></span><span class="item-status">Set to 25%</span></td>
+                            </tr>
+
+                            <!-- Question 2: Is the vehicle able to arm? -->
+                            <tr class="checklist-item is-question conditional" id="q2" data-path="q1-yes">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Is the vehicle able to arm?</span></td>
+                            </tr>
+                            <tr class="options-row conditional" data-question="q2" data-path="q1-yes">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes" disabled>YES</button>
+                                    <button class="option-btn" data-choice="no" disabled>NO</button>
+                                </td>
+                            </tr>
+
+                            <!-- Path for "No" to Q2 -->
+                            <tr class="instruction conditional" data-path="q2-no">
+                                <td colspan="2">PROCEED TO THE NEXT PAGE</td>
+                            </tr>
+
+                            <!-- Path for "Yes" to Q2 -->
+                            <tr class="checklist-item conditional" data-path="q2-yes" data-prereq-for="q3">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Confirm ARMED</span></td>
+                            </tr>
+                            <tr class="instruction conditional" data-path="q2-yes">
+                                <td colspan="2">- Slowly Test Pilot Input -</td>
+                            </tr>
+
+                            <!-- Question 3: Are functions restored? -->
+                            <tr class="checklist-item is-question conditional" id="q3" data-path="q2-yes">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are functions restored?</span></td>
+                            </tr>
+                            <tr class="options-row conditional" data-question="q3" data-path="q2-yes">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes" disabled>YES</button>
+                                    <button class="option-btn" data-choice="no" disabled>NO</button>
+                                </td>
+                            </tr>
+
+                            <!-- Path for "Yes" to Q3 -->
+                            <tr class="instruction conditional success" data-path="q3-yes">
+                                <td colspan="2">Continue with Mission</td>
+                            </tr>
+
+                            <!-- Path for "No" to Q3 -->
+                            <tr class="instruction conditional" data-path="q3-no">
+                                <td colspan="2">PROCEED TO THE NEXT PAGE</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Software Connection Tab -->
+            <div class="page">
+                <div class="scroll-wrapper">
+                    <table>
+                        <tbody>
+                            <!-- Question 1: Are you able to reach BlueOS UI? -->
+                            <tr class="checklist-item is-question" id="sw-q1">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are you able to reach BlueOS UI?</span></td>
+                            </tr>
+                            <tr class="options-row" data-question="sw-q1">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes">YES</button>
+                                    <button class="option-btn" data-choice="no">NO</button>
+                                </td>
+                            </tr>
+
+                            <!-- Path for "No" to SW-Q1 -->
+                            <tr class="instruction conditional" data-path="sw-q1-no">
+                                <td colspan="2">Proceed to Next Page</td>
+                            </tr>
+
+                            <!-- Path for "Yes" to SW-Q1 -->
+                            <tr class="checklist-item conditional" data-path="sw-q1-yes" data-prereq-for="sw-q2">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Auto Pilot</span><span class="dots"></span><span class="item-status">Restart</span></td>
+                            </tr>
+                            <tr class="instruction conditional" data-path="sw-q1-yes">
+                                <td colspan="2">- Wait 10 seconds -</td>
+                            </tr>
+                            <tr class="checklist-item conditional" data-path="sw-q1-yes" data-prereq-for="sw-q2">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Pilot Gain</span><span class="dots"></span><span class="item-status">Set to 25%</span></td>
+                            </tr>
+                            <tr class="checklist-item conditional" data-path="sw-q1-yes" data-prereq-for="sw-q2">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Confirm ARMED</span></td>
+                            </tr>
+
+                            <!-- Question 2: Is the vehicle able to arm? -->
+                            <tr class="checklist-item is-question conditional" id="sw-q2" data-path="sw-q1-yes">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Is the vehicle able to arm?</span></td>
+                            </tr>
+                            <tr class="options-row conditional" data-question="sw-q2" data-path="sw-q1-yes">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes" disabled>YES</button>
+                                    <button class="option-btn" data-choice="no" disabled>NO</button>
+                                </td>
+                            </tr>
+
+                            <!-- Path for "Yes" to SW-Q2 -->
+                            <tr class="instruction conditional" data-path="sw-q2-yes">
+                                <td colspan="2">- Slowly Test Pilot Input -</td>
+                            </tr>
+
+                            <!-- Question 3: Are functions restored? -->
+                            <tr class="checklist-item is-question conditional" id="sw-q3" data-path="sw-q2-yes">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are functions restored?</span></td>
+                            </tr>
+                            <tr class="options-row conditional" data-question="sw-q3" data-path="sw-q2-yes">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes">YES</button>
+                                    <button class="option-btn" data-choice="no">NO</button>
+                                </td>
+                            </tr>
+
+                            <!-- Path for "Yes" to SW-Q3 -->
+                            <tr class="instruction conditional success" data-path="sw-q3-yes">
+                                <td colspan="2">Continue with Mission</td>
+                            </tr>
+
+                            <!-- Path for "No" to SW-Q3 -->
+                            <tr class="instruction conditional" data-path="sw-q3-no">
+                                <td colspan="2">Proceed to Next Page</td>
+                            </tr>
+
+                            <!-- Path for "No" to SW-Q2 -->
+                            <tr class="checklist-item conditional" data-path="sw-q2-no" id="blueos-restart-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">BlueOS</span><span class="dots"></span><span class="item-status">Full Restart</span></td>
+                            </tr>
+                            <tr class="instruction" id="blueos-restart-instruction" style="display: none;">
+                                <td colspan="2">- Wait until BlueOS is fully restarted >30 sec - If the vehicle is able to ARM: Re-Select YES on the item above. If STILL NO: Proceed to Next Page</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Vehicle Connection Tab -->
+            <div class="page">
+                <div class="scroll-wrapper">
+                    <table>
+                        <tbody>
+                            <!-- Question 1: Is the Vehicle in the Water? -->
+                            <tr class="checklist-item is-question" id="vc-q1">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Is the Vehicle in the Water?</span></td>
+                            </tr>
+                            <tr class="options-row" data-question="vc-q1">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes">YES</button>
+                                    <button class="option-btn" data-choice="no">NO</button>
+                                </td>
+                            </tr>
+
+                            <!-- Path for "Yes" to VC-Q1 -->
+                            <tr class="instruction conditional" data-path="vc-q1-yes">
+                                <td colspan="2">- Retrieve Vehicle First -</td>
+                            </tr>
+                            <tr class="instruction conditional" data-path="vc-q1-yes">
+                                <td colspan="2">- Proceed with Checklist -</td>
+                            </tr>
+
+                            <!-- Path for "No" to VC-Q1 OR continuation from "Yes" path -->
+                            <tr class="checklist-item conditional" data-path="vc-q1-no,vc-q1-yes" data-prereq-for="vc-q2">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Tether</span><span class="dots"></span><span class="item-status">Disconnected</span></td>
+                            </tr>
+                            <tr class="instruction conditional" data-path="vc-q1-no,vc-q1-yes">
+                                <td colspan="2">- Wait 5 seconds -</td>
+                            </tr>
+                            <tr class="checklist-item conditional" data-path="vc-q1-no,vc-q1-yes" data-prereq-for="vc-q2">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Tether</span><span class="dots"></span><span class="item-status">Connected</span></td>
+                            </tr>
+
+                            <!-- Question 2: Are you able to reach BlueOS UI? -->
+                            <tr class="checklist-item is-question conditional" id="vc-q2" data-path="vc-q1-no,vc-q1-yes">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are you able to reach BlueOS UI?</span></td>
+                            </tr>
+                            <tr class="options-row conditional" data-question="vc-q2" data-path="vc-q1-no,vc-q1-yes">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes" disabled>YES</button>
+                                    <button class="option-btn" data-choice="no" disabled>NO</button>
+                                </td>
+                            </tr>
+
+                            <!-- Path for "No" to VC-Q2 -->
+                            <tr class="checklist-item conditional" data-path="vc-q2-no" id="vc-battery-disconnect-item" data-prereq-for="vc-q2b">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Battery Connectors (GROUND)</span><span class="dots"></span><span class="item-status">Disconnected</span></td>
+                            </tr>
+                            <tr class="instruction conditional" data-path="vc-q2-no">
+                                <td colspan="2">- Wait 5 seconds -</td>
+                            </tr>
+                            <tr class="checklist-item conditional" data-path="vc-q2-no" data-prereq-for="vc-q2b">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Battery Connectors (GROUND)</span><span class="dots"></span><span class="item-status">Connected</span></td>
+                            </tr>
+
+                            <!-- Question 2b: Do You Hear the Startup Beeps? -->
+                            <tr class="checklist-item is-question conditional" id="vc-q2b" data-path="vc-q2-no">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Do You Hear the Startup Beeps?</span></td>
+                            </tr>
+                            <tr class="options-row conditional" data-question="vc-q2b" data-path="vc-q2-no">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes" disabled>YES</button>
+                                    <button class="option-btn" data-choice="no" disabled>NO</button>
+                                </td>
+                            </tr>
+
+                            <!-- Path for "No" to VC-Q2b -->
+                            <tr class="checklist-item conditional" data-path="vc-q2b-no" id="vc-battery-check-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Connection</span><span class="dots"></span><span class="item-status">Double Check Connection</span></td>
+                            </tr>
+                            <tr class="instruction" id="vc-battery-try-again-instruction" style="display: none;">
+                                <td colspan="2">Try again. If still NO: <a href="abort-mission.html" class="footer-btn">Abort Mission Checklist</a></td>
+                            </tr>
+                            <tr class="instruction" id="vc-q2b-reselect-instruction" style="display: none;">
+                                <td colspan="2">If Startup Beeps are heard, reselect the item above to YES.</td>
+                            </tr>
+
+                            <!-- Path for "Yes" to VC-Q2b -->
+                            <tr class="instruction conditional" data-path="vc-q2b-yes">
+                                <td colspan="2">- Wait for 5 minutes -</td>
+                            </tr>
+                            <tr class="checklist-item conditional" data-path="vc-q2b-yes" id="vc-blueos-wait-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">5 Minute Wait</span><span class="dots"></span><span class="item-status">Complete</span></td>
+                            </tr>
+                            <tr class="instruction" id="vc-blueos-restore-instruction" style="display: none;">
+                                <td colspan="2">Confirm if connection to BlueOS is restored, if no <a href="abort-mission.html" class="footer-btn">Abort Mission</a>. If yes reselect the item above for BlueOS as YES</td>
+                            </tr>
+
+                            <!-- Path for "Yes" to VC-Q2 -->
+                            <tr class="checklist-item conditional" data-path="vc-q2-yes" data-prereq-for="vc-q3">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Pilot Gain</span><span class="dots"></span><span class="item-status">Set to 25%</span></td>
+                            </tr>
+                            <tr class="checklist-item conditional" data-path="vc-q2-yes" data-prereq-for="vc-q3">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Confirm ARMED</span></td>
+                            </tr>
+
+                            <!-- Question 3: Is the vehicle able to arm? -->
+                            <tr class="checklist-item is-question conditional" id="vc-q3" data-path="vc-q2-yes">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Is the vehicle able to arm?</span></td>
+                            </tr>
+                            <tr class="options-row conditional" data-question="vc-q3" data-path="vc-q2-yes">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes" disabled>YES</button>
+                                    <button class="option-btn" data-choice="no" disabled>NO</button>
+                                </td>
+                            </tr>
+
+                            <!-- Path for "No" to VC-Q3 -->
+                            <tr class="instruction conditional" data-path="vc-q3-no">
+                                <td colspan="2"><a href="veh-arming.html" class="footer-btn">GO to Vehicle Arming Issue PAGE</a></td>
+                            </tr>
+
+                            <!-- Path for "Yes" to VC-Q3 -->
+                            <tr class="instruction conditional" data-path="vc-q3-yes">
+                                <td colspan="2">- Slowly Test Pilot Input -</td>
+                            </tr>
+
+                            <!-- Question 4: Are functions restored? -->
+                            <tr class="checklist-item is-question conditional" id="vc-q4" data-path="vc-q3-yes">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are functions restored?</span></td>
+                            </tr>
+                            <tr class="options-row conditional" data-question="vc-q4" data-path="vc-q3-yes">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes">YES</button>
+                                    <button class="option-btn" data-choice="no">NO</button>
+                                </td>
+                            </tr>
+
+                            <!-- Path for "Yes" to VC-Q4 -->
+                            <tr class="instruction conditional success" data-path="vc-q4-yes">
+                                <td colspan="2">Continue with Mission</td>
+                            </tr>
+
+                            <!-- Path for "No" to VC-Q4 -->
+                            <tr class="instruction conditional" data-path="vc-q4-no">
+                                <td colspan="2"><a href="veh-function.html" class="footer-btn">GO to Vehicle Function Issue PAGE</a></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="scroll-controls">
+                <button id="scroll-up-btn" class="scroll-btn">▲</button>
+                <button id="scroll-down-btn" class="scroll-btn">▼</button>
+            </div>
+        </div>
+        
+        <footer class="page-footer">
+            <div id="pager-controls">
+                <div class="nav-controls">
+                    <button id="prev-page-btn" class="footer-btn">&lt; PREV PAGE</button>
+                </div>
+                <div id="page-indicator">1 / 3</div>
+                <div class="nav-controls">
+                    <button id="next-page-btn" class="footer-btn">NEXT PAGE &gt;</button>
+                </div>
+            </div>
+            <a href="home.html" id="next-checklist-btn" class="footer-btn" style="display: none;">GO TO HOME</a>
+        </footer>
+        <footer class="theme-footer">
+            <a href="home.html" class="footer-btn">HOME</a>
+            <span style="width: 20px;"></span>
+            <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
+            <span style="padding: 0 10px;">ZOOM</span>
+            <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
+            <span style="width: 20px;"></span>
+            <button id="theme-toggle" class="footer-btn">DARK MODE</button>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize the Vehicle Connection Issues checklist
+        document.addEventListener('DOMContentLoaded', () => {
+            new VehConnectIssuesChecklist();
+        });
+    </script>
+
+</body>
+</html>

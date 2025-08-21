@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROV Pre-Flight Checklist - B777 Interface</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-mode">
+
+    <div class="container">
+        <header>
+            <a href="home.html" class="nav-arrow left">&lt;</a>
+            <h1>► PRE-FLIGHT ◄</h1>
+            <a href="during-flight.html" class="nav-arrow right">&gt;</a>
+        </header>
+
+        <div class="sub-tabs-container">
+            <button class="sub-tab">CONTROL</button>
+            <button class="sub-tab">VEHICLE</button>
+            <button class="sub-tab">TETHER</button>
+            <button class="sub-tab">SOFTWARE</button>
+            <button class="sub-tab">DRY TEST</button>
+        </div>
+        
+        <div class="progress-text" id="progress-text">0 / 43 ITEMS COMPLETE</div>
+        <div class="tab-title" id="tab-title"></div>
+        
+        <div class="page-content" id="page-content">
+            <div class="page active">
+                <div class="scroll-wrapper">
+                    <table>
+                        <tbody>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Monitor Switch</span><span class="dots"></span><span class="item-status">ON</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Top Cover</span><span class="dots"></span><span class="item-status">OPEN Lid CAREFULLY</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Velcro Mounts</span><span class="dots"></span><span class="item-status">Verify SECURED</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Power Button</span><span class="dots"></span><span class="item-status">HOLD until ON</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">DC Output</span><span class="dots"></span><span class="item-status">Set ON, Set to <span class="notes-code">12V / 5A</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="item-note" colspan="2">(Verify DC power is ON with the battery display)</td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Ethernet and USB Connectors</span><span class="dots"></span><span class="item-status">Verify Secured</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Mac Power Button</span><span class="dots"></span><span class="item-status">Pressed</span></td>
+                            </tr>
+                            <tr>
+                                <td class="item-note" colspan="2">(Verify Mac Mini is ON)</td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Top Cover</span><span class="dots"></span><span class="item-status">Closed and Secured</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Monitor Power</span><span class="dots"></span><span class="item-status">Verify ON</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Connections</span><span class="dots"></span><span class="item-status">Joystick and buttons secure</span></td>
+                            </tr>
+                             <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Joystick Frame</span><span class="dots"></span><span class="item-status">Secured in holder</span></td>
+                            </tr>
+                            <tr class="instruction" id="control-proceed" style="display: none;">
+                                <td colspan="2">Proceed to next page</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="page">
+                <div class="scroll-wrapper">
+                    <table>
+                        <tbody>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">End Cap Bulkheads</span><span class="dots"></span><span class="item-status">Verify all M10s are secure</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Connectors (x2)</span><span class="dots"></span><span class="item-status">Plugged in - <span class="critical">VERIFY POLARITY</span></span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Tether Connector</span><span class="dots"></span><span class="item-status">Plugged in (no threads showing)</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Cobalt Sleeves</span><span class="dots"></span><span class="item-status">VERIFY secure with <span class="critical">NO THREADS SHOWING</span></span></td>
+                            </tr>
+                            <tr>
+                                <td class="item-note" colspan="2">(Finger tighten as tight as possible)</td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vent Cap</span><span class="dots"></span><span class="item-status">Tightened</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Strain Relief</span><span class="dots"></span><span class="item-status">Tether carabiner is attached securely</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Camera Lens Cap</span><span class="dots"></span><span class="item-status">REMOVED</span></td>
+                            </tr>
+                            <tr class="instruction" id="vehicle-proceed" style="display: none;">
+                                <td colspan="2">Proceed to next page</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="page">
+                <div class="scroll-wrapper">
+                    <table>
+                         <tbody>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Cable</span><span class="dots"></span><span class="item-status">Securely attached to station and spool</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Tether</span><span class="dots"></span><span class="item-status">VERIFY Clear and untangled</span></td>
+                            </tr>
+                            <tr class="instruction" id="tether-proceed" style="display: none;">
+                                <td colspan="2">Proceed to next page</td>
+                            </tr>
+                         </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="page">
+                <div class="scroll-wrapper">
+                     <table>
+                        <tbody>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Cockpit Software</span><span class="dots"></span><span class="item-status">LAUNCHED</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Connection</span><span class="dots"></span><span class="item-status">VERIFY in Software</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Depth Sensor</span><span class="dots"></span><span class="item-status">VERIFY at <span class="notes-code">0</span></span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Compass</span><span class="dots"></span><span class="item-status">VERIFY Heading with Phone Compass</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Voltage and Current</span><span class="dots"></span><span class="item-status">VERIFY above <span class="notes-code">14V</span>, below <span class="notes-code">1A</span></span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Attitude Indicator</span><span class="dots"></span><span class="item-status">VERIFY correct orientation</span></td>
+                            </tr>
+                             <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Joystick Input</span><span class="dots"></span><span class="item-status">VERIFY in Software</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Video Streams</span><span class="dots"></span><span class="item-status">VERIFY function</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Recording Configuration</span><span class="dots"></span><span class="item-status">VERIFIED</span></td>
+                            </tr>
+                            <tr class="instruction" id="software-proceed" style="display: none;">
+                                <td colspan="2">Proceed to next page</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="page">
+                <div class="scroll-wrapper">
+                    <table>
+                         <tbody>
+                            <tr><td class="instruction">- VEHICLE DRY TEST -</td></tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Pilot Gain</span><span class="dots"></span><span class="item-status">SET to <span class="notes-code">25</span> percent</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Mode</span><span class="dots"></span><span class="item-status">SET to <span class="notes-code">Manual</span></span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">SET and VERIFY armed</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Joystick Input</span><span class="dots"></span><span class="item-status">SLOWLY move each Axis</span></td>
+                            </tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Motor Movements</span><span class="dots"></span><span class="item-status">VERIFY</span></td>
+                            </tr>
+                            <tr><td class="instruction">- ALL FUNCTIONS CONFIRMED -</td></tr>
+                            <tr class="checklist-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">SET and VERIFY disarmed</span></td>
+                            </tr>
+                            <tr id="completion-message-row">
+                                <td class="checklist-complete" colspan="2">PRE-FLIGHT CHECKLIST COMPLETE - VEHICLE IS READY FOR DEPLOYMENT</td>
+                            </tr>
+                            <tr id="not-ready-message-row">
+                                <td class="checklist-incomplete" colspan="2">VEHICLE IS NOT READY</td>
+                            </tr>
+                         </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="scroll-controls">
+                <button id="scroll-up-btn" class="scroll-btn">▲</button>
+                <button id="scroll-down-btn" class="scroll-btn">▼</button>
+            </div>
+        </div>
+        
+        <footer class="page-footer">
+            <div id="pager-controls">
+                <div class="nav-controls">
+                    <button id="prev-page-btn" class="footer-btn">&lt; PREV PAGE</button>
+                </div>
+                <div id="page-indicator">1 / 5</div>
+                <div class="nav-controls">
+                    <button id="next-page-btn" class="footer-btn">NEXT PAGE &gt;</button>
+                </div>
+            </div>
+            <a href="during-flight.html" id="next-checklist-btn" class="footer-btn">GO TO DURING-FLIGHT CHECKLIST</a>
+        </footer>
+        <footer class="theme-footer">
+            <a href="home.html" class="footer-btn">HOME</a>
+            <span style="width: 20px;"></span>
+            <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
+            <span style="padding: 0 10px;">ZOOM</span>
+            <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
+            <span style="width: 20px;"></span>
+            <button id="theme-toggle" class="footer-btn">DARK MODE</button>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize the pre-flight checklist
+        document.addEventListener('DOMContentLoaded', () => {
+            new PreFlightChecklist();
+        });
+    </script>
+
+</body>
+</html>

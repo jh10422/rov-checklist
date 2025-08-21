@@ -192,6 +192,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            padding-bottom: 300px; /* Extra padding to prevent last items being cut off */
         }
 
         td {
@@ -385,7 +386,7 @@
     <div class="container">
         <header>
             <a href="pre-flight.html" class="nav-arrow left">&lt;</a>
-            <h1>► DURING FLIGHT ◄</h1>
+            <h1>▶ DURING FLIGHT ◀</h1>
             <a href="post-flight.html" class="nav-arrow right">&gt;</a>
         </header>
 
@@ -398,9 +399,9 @@
         <div class="progress-text" id="progress-text">0 / 9 ITEMS COMPLETE</div>
         <div class="tab-title" id="tab-title"></div>
         
-        <div class="page-content">
-            <div class="scroll-wrapper">
-                <div class="page active">
+        <div class="page-content" id="page-content">
+            <div class="page active">
+                <div class="scroll-wrapper">
                     <table>
                         <tbody>
                             <tr class="checklist-item">
@@ -422,7 +423,9 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="page">
+            </div>
+            <div class="page">
+                <div class="scroll-wrapper">
                     <table>
                         <tbody>
                             <tr class="checklist-item">
@@ -448,7 +451,9 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="page">
+            </div>
+            <div class="page">
+                <div class="scroll-wrapper">
                      <table>
                         <tbody>
                             <tr><td class="instruction">- Continuously Monitor The Following Throughout The Flight -</td></tr>
@@ -529,6 +534,7 @@
             
             const scrollUpBtn = document.getElementById('scroll-up-btn');
             const scrollDownBtn = document.getElementById('scroll-down-btn');
+            const pageContent = document.getElementById('page-content');
             
             const pageTitles = ['DEPLOYMENT', 'PILOTING', 'MONITORING'];
             let currentPage = 0;
@@ -562,23 +568,43 @@
             
             // --- SCROLL FUNCTIONALITY ---
             function updateScrollState() {
-                const activeWrapper = document.querySelector('.page.active').parentElement;
+                const activeWrapper = document.querySelector('.page.active .scroll-wrapper');
                 if (!activeWrapper) return;
 
                 const contentHeight = activeWrapper.scrollHeight;
-                const containerHeight = activeWrapper.clientHeight;
+                const containerHeight = pageContent.clientHeight;
                 const currentScroll = scrollPositions[currentPage];
+                const footerBuffer = 150;
+                
+                console.log('UpdateScrollState - contentHeight:', contentHeight, 'containerHeight:', containerHeight, 'currentScroll:', currentScroll);
+                
+                // Check if content actually needs scrolling (including when auto-scrolled)
+                const needsScrolling = contentHeight > containerHeight || currentScroll !== 0;
+                
+                if (!needsScrolling) {
+                    scrollUpBtn.disabled = true;
+                    scrollDownBtn.disabled = true;
+                    console.log('No scrolling needed - disabling both buttons');
+                    return;
+                }
 
-                scrollUpBtn.disabled = currentScroll === 0;
-                scrollDownBtn.disabled = currentScroll <= -(contentHeight - containerHeight);
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
+                const upDisabled = currentScroll === 0;
+                const downDisabled = currentScroll <= maxScroll;
+                
+                console.log('maxScroll:', maxScroll, 'upDisabled:', upDisabled, 'downDisabled:', downDisabled);
+                
+                scrollUpBtn.disabled = upDisabled;
+                scrollDownBtn.disabled = downDisabled;
             }
 
-            function scrollContent(direction) {
-                const activeWrapper = document.querySelector('.scroll-wrapper');
+            function scrollContent(direction, amount = null) {
+                const activeWrapper = document.querySelector('.page.active .scroll-wrapper');
                 if (!activeWrapper) return;
 
-                const containerHeight = activeWrapper.clientHeight;
-                const scrollStep = containerHeight;
+                const containerHeight = pageContent.clientHeight;
+                const contentHeight = activeWrapper.scrollHeight;
+                const scrollStep = amount !== null ? amount : containerHeight; 
                 
                 let newScrollY = scrollPositions[currentPage];
                 if (direction === 'down') {
@@ -587,14 +613,22 @@
                     newScrollY += scrollStep;
                 }
 
-                const contentHeight = document.querySelector('.page.active').scrollHeight;
-                newScrollY = Math.max(newScrollY, -(contentHeight - containerHeight));
+                // Add extra buffer to ensure content is never cut off by footer
+                const footerBuffer = 150; 
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
+                
+                newScrollY = Math.max(newScrollY, maxScroll);
                 newScrollY = Math.min(newScrollY, 0);
 
                 scrollPositions[currentPage] = newScrollY;
-                document.querySelectorAll('.page').forEach(p => {
-                    p.style.transform = `translateY(${newScrollY}px)`;
-                });
+                activeWrapper.style.transform = `translateY(${newScrollY}px)`;
+                
+                // Debug logging
+                console.log('Scroll direction:', direction);
+                console.log('Current page:', currentPage);
+                console.log('New scroll Y:', newScrollY);
+                console.log('Scroll positions:', scrollPositions);
+                
                 updateScrollState();
             }
 
@@ -612,20 +646,42 @@
                 const isTabComplete = checkedCount === totalVisible && totalVisible > 0;
                 
                 // Show "Proceed to next page" for each tab (except the last one)
-                if (currentPage === 0) { // Deployment
-                    const proceedElement = document.getElementById('deployment-proceed');
+                const proceedElements = ['deployment-proceed', 'piloting-proceed'];
+                if (currentPage < proceedElements.length) {
+                    const proceedElement = document.getElementById(proceedElements[currentPage]);
                     if (proceedElement) {
+                        const wasHidden = proceedElement.style.display === 'none' || proceedElement.style.display === '';
                         proceedElement.style.display = isTabComplete ? 'table-row' : 'none';
-                    }
-                } else if (currentPage === 1) { // Piloting
-                    const proceedElement = document.getElementById('piloting-proceed');
-                    if (proceedElement) {
-                        proceedElement.style.display = isTabComplete ? 'table-row' : 'none';
+                        
+                        // Auto-scroll to show the "Proceed to next page" message when it first appears
+                        if (isTabComplete && wasHidden) {
+                            setTimeout(() => {
+                                const messageRect = proceedElement.getBoundingClientRect();
+                                const containerRect = pageContent.getBoundingClientRect();
+                                if (messageRect.bottom > containerRect.bottom - 100) { // Extra margin from bottom
+                                    const scrollAmount = messageRect.bottom - containerRect.bottom + 150; // More buffer
+                                    scrollContent('down', scrollAmount);
+                                }
+                            }, 100);
+                        }
                     }
                 } else if (currentPage === 2) { // Monitoring (last page)
                     const completeElement = document.getElementById('monitoring-complete');
                     if (completeElement) {
+                        const wasHidden = completeElement.style.display === 'none' || completeElement.style.display === '';
                         completeElement.style.display = isTabComplete ? 'table-row' : 'none';
+                        
+                        // Auto-scroll to show the completion message when it first appears
+                        if (isTabComplete && wasHidden) {
+                            setTimeout(() => {
+                                const messageRect = completeElement.getBoundingClientRect();
+                                const containerRect = pageContent.getBoundingClientRect();
+                                if (messageRect.bottom > containerRect.bottom - 100) { // Extra margin from bottom
+                                    const scrollAmount = messageRect.bottom - containerRect.bottom + 150; // More buffer
+                                    scrollContent('down', scrollAmount);
+                                }
+                            }, 100);
+                        }
                     }
                 }
                 
@@ -672,8 +728,13 @@
             }
 
             function showPage(pageIndex) {
-                document.querySelectorAll('.scroll-wrapper .page').forEach((page, index) => {
-                    page.classList.toggle('active', index === pageIndex)
+                pages.forEach((page, index) => {
+                    page.classList.toggle('active', index === pageIndex);
+                    // Apply the saved scroll position for each page's scroll wrapper
+                    const scrollWrapper = page.querySelector('.scroll-wrapper');
+                    if (scrollWrapper) {
+                        scrollWrapper.style.transform = `translateY(${scrollPositions[index]}px)`;
+                    }
                 });
                 subTabs.forEach((tab, index) => tab.classList.toggle('active', index === pageIndex));
                 tabTitle.textContent = pageTitles[pageIndex];
@@ -743,6 +804,8 @@
                 updateProgress();
                 showPage(currentPage);
             }
+
+            window.addEventListener('resize', updateScrollState);
 
             initialize();
         });

@@ -132,6 +132,11 @@
             flex-grow: 1;
             text-align: center;
         }
+        
+        .sub-tab:hover:not(.active) {
+            background-color: var(--active-tab-bg);
+            color: var(--text-color);
+        }
 
         .sub-tab.active {
             background-color: var(--active-tab-bg);
@@ -707,13 +712,13 @@
                 scrollDownBtn.disabled = currentScroll <= maxScroll;
             }
 
-            function scrollContent(direction) {
+            function scrollContent(direction, amount = null) {
                 const activeWrapper = document.querySelector('.page.active .scroll-wrapper');
                 if (!activeWrapper) return;
 
                 const containerHeight = pageContent.clientHeight;
                 const contentHeight = activeWrapper.scrollHeight;
-                const scrollStep = containerHeight; 
+                const scrollStep = amount !== null ? amount : containerHeight; 
                 
                 let newScrollY = scrollPositions[currentPage];
                 if (direction === 'down') {
@@ -751,7 +756,21 @@
                 const proceedElements = ['control-proceed', 'vehicle-proceed', 'tether-proceed', 'software-proceed'];
                 const proceedElement = document.getElementById(proceedElements[currentPage]);
                 if (proceedElement) {
+                    const wasHidden = proceedElement.style.display === 'none' || proceedElement.style.display === '';
                     proceedElement.style.display = isTabComplete ? 'table-row' : 'none';
+                    
+                    // Auto-scroll to show the "Proceed to next page" message when it first appears
+                    if (isTabComplete && wasHidden) {
+                        setTimeout(() => {
+                            updateScrollState();
+                            const messageRect = proceedElement.getBoundingClientRect();
+                            const containerRect = pageContent.getBoundingClientRect();
+                            if (messageRect.bottom > containerRect.bottom - 100) { // Extra margin from bottom
+                                const scrollAmount = messageRect.bottom - containerRect.bottom + 150; // More buffer
+                                scrollContent('down', scrollAmount);
+                            }
+                        }, 100);
+                    }
                 }
                 
                 // Highlight next page button

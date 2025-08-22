@@ -98,7 +98,16 @@
 
             initialize();
         });
+    function openCleanWindow() {
+  // Define the URL to open in the new window
+  const url = 'home.html';
 
+  // Define the features for the new window (no address bar, menu, etc.)
+  const windowFeatures = 'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=1200,height=900';
+
+  // Open the new window
+  window.open(url, 'checklistWindow', windowFeatures);
+}
         // --- PWA Service Worker Registration ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {

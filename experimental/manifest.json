@@ -1,7 +1,7 @@
 {
     "name": "FUMI ROV Checklist System",
     "short_name": "ROV Checklist",
-    "start_url": ".",
+    "start_url": "home.html",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#000000",

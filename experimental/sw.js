@@ -3,13 +3,30 @@ const CACHE_NAME = 'rov-checklist-cache-v1';
 
 // List all the files and assets you want to cache
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/home.html',
-  '/styles.css',
-  '/images/icon-192.png',
-  '/images/icon-512.png'
-];
+    '.', // Represents the root directory
+    'index.html',
+    'home.html',
+    'styles.css',
+    'manifest.json',
+    'sw.js',
+    
+    // All checklist pages
+    'abort-mission.html',
+    'cs-battery-failure.html',
+    'during-flight.html',
+    'pop-out.html',
+    'post-flight.html',
+    'pre-flight.html',
+    'veh-arming.html',
+    'veh-connect-issues.html',
+    'veh-function.html',
+    'video-fail.html',
+  
+    // All icons
+    'icon-128.png',
+    'icon-192.png',
+    'icon-512.png'
+  ];
 
 // 1. Installation: Open a cache and add the files to it
 self.addEventListener('install', event => {

@@ -1,5 +1,5 @@
 // Define a name for the cache
-const CACHE_NAME = 'rov-checklist-cache-v1';
+const CACHE_NAME = 'rov-checklist-cache-v10';
 
 // List all the files and assets you want to cache
 const urlsToCache = [

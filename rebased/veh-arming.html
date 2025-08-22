@@ -10,11 +10,9 @@
 
     <div class="container">
         <header>
-            <!-- Changed: "Back" arrow now links to during-flight.html -->
-            <a href="during-flight.html" class="nav-arrow left">&lt;</a>
-            <h1 class="danger smaller">► VEHICLE ARMING ISSUE ◄</h1>
-            <!-- Changed: "Forward" arrow is no longer disabled and links to home.html -->
-            <a href="home.html" class="nav-arrow right">&gt;</a>
+            <a href="#" class="nav-arrow left disabled">&lt;</a>
+            <h1 class="danger">► VEHICLE ARMING ISSUE ◄</h1>
+            <a href="#" class="nav-arrow right disabled">&gt;</a>
         </header>
 
         <div class="progress-text" id="progress-text">0 / 1 ITEMS COMPLETE</div>
@@ -24,17 +22,16 @@
                 <div class="scroll-wrapper">
                     <table>
                         <tbody>
-                            <tr class="checklist-item">
+                            <tr class="checklist-item" data-prereq-for="q1"> 
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Confirm DISARMED</span></td>
                             </tr>
-                            <tr class="checklist-item">
+                            <tr class="checklist-item" data-prereq-for="q1">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Pilot Gain</span><span class="dots"></span><span class="item-status">Set to 25%</span></td>
                             </tr>
                             <tr class="checklist-item" data-prereq-for="q1">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Mode</span><span class="dots"></span><span class="item-status">Manual</span></td>
                             </tr>
 
-                            <!-- Question 1: Is the battery above 12.8V? -->
                             <tr class="checklist-item is-question" id="q1">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Is the battery above 12.8V?</span></td>
                             </tr>
@@ -45,7 +42,6 @@
                                 </td>
                             </tr>
 
-                            <!-- Path for "No" to Q1 -->
                             <tr class="instruction conditional" data-path="q1-no">
                                 <td colspan="2">- Battery Voltage Low -</td>
                             </tr>
@@ -54,22 +50,22 @@
                             </tr>
 
 
-                            <!-- Path for "Yes" to Q1 -->
                             <tr class="checklist-item conditional" data-path="q1-yes" data-prereq-for="q2">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Main Joystick</span><span class="dots"></span><span class="item-status">Disconnected</span></td>
                             </tr>
                             <tr class="checklist-item conditional" data-path="q1-yes" data-prereq-for="q2">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Backup Joystick</span><span class="dots"></span><span class="item-status">Connected</span></td>
                             </tr>
+                            <tr class="checklist-item conditional" data-path="q1-yes" data-prereq-for="q2">
+                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Cockpit</span><span class="dots"></span><span class="item-status">Restarted</span></td>
+                             </tr>
                             <tr class="instruction conditional" data-path="q1-yes">
                                 <td colspan="2">- Switch Users for the Backup Joystick -</td>
                             </tr>
                             <tr class="checklist-item conditional" data-path="q1-yes" data-prereq-for="q2">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Joystick Bindings</span><span class="dots"></span><span class="item-status">Confirmed and Tested</span></td>
                             </tr>
-                            <tr class="checklist-item conditional" data-path="q1-yes" data-prereq-for="q2">
-                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Cockpit</span><span class="dots"></span><span class="item-status">Restart</span></td>
-                             </tr>
+
                             <tr class="checklist-item conditional" data-path="q1-yes" data-prereq-for="q2">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Auto Pilot</span><span class="dots"></span><span class="item-status">Restart</span></td>
                             </tr>
@@ -80,7 +76,6 @@
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Set to ARMED</span></td>
                             </tr>
 
-                            <!-- Question 2: Is the vehicle able to arm? -->
                             <tr class="checklist-item is-question conditional" id="q2" data-path="q1-yes">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Is the vehicle able to arm?</span></td>
                             </tr>
@@ -91,12 +86,10 @@
                                 </td>
                             </tr>
 
-                            <!-- Path for "Yes" to Q2 -->
                             <tr class="instruction conditional" data-path="q2-yes">
                                 <td colspan="2">- Slowly Test Pilot Input -</td>
                             </tr>
 
-                            <!-- Question 3: Are functions restored? -->
                             <tr class="checklist-item is-question conditional" id="q3" data-path="q2-yes">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are functions restored?</span></td>
                             </tr>
@@ -107,12 +100,10 @@
                                 </td>
                             </tr>
 
-                            <!-- Path for "Yes" to Q3 -->
                             <tr class="instruction success conditional" data-path="q3-yes">
                                 <td colspan="2">Continue with Mission</td>
                             </tr>
 
-                            <!-- Path for "No" to Q3 -->
                             <tr class="checklist-item conditional" data-path="q3-no" id="autopilot-restart-item">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Auto Pilot</span><span class="dots"></span><span class="item-status">Restart</span></td>
                             </tr>
@@ -129,7 +120,6 @@
                                 <td colspan="2">If functions are restored, re-select Yes above. If still NO: <a href="abort-mission.html" class="action-btn">Abort Mission</a></td>
                             </tr>
 
-                            <!-- Path for "No" to Q2 -->
                             <tr class="checklist-item conditional" data-path="q2-no" id="blueos-restart-item">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">BlueOS</span><span class="dots"></span><span class="item-status">Full Restart</span></td>
                             </tr>
@@ -193,7 +183,7 @@
                 const clampedZoom = Math.max(0.5, Math.min(zoomLevel, 2.0));
                 currentZoom = clampedZoom;
                 applyZoom(currentZoom);
-                localStorage.setItem('rovChecklistZoom', currentZoom);
+                localStorage.setItem('rovChecklistZoom', clampedZoom);
             }
 
             zoomInBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom + 0.1));
@@ -207,7 +197,7 @@
                 localStorage.setItem('theme', currentTheme);
             });
 
-            // --- SCROLL FUNCTIONALITY ---
+            // --- SCROLL FUNCTIONALITY (SYNCHRONIZED WITH WORKING FILE) ---
             function updateScrollState() {
                 const activeWrapper = document.querySelector('.page.active .scroll-wrapper');
                 if (!activeWrapper) return;
@@ -215,7 +205,7 @@
                 const contentHeight = activeWrapper.scrollHeight;
                 const containerHeight = pageContent.clientHeight;
                 const currentScroll = scrollPosition;
-                const footerBuffer = 150;
+                const footerBuffer = 150; // Correct buffer added
                 
                 if (contentHeight <= containerHeight) {
                     scrollUpBtn.disabled = true;
@@ -223,9 +213,13 @@
                     return;
                 }
 
-                scrollUpBtn.disabled = currentScroll === 0;
-                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
+                scrollUpBtn.disabled = currentScroll >= 0;
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer); // Correct max scroll calculation
                 scrollDownBtn.disabled = currentScroll <= maxScroll;
+                
+                if (currentScroll < 0) {
+                    scrollUpBtn.disabled = false;
+                }
             }
 
             function scrollContent(direction, amount = null) {
@@ -234,7 +228,7 @@
 
                 const containerHeight = pageContent.clientHeight;
                 const contentHeight = activeWrapper.scrollHeight;
-                const scrollStep = amount !== null ? amount : containerHeight;
+                const scrollStep = amount !== null ? amount : containerHeight * 0.7;
                 
                 let newScrollY = scrollPosition;
                 if (direction === 'down') {
@@ -243,8 +237,8 @@
                     newScrollY += scrollStep;
                 }
 
-                const footerBuffer = 150;
-                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
+                const footerBuffer = 150; // Correct buffer added
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer); // Correct max scroll calculation
                 
                 newScrollY = Math.max(newScrollY, maxScroll);
                 newScrollY = Math.min(newScrollY, 0);
@@ -260,10 +254,38 @@
                     const itemRect = element.getBoundingClientRect();
                     const containerRect = pageContent.getBoundingClientRect();
                     if (itemRect.bottom > containerRect.bottom) {
-                        const scrollAmount = itemRect.bottom - containerRect.bottom + 40;
+                        const scrollAmount = itemRect.bottom - containerRect.bottom + 40; 
                         scrollContent('down', scrollAmount);
                     }
                 });
+            }
+
+            // --- AUTO-SCROLL LOGIC ---
+            function autoScrollIfNeeded() {
+                const viewportRect = pageContent.getBoundingClientRect();
+            
+                const firstActionableItem = document.querySelector(
+                    '.checklist-item:not(.is-question):not(.checked), .option-btn:not(:disabled)'
+                );
+            
+                if (!firstActionableItem) {
+                    const finalAction = document.querySelector('.action-btn');
+                    if (finalAction) {
+                        const finalActionRect = finalAction.getBoundingClientRect();
+                        if (finalActionRect.top > viewportRect.bottom) {
+                            scrollIntoViewIfNeeded(finalAction);
+                        }
+                    }
+                    return;
+                }
+            
+                const itemRect = firstActionableItem.getBoundingClientRect();
+                const isVisible = itemRect.height > 0;
+                const isFullyInView = itemRect.top >= viewportRect.top && itemRect.bottom <= viewportRect.bottom;
+
+                if (!isFullyInView && isVisible) {
+                    scrollIntoViewIfNeeded(firstActionableItem);
+                }
             }
 
             scrollUpBtn.addEventListener('click', () => scrollContent('up'));
@@ -286,7 +308,7 @@
                 });
             }
 
-            function updateProgress() {
+            function updateProgress(skipAutoScroll = false) {
                 const visibleCheckableItems = document.querySelectorAll('.checklist-item:not(.is-question):not(.conditional), .checklist-item:not(.is-question).conditional[style*="table-row"]');
                 const checkedVisibleItems = [...visibleCheckableItems].filter(item => item.classList.contains('checked'));
                 const totalVisible = visibleCheckableItems.length;
@@ -304,6 +326,32 @@
                 }
                 checkPrerequisites();
                 updateScrollState();
+                if (!skipAutoScroll) {
+                    setTimeout(autoScrollIfNeeded, 50);
+                }
+            }
+
+            function checkRetryInstructionVisibility(itemId, instructionId, questionId) {
+                const item = document.getElementById(itemId);
+                const instructionElement = document.getElementById(instructionId);
+
+                if (item && instructionElement) {
+                    const isChecked = item.classList.contains('checked');
+                    instructionElement.style.display = isChecked ? 'table-row' : 'none';
+                    
+                    if (isChecked) {
+                        scrollIntoViewIfNeeded(instructionElement);
+                        const questionRow = document.querySelector(`.options-row[data-question="${questionId}"]`);
+                        if (questionRow?.classList.contains('selection-made')) {
+                            questionRow.classList.remove('selection-made');
+                            questionRow.querySelectorAll('.option-btn').forEach(btn => {
+                                btn.disabled = false;
+                                btn.classList.remove('selected');
+                            });
+                            document.getElementById(questionId).classList.remove('checked');
+                        }
+                    }
+                }
             }
 
             checklistItems.forEach(item => {
@@ -313,41 +361,10 @@
                         item.classList.toggle('checked');
                         
                         if (item.id === 'vehicle-arming-retry-item') {
-                            const instructionElement = document.getElementById('q3-retry-instruction');
-                            if (instructionElement) {
-                                instructionElement.style.display = item.classList.contains('checked') ? 'table-row' : 'none';
-                                if (item.classList.contains('checked')) {
-                                    scrollIntoViewIfNeeded(instructionElement);
-                                    const q3Row = document.querySelector('.options-row[data-question="q3"]');
-                                    if (q3Row?.classList.contains('selection-made')) {
-                                        q3Row.classList.remove('selection-made');
-                                        q3Row.querySelectorAll('.option-btn').forEach(btn => {
-                                            btn.disabled = false;
-                                            btn.classList.remove('selected');
-                                        });
-                                        document.getElementById('q3').classList.remove('checked');
-                                    }
-                                }
-                            }
+                            checkRetryInstructionVisibility('vehicle-arming-retry-item', 'q3-retry-instruction', 'q3');
                         }
-
                         if (item.id === 'blueos-restart-item') {
-                            const instructionElement = document.getElementById('q2-retry-instruction');
-                             if (instructionElement) {
-                                instructionElement.style.display = item.classList.contains('checked') ? 'table-row' : 'none';
-                                if (item.classList.contains('checked')) {
-                                    scrollIntoViewIfNeeded(instructionElement);
-                                    const q2Row = document.querySelector('.options-row[data-question="q2"]');
-                                    if (q2Row?.classList.contains('selection-made')) {
-                                        q2Row.classList.remove('selection-made');
-                                        q2Row.querySelectorAll('.option-btn').forEach(btn => {
-                                            btn.disabled = false;
-                                            btn.classList.remove('selected');
-                                        });
-                                        document.getElementById('q2').classList.remove('checked');
-                                    }
-                                }
-                            }
+                            checkRetryInstructionVisibility('blueos-restart-item', 'q2-retry-instruction', 'q2');
                         }
                         
                         updateProgress();
@@ -358,7 +375,8 @@
                             const allMet = [...allPrereqs].every(pr => pr.classList.contains('checked'));
                             if (allMet) {
                                 const questionElement = document.getElementById(prereqFor);
-                                scrollIntoViewIfNeeded(questionElement);
+                                const optionsRow = document.querySelector(`.options-row[data-question="${prereqFor}"]`);
+                                scrollIntoViewIfNeeded(optionsRow || questionElement);
                             }
                         }
                     });
@@ -378,12 +396,14 @@
                     e.target.classList.add('selected');
                     questionRow.classList.add('selection-made');
                     questionRow.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+                    
                     if (questionId === 'q3' && choice === 'yes') {
                         document.getElementById('q3-retry-instruction')?.style.setProperty('display', 'none', 'important');
                     }
                     if (questionId === 'q2' && choice === 'yes') {
                         document.getElementById('q2-retry-instruction')?.style.setProperty('display', 'none', 'important');
                     }
+
                     document.querySelectorAll(`[data-path]`).forEach(el => {
                        if(el.dataset.path.startsWith(questionId) && el.dataset.path !== `${questionId}-${choice}`) {
                            el.style.display = 'none';
@@ -393,11 +413,35 @@
                     document.querySelectorAll(pathToShow).forEach(el => {
                         el.style.display = el.tagName === 'TR' ? 'table-row' : 'block';
                     });
-                    updateProgress();
-                    const newlyShownItems = document.querySelectorAll(pathToShow);
-                    if (newlyShownItems.length > 0) {
-                        const lastNewItem = newlyShownItems[newlyShownItems.length - 1];
-                        scrollIntoViewIfNeeded(lastNewItem);
+                    
+                    // --- MODIFIED LOGIC FOR SCROLLING ---
+                    if (questionId === 'q1' && choice === 'yes') {
+                        // Apply the specific, hardcoded scroll for this case
+                        const activeWrapper = document.querySelector('.page.active .scroll-wrapper');
+                        if (activeWrapper) {
+                            scrollPosition = -270;
+                            activeWrapper.style.transform = `translateY(${scrollPosition}px)`;
+                        }
+                        // Update progress UI but skip the automatic scroll
+                        updateProgress(true); 
+                    } else if (questionId === 'q2' && choice === 'no') {
+                        // Force a scroll to focus on the new item, as it may not trigger the default scroll.
+                        updateProgress(true); // Update UI, skip the default auto-scroll.
+                        setTimeout(() => {
+                            const nextItem = document.getElementById('blueos-restart-item');
+                            if (nextItem) {
+                                const itemRect = nextItem.getBoundingClientRect();
+                                const containerRect = pageContent.getBoundingClientRect();
+                                // Calculate scroll amount to bring the item's TOP near the container's TOP
+                                const scrollAmount = itemRect.top - containerRect.top - 20;
+                                if (scrollAmount > 0) {
+                                    scrollContent('down', scrollAmount);
+                                }
+                            }
+                        }, 10); // Use a small timeout to ensure DOM is updated.
+                    } else {
+                        // For all other cases, run the default auto-scroll behavior
+                        updateProgress();
                     }
                 });
             });
@@ -415,7 +459,6 @@
                 currentZoom = savedZoom;
                 applyZoom(currentZoom);
                 updateProgress();
-                // Initial scroll state check
                 setTimeout(updateScrollState, 100);
             }
 

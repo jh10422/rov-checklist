@@ -3,65 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROV Vehicle Function Issue - B777 Interface</title>
+    <title>ROV Video Feed Issue - B777 Interface</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="light-mode">
 
     <div class="container">
         <header>
-            <a href="#" class="nav-arrow left disabled">&lt;</a>
-            <h1 class="danger">► VEHICLE FUNCTION ISSUE ◄</h1>
-            <a href="#" class="nav-arrow right disabled">&gt;</a>
+            <a href="home.html" class="nav-arrow left">&lt;</a>
+            <h1 class="danger">► VIDEO FEED ISSUE ◄</h1>
+            <a href="home.html" class="nav-arrow right">&gt;</a>
         </header>
 
-        <div class="progress-text" id="progress-text">0 / 8 ITEMS COMPLETE</div>
+        <div class="progress-text" id="progress-text">0 / 3 ITEMS COMPLETE</div>
         
         <div class="page-content" id="page-content">
             <div class="page active">
                 <div class="scroll-wrapper">
                     <table>
                         <tbody>
-                            <tr class="checklist-item">
+                            <!-- Initial Checks -->
+                            <tr class="checklist-item" data-prereq-for="q1">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Confirm DISARMED</span></td>
                             </tr>
-                            <tr class="checklist-item">
+                            <tr class="checklist-item" data-prereq-for="q1">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Pilot Gain</span><span class="dots"></span><span class="item-status">Set to 25%</span></td>
                             </tr>
-                            <tr class="checklist-item">
+                            <tr class="checklist-item" data-prereq-for="q1">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Mode</span><span class="dots"></span><span class="item-status">Manual</span></td>
                             </tr>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Main Joystick</span><span class="dots"></span><span class="item-status">Disconnected</span></td>
-                            </tr>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Backup Joystick</span><span class="dots"></span><span class="item-status">Connected</span></td>
-                            </tr>
-                            <tr class="checklist-item">
-                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Cockpit</span><span class="dots"></span><span class="item-status">Restarted</span></td>
-                             </tr>
-                            <tr class="instruction">
-                                <td colspan="2">- Switch Users for the Backup Joystick -</td>
-                            </tr>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Joystick Bindings</span><span class="dots"></span><span class="item-status">Confirmed and Tested</span></td>
-                            </tr>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Auto Pilot</span><span class="dots"></span><span class="item-status">Restart</span></td>
-                            </tr>
-                            <tr class="instruction">
-                                <td colspan="2">- Wait 5 Seconds -</td>
-                            </tr>
-                            <tr class="checklist-item" data-prereq-for="q1">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Set to ARMED</span></td>
-                            </tr>
-                            <tr class="instruction">
-                                <td colspan="2">- Slowly Test Pilot Input -</td>
-                            </tr>
 
-                            <!-- Question 1: Are functions restored? -->
+                            <!-- Question 1: Consistent Connection? -->
                             <tr class="checklist-item is-question" id="q1">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are functions restored?</span></td>
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Do you have a Consistent Connection with the Vehicle?</span></td>
+                            </tr>
+                            <tr class="item-note" data-for-question="q1">
+                                <td colspan="2">Telemetry Flight Data Updates, Cockpit DOES NOT say Vehicle Disconnected, etc</td>
                             </tr>
                             <tr class="options-row" data-question="q1">
                                 <td colspan="2">
@@ -70,26 +47,98 @@
                                 </td>
                             </tr>
 
-                            <!-- Path for "Yes" to Q1 -->
-                            <tr class="instruction success conditional" data-path="q1-yes">
-                                <td colspan="2">- Continue with Mission in MANUAL MODE ONLY -</td>
+                            <!-- Path for "No" to Q1 -->
+                            <tr class="action-row conditional" data-path="q1-no">
+                                <td colspan="2"><a href="veh-connect-issues.html" class="action-btn">Refer to Vehicle Connection Issues PAGE</a></td>
                             </tr>
 
-                            <!-- Path for "No" to Q1 -->
-                            <tr class="checklist-item conditional" data-path="q1-no" id="blueos-restart-item">
+                            <!-- Path for "Yes" to Q1 -->
+                            <!-- Step to Arm Vehicle -->
+                            <tr class="checklist-item conditional" data-path="q1-yes" data-prereq-for="q2">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Confirm ARMED</span></td>
+                            </tr>
+                            <!-- Question 2: Is the vehicle armed? -->
+                            <tr class="checklist-item is-question conditional" id="q2" data-path="q1-yes">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Is the vehicle armed?</span></td>
+                            </tr>
+                            <tr class="options-row conditional" data-question="q2" data-path="q1-yes">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes" disabled>YES</button>
+                                    <button class="option-btn" data-choice="no" disabled>NO</button>
+                                </td>
+                            </tr>
+                            
+                            <!-- Path for "No" to Q2 -->
+                             <tr class="action-row conditional" data-path="q2-no">
+                                <td colspan="2"><a href="veh-arming.html" class="action-btn">Refer to Vehicle Arming Issues PAGE</a></td>
+                            </tr>
+
+                            <!-- Path for "Yes" to Q2 -->
+                            <tr class="checklist-item conditional" data-path="q2-yes" data-prereq-for="q3">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Confirm DISARMED</span></td>
+                            </tr>
+                            <tr class="checklist-item conditional" data-path="q2-yes" data-prereq-for="q3">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">BlueOS</span><span class="dots"></span><span class="item-status">Full Restart</span></td>
                             </tr>
-                            <tr class="instruction conditional" data-path="q1-no">
-                                <td colspan="2">Wait > 30 seconds</td>
+                            <tr class="instruction conditional" data-path="q2-yes">
+                                <td colspan="2">- Wait until BlueOS is fully restarted >30 sec -</td>
                             </tr>
-                            <tr class="checklist-item conditional" data-path="q1-no" id="vehicle-arming-retry-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Set to ARMED</span></td>
+                            
+                            <!-- Question 3: Video Devices Detected? -->
+                            <tr class="checklist-item is-question conditional" id="q3" data-path="q2-yes">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are the Desired Video Devices Detected?</span></td>
                             </tr>
-                            <tr class="instruction conditional" data-path="q1-no">
-                                <td colspan="2">- Slowly Test Pilot Input -</td>
+                             <tr class="item-note conditional" data-path="q2-yes" data-for-question="q3">
+                                <td colspan="2">Check BlueOS or in Terminal</td>
                             </tr>
-                            <tr class="instruction" id="q1-retry-instruction" style="display: none;">
-                                <td colspan="2">If functions are restored, re-select Yes above. If still NO: <a href="abort-mission.html" class="action-btn">Abort Mission</a></td>
+                            <tr class="options-row conditional" data-question="q3" data-path="q2-yes">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes" disabled>YES</button>
+                                    <button class="option-btn" data-choice="no" disabled>NO</button>
+                                </td>
+                            </tr>
+
+                            <!-- Path for "No" to Q3 -->
+                            <tr class="checklist-item conditional" data-path="q3-no" id="blueos-restart-retry-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">BlueOS</span><span class="dots"></span><span class="item-status">Attempt Restart Again</span></td>
+                            </tr>
+                            <tr class="instruction conditional" data-path="q3-no" id="q3-retry-instruction" style="display: none;">
+                                <td colspan="2">If devices are detected, re-select YES above. If still NO: <a href="abort-mission.html" class="action-btn">Abort Mission</a></td>
+                            </tr>
+                            
+                            <!-- Path for "Yes" to Q3 -->
+                            <tr class="instruction conditional" data-path="q3-yes">
+                                <td colspan="2">- Ensure proper streaming settings are setup -</td>
+                            </tr>
+                            <tr class="checklist-item conditional" data-path="q3-yes" data-prereq-for="q4">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Cockpit</span><span class="dots"></span><span class="item-status">Restarted</span></td>
+                            </tr>
+                            <tr class="checklist-item conditional" data-path="q3-yes" data-prereq-for="q4">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Receiving Video Streams</span><span class="dots"></span><span class="item-status">Restarted</span></td>
+                            </tr>
+
+                            <!-- Question 4: Are Video Streams showing now? -->
+                            <tr class="checklist-item is-question conditional" id="q4" data-path="q3-yes">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are Video Streams showing now?</span></td>
+                            </tr>
+                            <tr class="options-row conditional" data-question="q4" data-path="q3-yes">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes" disabled>YES</button>
+                                    <button class="option-btn" data-choice="no" disabled>NO</button>
+                                </td>
+                            </tr>
+
+                            <!-- Path for "Yes" to Q4 -->
+                            <tr class="instruction success conditional" data-path="q4-yes">
+                                <td colspan="2">Checklist Complete</td>
+                            </tr>
+
+                            <!-- Path for "No" to Q4 -->
+                            <tr class="instruction conditional" data-path="q4-no" id="q4-retry-instruction">
+                                <td colspan="2">Re-setup Video Streams and Ensure Proper Connection Settings, re-select YES above if video stream is returned.</td>
+                            </tr>
+                            <tr class="action-row conditional" data-path="q4-no">
+                                <td colspan="2">Otherwise: <a href="abort-mission.html" class="action-btn">Refer to Abort Mission Page</a></td>
                             </tr>
 
                         </tbody>
@@ -216,17 +265,16 @@
                     const itemRect = element.getBoundingClientRect();
                     const containerRect = pageContent.getBoundingClientRect();
                     if (itemRect.bottom > containerRect.bottom) {
-                        const scrollAmount = itemRect.bottom - containerRect.bottom + 60;
+                        // MODIFIED: Increased scroll buffer for better visibility
+                        const scrollAmount = itemRect.bottom - containerRect.bottom + 80;
                         scrollContent('down', scrollAmount);
                     }
                 });
             }
             
-            // --- CORRECTED AUTO-SCROLL LOGIC ---
             function autoScrollIfNeeded() {
                 const viewportRect = pageContent.getBoundingClientRect();
             
-                // Find the very first actionable item that is not yet complete.
                 const firstActionableItem = document.querySelector(
                     '.checklist-item:not(.is-question):not(.checked), .option-btn:not(:disabled)'
                 );
@@ -235,26 +283,21 @@
                     const finalAction = document.querySelector('.action-btn');
                     if (finalAction) {
                         const finalActionRect = finalAction.getBoundingClientRect();
-                        // A simplified check for the final button
                         if (finalActionRect.top > viewportRect.bottom) {
                             scrollIntoViewIfNeeded(finalAction);
                         }
                     }
-                    return; // No more items to process
+                    return;
                 }
             
                 const itemRect = firstActionableItem.getBoundingClientRect();
                 const isVisible = itemRect.height > 0;
-
-                // An item is considered "fully visible" if its top and bottom are both within the viewport.
                 const isFullyInView = itemRect.top >= viewportRect.top && itemRect.bottom <= viewportRect.bottom;
 
-                // If the first actionable item is not fully in the viewport and is actually displayed, scroll to it.
                 if (!isFullyInView && isVisible) {
                     scrollIntoViewIfNeeded(firstActionableItem);
                 }
             }
-
 
             scrollUpBtn.addEventListener('click', () => scrollContent('up'));
             scrollDownBtn.addEventListener('click', () => scrollContent('down'));
@@ -268,6 +311,7 @@
                     if (prereqItems.length > 0) {
                         allPrereqsMet = [...prereqItems].every(item => item.classList.contains('checked'));
                     }
+                    
                     row.querySelectorAll('.option-btn').forEach(btn => {
                         if(!btn.closest('.options-row').classList.contains('selection-made')) {
                            btn.disabled = !allPrereqsMet;
@@ -277,54 +321,73 @@
             }
 
             function updateProgress() {
-                const visibleCheckableItems = document.querySelectorAll('.checklist-item:not(.is-question):not(.conditional), .checklist-item:not(.is-question).conditional[style*="table-row"]');
-                const checkedVisibleItems = [...visibleCheckableItems].filter(item => item.classList.contains('checked'));
+                const visibleCheckableItems = Array.from(document.querySelectorAll('.checklist-item:not(.is-question)'))
+                    .filter(item => {
+                        const style = window.getComputedStyle(item);
+                        return style.display !== 'none';
+                    });
+
+                const checkedVisibleItems = visibleCheckableItems.filter(item => item.classList.contains('checked'));
+                
                 const totalVisible = visibleCheckableItems.length;
                 const checkedCount = checkedVisibleItems.length;
+                
                 progressText.textContent = `${checkedCount} / ${totalVisible} ITEMS COMPLETE`;
-                const missionComplete = document.querySelector('.instruction.conditional[data-path="q1-yes"]')?.style.display === 'table-row';
+                
+                const missionComplete = document.querySelector('.instruction.conditional[data-path="q4-yes"]')?.style.display === 'table-row';
                 if (missionComplete) {
                     nextChecklistBtn.style.display = 'block';
-                    nextChecklistBtn.textContent = 'GO TO HOME';
-                    progressText.textContent = 'TROUBLESHOOTING COMPLETE - MISSION READY';
+                    progressText.textContent = 'TROUBLESHOOTING COMPLETE';
                     progressText.style.color = 'var(--complete-color)';
                 } else {
                     nextChecklistBtn.style.display = 'none';
                     progressText.style.color = 'var(--dim-text-color)';
                 }
+                
                 checkPrerequisites();
                 updateScrollState();
-                
-                // Run the auto-scroll check after a tiny delay to allow the DOM to update.
                 setTimeout(autoScrollIfNeeded, 50);
             }
 
-            function checkRetryInstructionVisibility() {
-                const blueOsItem = document.getElementById('blueos-restart-item');
-                const armingItem = document.getElementById('vehicle-arming-retry-item');
-                const instructionElement = document.getElementById('q1-retry-instruction');
+            function checkQ3RetryVisibility() {
+                const retryItem = document.getElementById('blueos-restart-retry-item');
+                const instructionElement = document.getElementById('q3-retry-instruction');
 
-                if (blueOsItem && armingItem && instructionElement) {
-                    const bothChecked = blueOsItem.classList.contains('checked') && armingItem.classList.contains('checked');
+                if (retryItem && instructionElement) {
+                    const isChecked = retryItem.classList.contains('checked');
+                    instructionElement.style.display = isChecked ? 'table-row' : 'none';
                     
-                    if (bothChecked) {
-                        instructionElement.style.display = 'table-row';
+                    if (isChecked) {
                         scrollIntoViewIfNeeded(instructionElement);
-
-                        const q1Row = document.querySelector('.options-row[data-question="q1"]');
-                        if (q1Row?.classList.contains('selection-made')) {
-                            q1Row.classList.remove('selection-made');
-                            q1Row.querySelectorAll('.option-btn').forEach(btn => {
+                        const q3Row = document.querySelector('.options-row[data-question="q3"]');
+                        if (q3Row) {
+                            q3Row.classList.remove('selection-made');
+                            q3Row.querySelectorAll('.option-btn').forEach(btn => {
                                 btn.disabled = false;
                                 btn.classList.remove('selected');
                             });
-                            document.getElementById('q1').classList.remove('checked');
+                            document.getElementById('q3').classList.remove('checked');
                         }
-                    } else {
-                        instructionElement.style.display = 'none';
                     }
                 }
             }
+            
+            // MODIFIED: Function to handle re-enabling buttons for Q4
+            function handleQ4Retry() {
+                const q4Row = document.querySelector('.options-row[data-question="q4"]');
+                if (q4Row) {
+                    q4Row.classList.remove('selection-made');
+                    q4Row.querySelectorAll('.option-btn').forEach(btn => {
+                        // Re-enable buttons only if prerequisites are met
+                        const prereqs = document.querySelectorAll('[data-prereq-for="q4"]');
+                        const prereqsMet = [...prereqs].every(p => p.classList.contains('checked'));
+                        btn.disabled = !prereqsMet;
+                        btn.classList.remove('selected');
+                    });
+                    document.getElementById('q4').classList.remove('checked');
+                }
+            }
+
 
             checklistItems.forEach(item => {
                 if (!item.classList.contains('is-question')) {
@@ -332,7 +395,10 @@
                         if (e.target.closest('a')) return;
                         item.classList.toggle('checked');
                         
-                        checkRetryInstructionVisibility();
+                        if (item.id === 'blueos-restart-retry-item') {
+                            checkQ3RetryVisibility();
+                        }
+
                         updateProgress();
 
                         const prereqFor = item.dataset.prereqFor;
@@ -357,30 +423,53 @@
                     if (!questionRow) return; 
                     const questionId = questionRow.dataset.question;
                     const questionItem = document.getElementById(questionId);
-                    questionItem.classList.add('checked');
+                    
+                    if (questionItem.classList.contains('is-question')) {
+                        questionItem.classList.add('checked');
+                    }
+                    
                     questionRow.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
                     e.target.classList.add('selected');
-                    questionRow.classList.add('selection-made');
-                    questionRow.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
                     
-                    if (questionId === 'q1' && choice === 'yes') {
-                        document.getElementById('q1-retry-instruction')?.style.setProperty('display', 'none', 'important');
+                    // MODIFIED: Keep buttons enabled for Q4 "No" path
+                    if (questionId !== 'q4' || choice !== 'no') {
+                        questionRow.classList.add('selection-made');
+                        questionRow.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+                    } else {
+                        // If Q4 "No" is selected, immediately allow re-selection
+                        handleQ4Retry();
+                        e.target.classList.add('selected'); // Re-apply 'selected' to the "No" button
                     }
+
+
+                    if (questionId === 'q3' && choice === 'yes') {
+                        document.getElementById('q3-retry-instruction').style.display = 'none';
+                    }
+                    
+                    // Hide the "Yes" path for Q4 if "No" is selected
+                    if (questionId === 'q4' && choice === 'no') {
+                         document.querySelector('[data-path="q4-yes"]').style.display = 'none';
+                    }
+
 
                     document.querySelectorAll(`[data-path]`).forEach(el => {
                        if(el.dataset.path.startsWith(questionId) && el.dataset.path !== `${questionId}-${choice}`) {
                            el.style.display = 'none';
+                           el.querySelectorAll('.checklist-item').forEach(innerItem => innerItem.classList.remove('checked'));
                        }
                     });
+                    
                     const pathToShow = `[data-path="${questionId}-${choice}"]`;
                     document.querySelectorAll(pathToShow).forEach(el => {
                         el.style.display = el.tagName === 'TR' ? 'table-row' : 'block';
                     });
+                    
                     updateProgress();
+                    
                     const newlyShownItems = document.querySelectorAll(pathToShow);
                     if (newlyShownItems.length > 0) {
-                        const lastNewItem = newlyShownItems[newlyShownItems.length - 1];
-                        scrollIntoViewIfNeeded(lastNewItem);
+                        const firstNewItem = newlyShownItems[0];
+                        scrollIntoViewIfNeeded(firstNewItem);
                     }
                 });
             });

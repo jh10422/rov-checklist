@@ -11,23 +11,23 @@
     <div class="container">
         <header>
             <a href="home.html" class="nav-arrow left">&lt;</a>
-            <h1>► ABORT MISSION ◄</h1>
+            <h1 class="danger">► ABORT MISSION ◄</h1>
             <a href="#" class="nav-arrow right disabled">&gt;</a>
         </header>
 
         <div class="sub-tabs-container">
-            <button class="sub-tab">Immediate Actions</button>
+            <button class="sub-tab active">Immediate Actions</button>
             <button class="sub-tab">Vehicle</button>
             <button class="sub-tab">Tether</button>
             <button class="sub-tab">Control Station</button>
         </div>
 
         <div class="progress-text" id="progress-text">0 / 1 ITEMS COMPLETE</div>
-        <div class="tab-title" id="tab-title"></div>
+        <div class="tab-title" id="tab-title">IMMEDIATE ACTIONS</div>
         
         <div class="page-content" id="page-content">
-            <div class="page active">
-                <div class="scroll-wrapper">
+            <div class="scroll-wrapper">
+                <div class="page active">
                     <table>
                         <tbody>
                             <!-- Question 1 -->
@@ -42,16 +42,16 @@
                             </tr>
 
                             <!-- Path for "Yes" to Q1 -->
-                            <tr class="instruction conditional" data-path="q1-yes">
+                            <tr class="instruction conditional" data-path="q1-yes" style="display: none;">
                                 <td colspan="2">Retrieve Vehicle via Tether Pulling and PROCEED TO NEXT PAGE</td>
                             </tr>
 
                             <!-- Path for "No" to Q1 -->
                             <!-- Question 2: Vehicle Arming -->
-                            <tr class="checklist-item is-question conditional" id="q2" data-path="q1-no">
+                            <tr class="checklist-item is-question conditional" id="q2" data-path="q1-no" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are You Able to Arm the Vehicle?</span></td>
                             </tr>
-                            <tr class="options-row conditional" data-question="q2" data-path="q1-no">
+                            <tr class="options-row conditional" data-question="q2" data-path="q1-no" style="display: none;">
                                 <td colspan="2">
                                     <button class="option-btn" data-choice="yes">YES</button>
                                     <button class="option-btn" data-choice="no">NO</button>
@@ -59,26 +59,26 @@
                             </tr>
 
                             <!-- Path for "No" to Q2 -->
-                            <tr class="instruction conditional" data-path="q2-no">
+                            <tr class="instruction conditional" data-path="q2-no" style="display: none;">
                                 <td colspan="2">Retrieve Vehicle via Tether Pulling and PROCEED TO NEXT PAGE</td>
                             </tr>
 
                             <!-- Path for "Yes" to Q2 -->
-                            <tr class="checklist-item conditional" data-path="q2-yes" data-prereq-for="q3">
+                            <tr class="checklist-item conditional" data-path="q2-yes" data-prereq-for="q3" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">MODE</span><span class="dots"></span><span class="item-status">Set to Manual</span></td>
                             </tr>
-                            <tr class="checklist-item conditional" data-path="q2-yes" data-prereq-for="q3">
+                            <tr class="checklist-item conditional" data-path="q2-yes" data-prereq-for="q3" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Gain</span><span class="dots"></span><span class="item-status">Set to 25%</span></td>
                             </tr>
-                            <tr class="instruction conditional" data-path="q2-yes">
+                            <tr class="instruction conditional" data-path="q2-yes" style="display: none;">
                                 <td colspan="2">- Slowly Test Pilot Input -</td>
                             </tr>
 
                             <!-- Question 3: ROV Controllable -->
-                            <tr class="checklist-item is-question conditional" id="q3" data-path="q2-yes">
+                            <tr class="checklist-item is-question conditional" id="q3" data-path="q2-yes" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Is Vehicle Controllable?</span></td>
                             </tr>
-                            <tr class="options-row conditional" data-question="q3" data-path="q2-yes">
+                            <tr class="options-row conditional" data-question="q3" data-path="q2-yes" style="display: none;">
                                 <td colspan="2">
                                     <button class="option-btn" data-choice="yes" disabled>YES</button>
                                     <button class="option-btn" data-choice="no" disabled>NO</button>
@@ -86,7 +86,7 @@
                             </tr>
 
                             <!-- Path for "No" to Q3 -->
-                            <tr class="checklist-item conditional" data-path="q3-no" id="vehicle-disarm-item">
+                            <tr class="checklist-item conditional" data-path="q3-no" id="vehicle-disarm-item" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Disarmed</span></td>
                             </tr>
                             <!-- This instruction only shows when Vehicle Arming is checked -->
@@ -95,10 +95,10 @@
                             </tr>
 
                             <!-- Path for "Yes" to Q3 -->
-                            <tr class="instruction conditional" data-path="q3-yes">
+                            <tr class="instruction conditional" data-path="q3-yes" style="display: none;">
                                 <td colspan="2">Set Gain as Needed, Surface and Pilot back to Dock</td>
                             </tr>
-                            <tr class="checklist-item conditional" data-path="q3-yes" id="vehicle-retrieved-item">
+                            <tr class="checklist-item conditional" data-path="q3-yes" id="vehicle-retrieved-item" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle</span><span class="dots"></span><span class="item-status">Retrieved via Tether and Piloting</span></td>
                             </tr>
                             <!-- This instruction only shows when Vehicle item is checked -->
@@ -109,9 +109,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="page">
-                <div class="scroll-wrapper">
+                <div class="page">
                     <table>
                         <tbody>
                             <tr class="checklist-item">
@@ -133,9 +131,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="page">
-                <div class="scroll-wrapper">
+                <div class="page">
                     <table>
                         <tbody>
                             <tr class="checklist-item">
@@ -153,9 +149,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="page">
-                <div class="scroll-wrapper">
+                <div class="page">
                     <table>
                         <tbody>
                             <!-- Question: Control Station Operable -->
@@ -169,49 +163,49 @@
                                 </td>
                             </tr>
 
-                            <!-- Path for "Yes" to CS-Q1 -->
-                            <tr class="checklist-item conditional" data-path="cs-q1-yes">
+                            <!-- Path for "Yes" to CS-Q1 - ALL HIDDEN BY DEFAULT -->
+                            <tr class="checklist-item conditional" data-path="cs-q1-yes" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Video Recordings</span><span class="dots"></span><span class="item-status">Saved</span></td>
                             </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-yes">
+                            <tr class="checklist-item conditional" data-path="cs-q1-yes" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Monitor Switch</span><span class="dots"></span><span class="item-status">OFF</span></td>
                             </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-yes">
+                            <tr class="checklist-item conditional" data-path="cs-q1-yes" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Top Cover</span><span class="dots"></span><span class="item-status">OPEN Lid CAREFULLY</span></td>
                             </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-yes">
+                            <tr class="checklist-item conditional" data-path="cs-q1-yes" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Power Button</span><span class="dots"></span><span class="item-status">Hold until OFF</span></td>
                             </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-yes">
+                            <tr class="checklist-item conditional" data-path="cs-q1-yes" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Joystick Frame</span><span class="dots"></span><span class="item-status">STOWED</span></td>
                             </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-yes">
+                            <tr class="checklist-item conditional" data-path="cs-q1-yes" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Cable</span><span class="dots"></span><span class="item-status">STOWED</span></td>
                             </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-yes">
+                            <tr class="checklist-item conditional" data-path="cs-q1-yes" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Station Lid</span><span class="dots"></span><span class="item-status">Securely CLOSED</span></td>
                             </tr>
                             <tr class="instruction conditional success" data-path="cs-q1-yes" id="cs-yes-complete" style="display: none;">
                                 <td colspan="2">Checklist Complete - System Secured</td>
                             </tr>
 
-                            <!-- Path for "No" to CS-Q1 -->
-                            <tr class="checklist-item conditional" data-path="cs-q1-no">
+                            <!-- Path for "No" to CS-Q1 - ALL HIDDEN BY DEFAULT -->
+                            <tr class="checklist-item conditional" data-path="cs-q1-no" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Monitor Switch</span><span class="dots"></span><span class="item-status">OFF</span></td>
                             </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-no">
+                            <tr class="checklist-item conditional" data-path="cs-q1-no" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Top Cover</span><span class="dots"></span><span class="item-status">OPEN Lid CAREFULLY</span></td>
                             </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-no">
+                            <tr class="checklist-item conditional" data-path="cs-q1-no" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Power Button</span><span class="dots"></span><span class="item-status">Hold until OFF</span></td>
                             </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-no">
+                            <tr class="checklist-item conditional" data-path="cs-q1-no" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Joystick Frame</span><span class="dots"></span><span class="item-status">STOWED</span></td>
                             </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-no">
+                            <tr class="checklist-item conditional" data-path="cs-q1-no" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Cable</span><span class="dots"></span><span class="item-status">STOWED</span></td>
                             </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-no">
+                            <tr class="checklist-item conditional" data-path="cs-q1-no" style="display: none;">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Station Lid</span><span class="dots"></span><span class="item-status">Securely CLOSED</span></td>
                             </tr>
                             <tr class="instruction conditional success" data-path="cs-q1-no" id="cs-no-complete" style="display: none;">
@@ -252,9 +246,201 @@
 
     <script src="script.js"></script>
     <script>
-        // Initialize the Abort Mission checklist
+        // Fixed AbortMissionChecklist that works with the correct DOM structure
+        class FixedAbortMissionChecklist extends AbortMissionChecklist {
+            constructor() {
+                super();
+            }
+
+            // Override scroll state detection to work with active page content height
+            updateTransformScrollState() {
+                const activeWrapper = this.scrollWrapper;
+                const activePage = document.querySelector('.page.active');
+                if (!activeWrapper || !activePage) return;
+
+                // Get the height of the active page's content, not the entire scroll wrapper
+                const contentHeight = activePage.scrollHeight;
+                const containerHeight = this.pageContent.clientHeight;
+                const currentScroll = this.scrollPositions[this.currentPage];
+                
+                if (contentHeight <= containerHeight) {
+                    this.scrollUpBtn.disabled = true;
+                    this.scrollDownBtn.disabled = true;
+                    // Reset scroll position if content becomes unscrollable
+                    if (this.scrollPositions[this.currentPage] !== 0) {
+                        this.scrollPositions[this.currentPage] = 0;
+                        activeWrapper.style.transform = `translateY(0px)`;
+                    }
+                    return;
+                }
+
+                this.scrollUpBtn.disabled = currentScroll >= 0;
+                
+                const maxScroll = -(contentHeight - containerHeight + 50); // More buffer
+                
+                this.scrollDownBtn.disabled = currentScroll <= maxScroll;
+            }
+
+            // Override scroll content to work with active page height
+            scrollContentTransform(direction, amount = null) {
+                const activeWrapper = this.scrollWrapper;
+                const activePage = document.querySelector('.page.active');
+                if (!activeWrapper || !activePage) return;
+
+                const containerHeight = this.pageContent.clientHeight;
+                const contentHeight = activePage.scrollHeight; // Use active page height
+                const scrollStep = amount !== null ? amount : containerHeight * 0.7;
+                
+                let newScrollY = this.scrollPositions[this.currentPage];
+                if (direction === 'down') {
+                    newScrollY -= scrollStep;
+                } else {
+                    newScrollY += scrollStep;
+                }
+
+                const maxScroll = -(contentHeight - containerHeight + 50); // More buffer
+                
+                newScrollY = Math.max(newScrollY, maxScroll);
+                newScrollY = Math.min(newScrollY, 0);
+
+                this.scrollPositions[this.currentPage] = newScrollY;
+                activeWrapper.style.transform = `translateY(${newScrollY}px)`;
+                this.updateScrollState();
+            }
+
+            // Override showPage to properly handle scroll wrapper transform
+            showPage(pageIndex) {
+                this.currentPage = pageIndex;
+                this.pages.forEach((page, index) => {
+                    page.classList.toggle('active', index === pageIndex);
+                });
+                
+                // Apply the correct transform to the main scroll wrapper
+                if (this.scrollWrapper) {
+                    this.scrollWrapper.style.transform = `translateY(${this.scrollPositions[pageIndex]}px)`;
+                }
+                
+                if (this.config.hasSubTabs) {
+                    this.subTabs.forEach((tab, index) => {
+                        tab.classList.toggle('active', index === pageIndex);
+                    });
+                }
+                
+                if (this.tabTitle && this.config.pageTitles[pageIndex]) {
+                    this.tabTitle.textContent = this.config.pageTitles[pageIndex];
+                }
+                
+                if (this.pageIndicator) {
+                    this.pageIndicator.textContent = `${pageIndex + 1} / ${this.totalPages}`;
+                }
+                
+                if (this.prevBtn) this.prevBtn.disabled = pageIndex === 0;
+                if (this.nextBtn) this.nextBtn.disabled = pageIndex === this.totalPages - 1;
+                
+                if (this.nextBtn) {
+                    this.nextBtn.classList.remove('highlighted');
+                }
+                
+                this.updateFooter();
+                
+                setTimeout(() => {
+                    this.updateScrollState();
+                    this.updateProgress();
+                }, 50);
+            }
+
+            // Override the entire handleSpecialItemBehaviors to match working version
+            handleSpecialItemBehaviors(item) {
+                if (item.id === 'vehicle-retrieved-item') {
+                    const instruction = document.getElementById('vehicle-instructions');
+                    instruction.style.display = item.classList.contains('checked') ? 'table-row' : 'none';
+                    if(item.classList.contains('checked')) this.scrollIntoViewIfNeeded(instruction);
+                }
+                if (item.id === 'vehicle-disarm-item') {
+                    const instruction = document.getElementById('disarm-instructions');
+                    instruction.style.display = item.classList.contains('checked') ? 'table-row' : 'none';
+                    if(item.classList.contains('checked')) this.scrollIntoViewIfNeeded(instruction);
+                }
+                
+                // Control Station completion logic - run on every item check like the original
+                if (this.currentPage === 3) { // Control Station tab
+                    const csYesItems = document.querySelectorAll('.checklist-item.conditional[data-path="cs-q1-yes"]:not(.is-question)');
+                    const csNoItems = document.querySelectorAll('.checklist-item.conditional[data-path="cs-q1-no"]:not(.is-question)');
+                    
+                    const csYesVisible = [...csYesItems].filter(item => item.style.display === 'table-row');
+                    const csYesChecked = csYesVisible.filter(item => item.classList.contains('checked'));
+                    const yesComplete = document.getElementById('cs-yes-complete');
+                    if(csYesVisible.length > 0 && csYesChecked.length === csYesVisible.length) {
+                        yesComplete.style.display = 'table-row';
+                        this.scrollIntoViewIfNeeded(yesComplete);
+                    } else {
+                        yesComplete.style.display = 'none';
+                    }
+                    
+                    const csNoVisible = [...csNoItems].filter(item => item.style.display === 'table-row');
+                    const csNoChecked = csNoVisible.filter(item => item.classList.contains('checked'));
+                    const noComplete = document.getElementById('cs-no-complete');
+                    if(csNoVisible.length > 0 && csNoChecked.length === csNoVisible.length) {
+                        noComplete.style.display = 'table-row';
+                        this.scrollIntoViewIfNeeded(noComplete);
+                    } else {
+                        noComplete.style.display = 'none';
+                    }
+                }
+            }
+
+            // Override updateProgress to fix Control Station completion detection
+            updateProgress() {
+                const currentPageElement = document.querySelector('.page.active');
+                if (!currentPageElement) return;
+                
+                let visibleCheckableItems, checkedVisibleItems, totalVisible, checkedCount;
+                
+                if (this.currentPage === 3) { // Control Station tab - special handling
+                    // For Control Station, we need to count visible conditional items properly
+                    visibleCheckableItems = currentPageElement.querySelectorAll('.checklist-item:not(.is-question):not(.conditional), .checklist-item:not(.is-question).conditional[style*="table-row"]');
+                    checkedVisibleItems = [...visibleCheckableItems].filter(item => item.classList.contains('checked'));
+                    
+                    totalVisible = visibleCheckableItems.length;
+                    checkedCount = checkedVisibleItems.length;
+                    
+                    // Check if Control Station is complete (either YES or NO path finished)
+                    const csComplete = document.getElementById('cs-yes-complete')?.style.display === 'table-row' || 
+                                       document.getElementById('cs-no-complete')?.style.display === 'table-row';
+                    
+                    if (this.progressText) {
+                        this.progressText.textContent = `${checkedCount} / ${totalVisible} ITEMS COMPLETE`;
+                        
+                        if (csComplete) {
+                            this.progressText.textContent += ' -- SYSTEM SECURED';
+                            this.progressText.style.color = 'var(--complete-color)';
+                        } else {
+                            this.progressText.style.color = 'var(--dim-text-color)';
+                        }
+                    }
+                } else {
+                    // For other tabs, use normal logic
+                    visibleCheckableItems = currentPageElement.querySelectorAll('.checklist-item:not(.is-question):not(.conditional), .checklist-item:not(.is-question).conditional[style*="table-row"]');
+                    checkedVisibleItems = [...visibleCheckableItems].filter(item => item.classList.contains('checked'));
+                    
+                    totalVisible = visibleCheckableItems.length;
+                    checkedCount = checkedVisibleItems.length;
+                    
+                    if (this.progressText) {
+                        this.progressText.textContent = `${checkedCount} / ${totalVisible} ITEMS COMPLETE`;
+                        this.progressText.style.color = 'var(--dim-text-color)';
+                    }
+                }
+                
+                this.checkTabCompletion();
+                this.checkPrerequisites();
+                this.updateFooter();
+            }
+        }
+
+        // Initialize the fixed Abort Mission checklist
         document.addEventListener('DOMContentLoaded', () => {
-            new AbortMissionChecklist();
+            new FixedAbortMissionChecklist();
         });
     </script>
 

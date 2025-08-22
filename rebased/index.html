@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FUMI ROV Checklist System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-mode">
+
+    <div class="container">
+        <header>
+            <h1>► FUMI ROV CHECKLIST SYSTEM ◄</h1>
+        </header>
+        
+        <div class="page-content welcome">
+            <div class="welcome-container">
+                <div class="system-title">OPERATIONAL CHECKLIST</div>
+                
+                <div class="welcome-text">
+                    This is a checklist system designed for the safe and efficient operation of the FUMI ROV.<br>
+                    Follow the procedures to ensure proper deployment, operation, and recovery.
+                </div>
+                
+                <a href="home.html" class="continue-btn">
+                    <span class="btn-title">CONTINUE TO CHECKLISTS</span>
+                    <span class="btn-description">Begin ROV operations</span>
+                </a>
+            </div>
+        </div>
+        
+        <footer class="theme-footer">
+            <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
+            <span style="padding: 0 10px;">ZOOM</span>
+            <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
+            <span style="width: 20px;"></span>
+            <button id="theme-toggle" class="footer-btn">DARK MODE</button>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const zoomInBtn = document.getElementById('zoom-in-btn');
+            const zoomOutBtn = document.getElementById('zoom-out-btn');
+
+            // --- ZOOM FUNCTIONALITY ---
+            let currentZoom = 1.0;
+
+            function applyZoom(zoomLevel) {
+                body.style.zoom = zoomLevel;
+            }
+
+            function saveAndApplyZoom(zoomLevel) {
+                const clampedZoom = Math.max(0.5, Math.min(zoomLevel, 2.0));
+                currentZoom = clampedZoom;
+                applyZoom(currentZoom);
+                localStorage.setItem('rovChecklistZoom', currentZoom);
+            }
+
+            zoomInBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom + 0.1));
+            zoomOutBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom - 0.1));
+
+            // --- THEME FUNCTIONALITY ---
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : 'dark-mode';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+                localStorage.setItem('theme', currentTheme);
+            });
+
+            // --- INITIAL LOAD ---
+            function initialize() {
+                // Load saved theme
+                const savedTheme = localStorage.getItem('theme') || 'light-mode';
+                if (savedTheme === 'dark-mode') {
+                    body.classList.remove('light-mode');
+                } else {
+                    body.classList.add('light-mode');
+                }
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+
+                // Load saved zoom
+                const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
+                currentZoom = savedZoom;
+                applyZoom(currentZoom);
+            }
+
+            initialize();
+        });
+    </script>
+
+</body>
+</html>

@@ -175,6 +175,7 @@ h1.danger {
     padding: 1rem 0;
     position: relative;
     display: flex;
+    min-height: 0; /* ADDED: Fix for flexbox overflow issues */
 }
 
 .scroll-wrapper {
@@ -182,6 +183,7 @@ h1.danger {
     overflow: hidden;
     transform: translateY(0);
     transition: transform 0.4s ease-in-out;
+    min-height: 0; /* ADDED: Fix for flexbox overflow issues */
 }
 
 .scroll-wrapper table {
@@ -209,6 +211,7 @@ h1.danger {
 .page {
     display: none;
     width: 100%; /* All pages should have 100% width */
+    min-height: 0; /* ADDED: Fix for flexbox overflow issues */
 }
 
 .page.active {
@@ -218,14 +221,23 @@ h1.danger {
 /* Home page specific styles */
 .page.home-page {
     padding-bottom: 200px;
+    min-height: 0; /* ADDED: Fix for flexbox overflow issues */
 }
 
 .page.home-page.active {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    /* height: 100%; */ /* REMOVED: This was the cause of the scrolling issue */
     padding-top: 1rem;
+    min-height: 0; /* ADDED: Fix for flexbox overflow issues */
+    height: 100%; /* ADDED: Ensure full height */
+}
+
+.page.home-page .scroll-wrapper {
+    /* ADDED: Specific styling for home page scroll wrapper */
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
 }
 
 .home-nav-container {
@@ -235,6 +247,7 @@ h1.danger {
     align-items: center;
     width: 100%;
     gap: 1rem;
+    min-height: 0; /* ADDED: Fix for flexbox overflow issues */
 }
 
 .home-nav-tab {

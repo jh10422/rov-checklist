@@ -19,9 +19,9 @@
             <button class="sub-tab">PREPARATION ITEMS</button>
         </div>
         
-        <div class="page-content">
-            <div class="page home-page active">
-                <div class="scroll-wrapper">
+        <div class="page-content" id="page-content">
+            <div class="scroll-wrapper">
+                <div class="page home-page active">
                     <div class="home-nav-container">
                         <a href="pre-flight.html" class="home-nav-tab">
                             <span class="tab-title">PRE-FLIGHT</span>
@@ -37,9 +37,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
-            <div class="page home-page">
-                 <div class="scroll-wrapper">
+                <div class="page home-page">
                      <div class="home-nav-container">
                         <a href="cs-battery-failure.html" class="home-nav-tab">
                             <span class="tab-title">Control Station Battery Failure</span>
@@ -62,10 +60,8 @@
                             <span class="tab-description">Procedure for aborting the mission.</span>
                         </a>
                     </div>
-                 </div>
-            </div>
-            <div class="page home-page">
-                <div class="scroll-wrapper">
+                </div>
+                <div class="page home-page">
                     <div class="home-nav-container">
                         <a href="#" class="home-nav-tab">
                             <span class="tab-title">EQUIPMENT INSPECTION</span>
@@ -99,9 +95,116 @@
 
     <script src="script.js"></script>
     <script>
-        // Initialize the home page
+        // Enhanced HomePageApp class that properly handles scrolling
+        class EnhancedHomePageApp extends HomePageApp {
+            constructor() {
+                super();
+                // Override the scroll detection to work properly
+                this.setupProperScrolling();
+            }
+
+            setupProperScrolling() {
+                // Use the original working scroll logic
+                setTimeout(() => {
+                    this.updateScrollState();
+                }, 100);
+            }
+
+            updateScrollState() {
+                const activePage = document.querySelector('.page.active');
+                if (!activePage) return;
+
+                const contentHeight = activePage.scrollHeight;
+                const containerHeight = this.pageContent.clientHeight;
+                const currentScroll = this.scrollPositions[this.currentPage];
+                const footerBuffer = 100;
+                
+                if (contentHeight <= containerHeight) {
+                    this.scrollUpBtn.disabled = true;
+                    this.scrollDownBtn.disabled = true;
+                    // Reset scroll position if content becomes unscrollable
+                    if (this.scrollPositions[this.currentPage] !== 0) {
+                        this.scrollPositions[this.currentPage] = 0;
+                        activePage.style.transform = `translateY(0px)`;
+                    }
+                    return;
+                }
+
+                this.scrollUpBtn.disabled = currentScroll >= 0;
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
+                this.scrollDownBtn.disabled = currentScroll <= maxScroll;
+            }
+
+            scrollContentTransform(direction, amount = null) {
+                const activePage = document.querySelector('.page.active');
+                if (!activePage) return;
+
+                const containerHeight = this.pageContent.clientHeight;
+                const contentHeight = activePage.scrollHeight;
+                const scrollStep = amount !== null ? amount : containerHeight * 0.6;
+                
+                let newScrollY = this.scrollPositions[this.currentPage];
+                if (direction === 'down') {
+                    newScrollY -= scrollStep;
+                } else {
+                    newScrollY += scrollStep;
+                }
+
+                const footerBuffer = 100;
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
+                
+                newScrollY = Math.max(newScrollY, maxScroll);
+                newScrollY = Math.min(newScrollY, 0);
+
+                this.scrollPositions[this.currentPage] = newScrollY;
+                
+                // Add smooth animation
+                activePage.style.transition = 'transform 0.4s ease-in-out';
+                activePage.style.transform = `translateY(${newScrollY}px)`;
+                
+                this.updateScrollState();
+            }
+
+            showPage(pageIndex) {
+                if (!this.config.hasPages) return;
+                
+                this.currentPage = pageIndex;
+                this.pages.forEach((page, index) => {
+                    page.classList.toggle('active', index === pageIndex);
+                    // Apply the stored scroll position
+                    page.style.transform = `translateY(${this.scrollPositions[index]}px)`;
+                });
+                
+                if (this.config.hasSubTabs) {
+                    this.subTabs.forEach((tab, index) => {
+                        tab.classList.toggle('active', index === pageIndex);
+                    });
+                }
+                
+                // Update scroll state after page change
+                setTimeout(() => {
+                    this.updateScrollState();
+                }, 50);
+            }
+
+            updateProgress() {
+                // Home page doesn't need progress tracking, but we need to update scroll state
+                setTimeout(() => {
+                    this.updateScrollState();
+                }, 50);
+            }
+            
+            updateFooter() {
+                // Home page footer logic - just update scroll state
+                setTimeout(() => {
+                    this.updateScrollState();
+                }, 50);
+            }
+        }
+
+        // Initialize the enhanced home page
         document.addEventListener('DOMContentLoaded', () => {
-            new HomePageApp();
+            new EnhancedHomePageApp();
         });
     </script>
 

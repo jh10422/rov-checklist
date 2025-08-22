@@ -19,12 +19,19 @@
                 
                 <div class="welcome-text">
                     This is a checklist system designed for the safe and efficient operation of the FUMI ROV.<br>
-                    Follow the procedures to ensure proper deployment, operation, and recovery.
+
                 </div>
                 
+                <!-- This is the original button that navigates in the same tab -->
                 <a href="home.html" class="continue-btn">
                     <span class="btn-title">CONTINUE TO CHECKLISTS</span>
                     <span class="btn-description">Begin ROV operations</span>
+                </a>
+
+                <!-- This is the new button to open the checklist in a clean popup window -->
+                <a href="#" onclick="openCleanWindow()" class="continue-btn">
+                    <span class="btn-title">OPEN IN NEW WINDOW</span>
+                    <span class="btn-description">Launch in a focused view</span>
                 </a>
             </div>
         </div>
@@ -39,6 +46,16 @@
     </div>
 
     <script>
+        // This function opens home.html in a new window with minimal browser UI.
+        function openCleanWindow() {
+            // Define the properties of the new window.
+            // You can adjust width and height as needed for your system.
+            const windowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=1200,height=900";
+            
+            // The first argument is the URL of the page to open.
+            window.open("home.html", "checklistWindow", windowFeatures);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const body = document.body;
             const themeToggle = document.getElementById('theme-toggle');

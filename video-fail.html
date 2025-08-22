@@ -10,9 +10,9 @@
 
     <div class="container">
         <header>
-            <a href="home.html" class="nav-arrow left">&lt;</a>
+            <a href="home.html" class="nav-arrow disabled left">&lt;</a>
             <h1 class="danger">► VIDEO FEED ISSUE ◄</h1>
-            <a href="home.html" class="nav-arrow right">&gt;</a>
+            <a href="home.html" class="nav-arrow disabled right">&gt;</a>
         </header>
 
         <div class="progress-text" id="progress-text">0 / 3 ITEMS COMPLETE</div>
@@ -135,7 +135,7 @@
 
                             <!-- Path for "No" to Q4 -->
                             <tr class="instruction conditional" data-path="q4-no" id="q4-retry-instruction">
-                                <td colspan="2">Re-setup Video Streams and Ensure Proper Connection Settings, re-select YES above if video stream is returned.</td>
+                                <td colspan="2">Re-setup Video Streams and Ensure Proper Connection Settings, Select YES above if video stream is returned.</td>
                             </tr>
                             <tr class="action-row conditional" data-path="q4-no">
                                 <td colspan="2">Otherwise: <a href="abort-mission.html" class="action-btn">Refer to Abort Mission Page</a></td>
@@ -265,8 +265,8 @@
                     const itemRect = element.getBoundingClientRect();
                     const containerRect = pageContent.getBoundingClientRect();
                     if (itemRect.bottom > containerRect.bottom) {
-                        // MODIFIED: Increased scroll buffer for better visibility
-                        const scrollAmount = itemRect.bottom - containerRect.bottom + 80;
+                        // MODIFIED: Increased scroll buffer for more comfortable viewing
+                        const scrollAmount = itemRect.bottom - containerRect.bottom + 160;
                         scrollContent('down', scrollAmount);
                     }
                 });
@@ -371,23 +371,6 @@
                     }
                 }
             }
-            
-            // MODIFIED: Function to handle re-enabling buttons for Q4
-            function handleQ4Retry() {
-                const q4Row = document.querySelector('.options-row[data-question="q4"]');
-                if (q4Row) {
-                    q4Row.classList.remove('selection-made');
-                    q4Row.querySelectorAll('.option-btn').forEach(btn => {
-                        // Re-enable buttons only if prerequisites are met
-                        const prereqs = document.querySelectorAll('[data-prereq-for="q4"]');
-                        const prereqsMet = [...prereqs].every(p => p.classList.contains('checked'));
-                        btn.disabled = !prereqsMet;
-                        btn.classList.remove('selected');
-                    });
-                    document.getElementById('q4').classList.remove('checked');
-                }
-            }
-
 
             checklistItems.forEach(item => {
                 if (!item.classList.contains('is-question')) {
@@ -430,25 +413,27 @@
                     
                     questionRow.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
                     e.target.classList.add('selected');
-                    
-                    // MODIFIED: Keep buttons enabled for Q4 "No" path
-                    if (questionId !== 'q4' || choice !== 'no') {
-                        questionRow.classList.add('selection-made');
-                        questionRow.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-                    } else {
-                        // If Q4 "No" is selected, immediately allow re-selection
-                        handleQ4Retry();
-                        e.target.classList.add('selected'); // Re-apply 'selected' to the "No" button
-                    }
+                    questionRow.classList.add('selection-made');
+                    questionRow.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
 
 
                     if (questionId === 'q3' && choice === 'yes') {
                         document.getElementById('q3-retry-instruction').style.display = 'none';
                     }
-                    
-                    // Hide the "Yes" path for Q4 if "No" is selected
+
+                    // MODIFIED: Logic to re-enable YES button for Q4 "No" path
                     if (questionId === 'q4' && choice === 'no') {
-                         document.querySelector('[data-path="q4-yes"]').style.display = 'none';
+                        const yesButton = questionRow.querySelector('[data-choice="yes"]');
+                        if (yesButton) {
+                            yesButton.disabled = false;
+                        }
+                        // Hide success path if user selects No
+                        const successPath = document.querySelector('[data-path="q4-yes"]');
+                        if(successPath) successPath.style.display = 'none';
+                    } else if (questionId === 'q4' && choice === 'yes') {
+                        // Ensure the "No" path instructions are hidden when "Yes" is selected
+                        const noPathElements = document.querySelectorAll('[data-path="q4-no"]');
+                        noPathElements.forEach(el => el.style.display = 'none');
                     }
 
 

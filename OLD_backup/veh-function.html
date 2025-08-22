@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROV Vehicle Function Issue - B777 Interface</title>
+    <style>
+        :root {
+            --display-bg: #000000;
+            --text-color: #FFFFFF;
+            --dim-text-color: #999;
+            --complete-color: #00ff7f;
+            --border-color: #333333;
+            --note-color: #d0a0d0;
+            --danger-color: #ff4d4d;
+            --inactive-tab-bg: #444;
+            --active-tab-bg: #777;
+            --inactive-checkbox-bg: #5a5a6a;
+        }
+
+        body.light-mode {
+            --display-bg: #FFFFFF;
+            --text-color: #000000;
+            --dim-text-color: #666666;
+            --border-color: #DDDDDD;
+            --note-color: #550055;
+            --complete-color: #00a000;
+            --inactive-tab-bg: #EEEEEE;
+            --active-tab-bg: #CCCCCC;
+            --inactive-checkbox-bg: #CCCCCC;
+        }
+
+        body {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            background-color: var(--display-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 1rem;
+            font-size: 22px; 
+            font-weight: 500;
+            line-height: 1.6; 
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cline x1='16' y1='4' x2='16' y2='28' stroke='%239400D3' stroke-width='3'/%3E%3Cline x1='4' y1='16' x2='28' y2='16' stroke='%239400D3' stroke-width='3'/%3E%3C/svg%3E") 16 16, crosshair;
+            transition: background-color 0.3s, color 0.3s, zoom 0.2s;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            border: 2px solid var(--border-color);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            height: 850px; /* Fixed height */
+            box-sizing: border-box;
+        }
+
+        header {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 0.5rem;
+            flex-shrink: 0;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 1.8rem; 
+            margin: 0;
+            color: var(--danger-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 2rem;
+            font-weight: 500;
+            cursor: inherit;
+            transition: color 0.2s, background-color 0.2s;
+            padding: 0.25rem 1rem;
+            text-decoration: none;
+        }
+
+        .nav-arrow:hover:not(.disabled) {
+            background-color: var(--active-tab-bg);
+            color: var(--note-color);
+        }
+
+        .nav-arrow.left {
+            left: 0;
+        }
+
+        .nav-arrow.right {
+            right: 0;
+        }
+
+        .nav-arrow.disabled {
+            color: var(--dim-text-color);
+            background-color: transparent;
+            pointer-events: none;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-weight: 400;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            color: var(--dim-text-color);
+            flex-shrink: 0;
+        }
+        
+        .page-content {
+            flex-grow: 1;
+            overflow: hidden;
+            border-top: 2px solid var(--border-color);
+            border-bottom: 2px solid var(--border-color);
+            padding: 1rem 0;
+            position: relative;
+            display: flex;
+        }
+        
+        .scroll-wrapper {
+            flex-grow: 1;
+            overflow-y: scroll; 
+            scroll-behavior: smooth; 
+            scrollbar-width: none; 
+            -ms-overflow-style: none; 
+        }
+        .scroll-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 8px 8px; 
+        }
+
+        .checklist-item {
+            cursor: inherit;
+            transition: color 0.2s, background-color 0.2s;
+            border-radius: 4px;
+        }
+
+        .checklist-item:not(.is-question):hover {
+            background-color: var(--border-color);
+        }
+        
+        .item-cell {
+            display: flex;
+            align-items: center; 
+        }
+
+        .checklist-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            margin-right: 22px;
+            background-color: var(--inactive-checkbox-bg);
+            flex-shrink: 0;
+        }
+        
+        .checklist-box::before {
+            content: '✓';
+            color: transparent; 
+            font-size: 28px;
+            font-weight: 500;
+            transition: color 0.1s;
+        }
+        
+        .checklist-item.checked {
+            color: var(--complete-color);
+        }
+        
+        body.light-mode .checklist-item.checked {
+            color: #00a000;
+        }
+        
+        .checklist-item.checked .checklist-box::before {
+            color: var(--complete-color); 
+        }
+        
+        body.light-mode .checklist-item.checked .checklist-box::before {
+            color: #00a000;
+        }
+        
+        .checklist-item.checked .dots {
+            border-bottom-color: var(--complete-color);
+        }
+
+        .item-name {
+            white-space: nowrap;
+        }
+        
+        .dots {
+            border-bottom: 2px dotted var(--border-color);
+            width: 100%;
+            margin: 0 0.75em;
+        }
+
+        .item-status {
+            white-space: nowrap;
+            padding-left: 0.75em;
+        }
+        
+        .critical {
+            color: var(--danger-color);
+        }
+        
+        .checklist-item.checked .critical {
+             color: var(--complete-color);
+        }
+
+        body.light-mode .checklist-item.checked .critical {
+            color: #00a000;
+        }
+        
+        .instruction {
+            color: var(--note-color);
+            text-align: center;
+            padding: 10px 0;
+            font-size: 0.9em;
+        }
+
+        .instruction.success {
+            color: var(--complete-color);
+            font-size: 1.1em;
+        }
+
+        .options-row td {
+            padding-left: 58px;
+        }
+
+        .option-btn {
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            cursor: inherit;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .option-btn:hover:not(:disabled) {
+            background-color: var(--active-tab-bg);
+        }
+        .option-btn:disabled {
+            background-color: transparent;
+            color: var(--border-color);
+            cursor: inherit;
+        }
+        .option-btn.selected {
+            background-color: var(--active-tab-bg);
+            border-color: var(--note-color);
+        }
+
+        .conditional {
+            display: none;
+        }
+
+        .page-footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 1rem;
+            text-transform: uppercase;
+            font-size: 1.2em; 
+            flex-shrink: 0;
+            margin-top: auto;
+            min-height: 2.5em; 
+        }
+
+        .theme-footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 1rem;
+            text-transform: uppercase;
+            font-size: 1.2em; 
+            flex-shrink: 0;
+        }
+
+        .footer-btn {
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 0;
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            cursor: inherit;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .footer-btn:disabled {
+            background-color: var(--display-bg);
+            color: var(--border-color);
+            cursor: inherit;
+        }
+        
+        .footer-btn.highlighted {
+            background-color: var(--note-color);
+            border-color: var(--note-color);
+            color: var(--display-bg);
+            animation: pulse 2s infinite;
+        }
+
+        .footer-btn:hover:not(:disabled) {
+            background-color: var(--active-tab-bg);
+        }
+
+        .scroll-controls {
+            flex-shrink: 0;
+            width: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        .scroll-btn {
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 1.5rem;
+            width: 40px;
+            height: 48%;
+            cursor: inherit;
+        }
+        .scroll-btn:hover:not(:disabled) {
+            background-color: var(--active-tab-bg);
+        }
+        .scroll-btn:disabled {
+            opacity: 0.3;
+        }
+
+    </style>
+</head>
+<body class="light-mode">
+
+    <div class="container">
+        <header>
+            <a href="home.html" class="nav-arrow left">&lt;</a>
+            <h1>► VEHICLE FUNCTION ISSUE ◄</h1>
+            <a href="#" class="nav-arrow right disabled">&gt;</a>
+        </header>
+
+        <div class="progress-text" id="progress-text">0 / 8 ITEMS COMPLETE</div>
+        
+        <div class="page-content" id="page-content">
+            <div class="scroll-wrapper">
+                <table>
+                    <tbody>
+                        <tr class="checklist-item">
+                           <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Confirm DISARMED</span></td>
+                        </tr>
+                        <tr class="checklist-item">
+                           <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Pilot Gain</span><span class="dots"></span><span class="item-status">Set to 25%</span></td>
+                        </tr>
+                        <tr class="checklist-item">
+                           <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Mode</span><span class="dots"></span><span class="item-status">Manual</span></td>
+                        </tr>
+                        <tr class="checklist-item">
+                           <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Main Joystick</span><span class="dots"></span><span class="item-status">Disconnected</span></td>
+                        </tr>
+                        <tr class="checklist-item">
+                           <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Backup Joystick</span><span class="dots"></span><span class="item-status">Connected</span></td>
+                        </tr>
+                        <tr class="instruction">
+                            <td colspan="2">- Switch Users for the Backup Joystick -</td>
+                        </tr>
+                        <tr class="checklist-item">
+                           <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Joystick Bindings</span><span class="dots"></span><span class="item-status">Confirmed and Tested</span></td>
+                        </tr>
+                        <tr class="checklist-item">
+                           <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Auto Pilot</span><span class="dots"></span><span class="item-status">Restart</span></td>
+                        </tr>
+                        <tr class="instruction">
+                            <td colspan="2">- Wait 5 Seconds -</td>
+                        </tr>
+                        <tr class="checklist-item" data-prereq-for="q1">
+                           <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Set to ARMED</span></td>
+                        </tr>
+                        <tr class="instruction">
+                            <td colspan="2">- Slowly Test Pilot Input -</td>
+                        </tr>
+
+                        <!-- Question 1: Are functions restored? -->
+                        <tr class="checklist-item is-question" id="q1">
+                           <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are functions restored?</span></td>
+                        </tr>
+                        <tr class="options-row" data-question="q1">
+                            <td colspan="2">
+                                <button class="option-btn" data-choice="yes" disabled>YES</button>
+                                <button class="option-btn" data-choice="no" disabled>NO</button>
+                            </td>
+                        </tr>
+
+                        <!-- Path for "Yes" to Q1 -->
+                        <tr class="instruction conditional" data-path="q1-yes">
+                            <td colspan="2">- Continue with Mission in MANUAL MODE ONLY -</td>
+                        </tr>
+
+                        <!-- Path for "No" to Q1 -->
+                        <tr class="checklist-item conditional" data-path="q1-no" id="blueos-restart-item">
+                           <td class="item-cell"><span class="checklist-box"></span><span class="item-name">BlueOS</span><span class="dots"></span><span class="item-status">Full Restart</span></td>
+                        </tr>
+                        <tr class="instruction conditional" data-path="q1-no">
+                            <td colspan="2">Wait > 30 seconds</td>
+                        </tr>
+                        <!-- FIX: Added ID to this item for specific targeting -->
+                        <tr class="checklist-item conditional" data-path="q1-no" id="vehicle-arming-retry-item">
+                           <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Set to ARMED</span></td>
+                        </tr>
+                        <tr class="instruction conditional" data-path="q1-no">
+                            <td colspan="2">- Slowly Test Pilot Input -</td>
+                        </tr>
+                        <tr class="instruction" id="q1-retry-instruction" style="display: none;">
+                            <td colspan="2">If functions are restored, re-select Yes above. If still NO: <a href="abort-mission.html" class="footer-btn">Abort Mission</a></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="scroll-controls">
+                <button id="scroll-up-btn" class="scroll-btn">▲</button>
+                <button id="scroll-down-btn" class="scroll-btn">▼</button>
+            </div>
+        </div>
+        
+        <footer class="page-footer">
+            <a href="home.html" id="next-checklist-btn" class="footer-btn" style="display: none;">GO TO HOME</a>
+        </footer>
+        <footer class="theme-footer">
+            <a href="home.html" class="footer-btn">HOME</a>
+            <span style="width: 20px;"></span>
+            <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
+            <span style="padding: 0 10px;">ZOOM</span>
+            <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
+            <span style="width: 20px;"></span>
+            <button id="theme-toggle" class="footer-btn">DARK MODE</button>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const zoomInBtn = document.getElementById('zoom-in-btn');
+            const zoomOutBtn = document.getElementById('zoom-out-btn');
+            
+            const checklistItems = document.querySelectorAll('.checklist-item');
+            const progressText = document.getElementById('progress-text');
+            const nextChecklistBtn = document.getElementById('next-checklist-btn');
+            
+            const optionBtns = document.querySelectorAll('.options-row .option-btn');
+            const pageContent = document.getElementById('page-content');
+            const scrollUpBtn = document.getElementById('scroll-up-btn');
+            const scrollDownBtn = document.getElementById('scroll-down-btn');
+            const scrollWrapper = document.querySelector('.scroll-wrapper');
+
+            // --- ZOOM FUNCTIONALITY ---
+            let currentZoom = 1.0;
+
+            function applyZoom(zoomLevel) {
+                body.style.zoom = zoomLevel;
+            }
+
+            function saveAndApplyZoom(zoomLevel) {
+                const clampedZoom = Math.max(0.5, Math.min(zoomLevel, 2.0));
+                currentZoom = clampedZoom;
+                applyZoom(currentZoom);
+                localStorage.setItem('rovChecklistZoom', currentZoom);
+            }
+
+            zoomInBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom + 0.1));
+            zoomOutBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom - 0.1));
+
+            // --- THEME FUNCTIONALITY ---
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : 'dark-mode';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+                localStorage.setItem('theme', currentTheme);
+            });
+
+            // --- SCROLL FUNCTIONALITY ---
+            function updateScrollState() {
+                if (!scrollWrapper) return;
+                setTimeout(() => {
+                    const canScroll = scrollWrapper.scrollHeight > scrollWrapper.clientHeight;
+                    if (!canScroll) {
+                        scrollUpBtn.disabled = true;
+                        scrollDownBtn.disabled = true;
+                        return;
+                    }
+                    scrollUpBtn.disabled = scrollWrapper.scrollTop <= 0;
+                    scrollDownBtn.disabled = scrollWrapper.scrollTop >= (scrollWrapper.scrollHeight - scrollWrapper.clientHeight - 1);
+                }, 50); 
+            }
+
+            function scrollContent(direction, amount = null) {
+                if (!scrollWrapper) return;
+                const scrollStep = amount !== null ? amount : scrollWrapper.clientHeight * 0.7;
+                if (direction === 'down') {
+                    scrollWrapper.scrollTop += scrollStep;
+                } else {
+                    scrollWrapper.scrollTop -= scrollStep;
+                }
+            }
+
+            function scrollIntoViewIfNeeded(element) {
+                if (!element) return;
+                setTimeout(() => {
+                    const itemRect = element.getBoundingClientRect();
+                    const containerRect = pageContent.getBoundingClientRect();
+                    if (itemRect.bottom > containerRect.bottom) {
+                        const scrollAmount = itemRect.bottom - containerRect.bottom + 60;
+                        scrollContent('down', scrollAmount);
+                    }
+                }, 100); 
+            }
+
+            scrollUpBtn.addEventListener('click', () => scrollContent('up'));
+            scrollDownBtn.addEventListener('click', () => scrollContent('down'));
+            scrollWrapper.addEventListener('scroll', updateScrollState);
+
+            // --- CHECKLIST LOGIC ---
+            function checkPrerequisites() {
+                document.querySelectorAll('.options-row').forEach(row => {
+                    const questionId = row.dataset.question;
+                    const prereqItems = document.querySelectorAll(`[data-prereq-for="${questionId}"]`);
+                    let allPrereqsMet = prereqItems.length === 0; 
+                    if (prereqItems.length > 0) {
+                        allPrereqsMet = [...prereqItems].every(item => item.classList.contains('checked'));
+                    }
+                    row.querySelectorAll('.option-btn').forEach(btn => {
+                        if(!btn.closest('.options-row').classList.contains('selection-made')) {
+                           btn.disabled = !allPrereqsMet;
+                        }
+                    });
+                });
+            }
+
+            function updateProgress() {
+                const visibleCheckableItems = document.querySelectorAll('.checklist-item:not(.is-question):not(.conditional), .checklist-item:not(.is-question).conditional[style*="table-row"]');
+                const checkedVisibleItems = [...visibleCheckableItems].filter(item => item.classList.contains('checked'));
+                const totalVisible = visibleCheckableItems.length;
+                const checkedCount = checkedVisibleItems.length;
+                progressText.textContent = `${checkedCount} / ${totalVisible} ITEMS COMPLETE`;
+                const missionComplete = document.querySelector('.instruction.conditional[data-path="q1-yes"]')?.style.display === 'table-row';
+                if (missionComplete) {
+                    nextChecklistBtn.style.display = 'block';
+                    nextChecklistBtn.textContent = 'GO TO HOME';
+                    progressText.textContent += ' -- MISSION READY';
+                    progressText.style.color = 'var(--complete-color)';
+                } else {
+                    nextChecklistBtn.style.display = 'none';
+                    progressText.style.color = 'var(--dim-text-color)';
+                }
+                checkPrerequisites();
+                updateScrollState();
+            }
+
+            // FIX: New function to check conditions for showing the retry instruction
+            function checkRetryInstructionVisibility() {
+                const blueOsItem = document.getElementById('blueos-restart-item');
+                const armingItem = document.getElementById('vehicle-arming-retry-item');
+                const instructionElement = document.getElementById('q1-retry-instruction');
+
+                if (blueOsItem && armingItem && instructionElement) {
+                    const bothChecked = blueOsItem.classList.contains('checked') && armingItem.classList.contains('checked');
+                    
+                    if (bothChecked) {
+                        instructionElement.style.display = 'table-row';
+                        scrollIntoViewIfNeeded(instructionElement);
+
+                        const q1Row = document.querySelector('.options-row[data-question="q1"]');
+                        if (q1Row?.classList.contains('selection-made')) {
+                            q1Row.classList.remove('selection-made');
+                            q1Row.querySelectorAll('.option-btn').forEach(btn => {
+                                btn.disabled = false;
+                                btn.classList.remove('selected');
+                            });
+                            document.getElementById('q1').classList.remove('checked');
+                        }
+                    } else {
+                        instructionElement.style.display = 'none';
+                    }
+                }
+            }
+
+            checklistItems.forEach(item => {
+                if (!item.classList.contains('is-question')) {
+                    item.addEventListener('click', (e) => {
+                        if (e.target.tagName === 'BUTTON') return;
+                        item.classList.toggle('checked');
+                        updateProgress();
+
+                        // FIX: Call the new check function every time an item is clicked
+                        checkRetryInstructionVisibility();
+
+                        const prereqFor = item.dataset.prereqFor;
+                        if (prereqFor) {
+                            const allPrereqs = document.querySelectorAll(`[data-prereq-for="${prereqFor}"]`);
+                            const allMet = [...allPrereqs].every(pr => pr.classList.contains('checked'));
+                            if (allMet) {
+                                const questionElement = document.getElementById(prereqFor);
+                                const optionsRow = document.querySelector(`.options-row[data-question="${prereqFor}"]`);
+                                scrollIntoViewIfNeeded(optionsRow || questionElement);
+                            }
+                        }
+                    });
+                }
+            });
+
+            optionBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    if(btn.disabled) return;
+                    const choice = e.target.dataset.choice;
+                    const questionRow = e.target.closest('.options-row');
+                    if (!questionRow) return; 
+                    const questionId = questionRow.dataset.question;
+                    const questionItem = document.getElementById(questionId);
+                    questionItem.classList.add('checked');
+                    questionRow.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                    questionRow.classList.add('selection-made');
+                    questionRow.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+                    
+                    if (questionId === 'q1' && choice === 'yes') {
+                        document.getElementById('q1-retry-instruction')?.style.setProperty('display', 'none', 'important');
+                    }
+
+                    document.querySelectorAll(`[data-path]`).forEach(el => {
+                       if(el.dataset.path.startsWith(questionId) && el.dataset.path !== `${questionId}-${choice}`) {
+                           el.style.display = 'none';
+                       }
+                    });
+                    const pathToShow = `[data-path="${questionId}-${choice}"]`;
+                    document.querySelectorAll(pathToShow).forEach(el => {
+                        el.style.display = el.tagName === 'TR' ? 'table-row' : 'block';
+                    });
+                    updateProgress();
+                    const newlyShownItems = document.querySelectorAll(pathToShow);
+                    if (newlyShownItems.length > 0) {
+                        const lastNewItem = newlyShownItems[newlyShownItems.length - 1];
+                        scrollIntoViewIfNeeded(lastNewItem);
+                    }
+                });
+            });
+
+            // --- INITIAL LOAD ---
+            function initialize() {
+                const savedTheme = localStorage.getItem('theme') || 'light-mode';
+                if (savedTheme === 'dark-mode') {
+                    body.classList.remove('light-mode');
+                } else {
+                    body.classList.add('light-mode');
+                }
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+                const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
+                currentZoom = savedZoom;
+                applyZoom(currentZoom);
+                updateProgress();
+            }
+
+            initialize();
+        });
+    </script>
+
+</body>
+</html>

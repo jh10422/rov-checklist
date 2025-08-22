@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FUMI ROV Checklist System</title>
+    <style>
+        :root {
+            --display-bg: #000000;
+            --text-color: #FFFFFF;
+            --dim-text-color: #999;
+            --complete-color: #00ff7f;
+            --border-color: #333333;
+            --note-color: #d0a0d0;
+            --danger-color: #ff4d4d;
+            --inactive-tab-bg: #444;
+            --active-tab-bg: #777;
+            --inactive-checkbox-bg: #5a5a6a;
+        }
+
+        body.light-mode {
+            --display-bg: #FFFFFF;
+            --text-color: #000000;
+            --dim-text-color: #666666;
+            --border-color: #DDDDDD;
+            --note-color: #550055;
+            --inactive-tab-bg: #EEEEEE;
+            --active-tab-bg: #CCCCCC;
+            --inactive-checkbox-bg: #CCCCCC;
+        }
+
+        body {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            background-color: var(--display-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 1rem;
+            font-size: 22px; 
+            font-weight: 500;
+            line-height: 1.6; 
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cline x1='16' y1='4' x2='16' y2='28' stroke='%239400D3' stroke-width='3'/%3E%3Cline x1='4' y1='16' x2='28' y2='16' stroke='%239400D3' stroke-width='3'/%3E%3C/svg%3E") 16 16, crosshair;
+            transition: background-color 0.3s, color 0.3s, zoom 0.2s;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            border: 2px solid var(--border-color);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            height: 850px; /* Fixed height */
+            box-sizing: border-box;
+        }
+
+        header {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 0.5rem;
+            flex-shrink: 0;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2rem; 
+            margin: 0;
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .page-content {
+            flex-grow: 1;
+            overflow: hidden;
+            border-top: 2px solid var(--border-color);
+            padding: 1rem 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .welcome-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            gap: 2rem;
+        }
+
+        .welcome-text {
+            font-size: 1.4rem;
+            color: var(--text-color);
+            line-height: 1.8;
+            max-width: 80%;
+            margin-bottom: 1rem;
+        }
+
+        .system-title {
+            font-size: 2.5rem;
+            color: var(--note-color);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .continue-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 60%;
+            padding: 2.5rem;
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            text-decoration: none;
+            cursor: inherit;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+            text-align: center;
+        }
+
+        .continue-btn:hover {
+            background-color: var(--active-tab-bg);
+            border-color: var(--note-color);
+        }
+
+        .btn-title {
+            font-size: 1.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-description {
+            font-size: 1rem;
+            color: var(--dim-text-color);
+            font-weight: 400;
+        }
+        
+        .theme-footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 1rem;
+            text-transform: uppercase;
+            font-size: 1.2em; 
+            flex-shrink: 0;
+            margin-top: auto;
+        }
+
+        .footer-btn {
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 0;
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            cursor: inherit;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .footer-btn:hover:not(:disabled) {
+            background-color: var(--active-tab-bg);
+        }
+
+    </style>
+</head>
+<body class="light-mode">
+
+    <div class="container">
+        <header>
+            <h1>► FUMI ROV CHECKLIST SYSTEM ◄</h1>
+        </header>
+        
+        <div class="page-content">
+            <div class="welcome-container">
+                <div class="system-title">OPERATIONAL CHECKLIST</div>
+                
+                <div class="welcome-text">
+                    This is a checklist system designed for the safe and efficient operation of the FUMI ROV.<br>
+                    Follow the procedures to ensure proper deployment, operation, and recovery.
+                </div>
+                
+                <a href="home.html" class="continue-btn">
+                    <span class="btn-title">CONTINUE TO CHECKLISTS</span>
+                    <span class="btn-description">Begin ROV operations</span>
+                </a>
+            </div>
+        </div>
+        
+        <footer class="theme-footer">
+            <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
+            <span style="padding: 0 10px;">ZOOM</span>
+            <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
+            <span style="width: 20px;"></span>
+            <button id="theme-toggle" class="footer-btn">DARK MODE</button>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const zoomInBtn = document.getElementById('zoom-in-btn');
+            const zoomOutBtn = document.getElementById('zoom-out-btn');
+
+            // --- ZOOM FUNCTIONALITY ---
+            let currentZoom = 1.0;
+
+            function applyZoom(zoomLevel) {
+                body.style.zoom = zoomLevel;
+            }
+
+            function saveAndApplyZoom(zoomLevel) {
+                const clampedZoom = Math.max(0.5, Math.min(zoomLevel, 2.0));
+                currentZoom = clampedZoom;
+                applyZoom(currentZoom);
+                localStorage.setItem('rovChecklistZoom', currentZoom);
+            }
+
+            zoomInBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom + 0.1));
+            zoomOutBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom - 0.1));
+
+            // --- THEME FUNCTIONALITY ---
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : 'dark-mode';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+                localStorage.setItem('theme', currentTheme);
+            });
+
+            // --- INITIAL LOAD ---
+            function initialize() {
+                // Load saved theme
+                const savedTheme = localStorage.getItem('theme') || 'light-mode';
+                if (savedTheme === 'dark-mode') {
+                    body.classList.remove('light-mode');
+                } else {
+                    body.classList.add('light-mode');
+                }
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+
+                // Load saved zoom
+                const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
+                currentZoom = savedZoom;
+                applyZoom(currentZoom);
+            }
+
+            initialize();
+        });
+    </script>
+
+</body>
+</html>

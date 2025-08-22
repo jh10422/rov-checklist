@@ -1,0 +1,23 @@
+{
+    "name": "FUMI ROV Checklist System",
+    "short_name": "ROV Checklist",
+    "description": "An operational checklist system for the FUMI ROV.",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#121212",
+    "theme_color": "#1e1e1e",
+    "orientation": "portrait-primary",
+    "icons": [
+      {
+        "src": "images/icon-192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "images/icon-512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ]
+  }
+  

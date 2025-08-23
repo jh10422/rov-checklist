@@ -306,12 +306,12 @@ h1.smaller {
 }
 
 .home-nav-tab .tab-title {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
 }
 
 .btn-description, .tab-description {
     color: var(--dim-text-color);
-    font-weight: 400;
+    font-weight: 600;
 }
 
 .btn-description {
@@ -319,7 +319,7 @@ h1.smaller {
 }
 
 .tab-description {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 table {

@@ -70,14 +70,14 @@
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr><td>100%</td><td>16.8 V</td><td>4.20 V</td><td class="note-col">Fully Charged</td></tr>
-                            <tr><td>80%</td><td>16.1 V</td><td>4.02 V</td><td></td></tr>
-                            <tr><td>50%</td><td>15.4 V</td><td>3.85 V</td><td class="note-col">Optimal Storage</td></tr>
-                            <tr><td>30%</td><td>14.8 V</td><td>3.70 V</td><td class="note-col">Nominal Voltage</td></tr>
-                            <tr><td>10%</td><td>13.2 V</td><td>3.30 V</td><td class="critical">RETRIEVE / LOW BATTERY</td></tr>
-                            <tr><td>0%</td><td>12.0 V</td><td>3.00 V</td><td class="critical">FULLY DISCHARGED</td></tr>
-                        </tbody>
+                    <tbody>
+                        <tr><td class="bold-col">100%</td><td class="bold-col">16.8 V</td><td>4.20 V</td><td class="note-col">Fully Charged</td></tr>
+                        <tr><td class="bold-col">80%</td><td class="bold-col">16.1 V</td><td>4.02 V</td><td></td></tr>
+                        <tr><td class="bold-col">50%</td><td class="bold-col">15.4 V</td><td>3.85 V</td><td class="note-col">Optimal Storage</td></tr>
+                        <tr><td class="bold-col">30%</td><td class="bold-col">14.8 V</td><td>3.70 V</td><td class="note-col">Nominal Voltage</td></tr>
+                        <tr><td class="bold-col">10%</td><td class="bold-col">13.2 V</td><td>3.30 V</td><td class="critical">RETRIEVE / LOW BATTERY</td></tr>
+                        <tr><td class="bold-col">0%</td><td class="bold-col">12.0 V</td><td>3.00 V</td><td class="critical">FULLY DISCHARGED</td></tr>
+                    </tbody>
                     </table>
                 </div>
             </div>
@@ -99,7 +99,7 @@
                                 <label>Target Depth</label>
                                 <div class="unit-input-wrapper">
                                     <input type="text" id="target-depth" class="notes-input" readonly>
-
+<span id="target-depth-unit" class="degree-symbol" style="margin-left: 0.5rem; min-width: 25px; text-align: left;">M</span>
                                 </div>
                             </div>
     
@@ -584,14 +584,50 @@
             [targetDepthInput, currentDepthInput, ascentRateInput].forEach(input => {
                 if(input) input.addEventListener('input', updateTimeToTarget);
             });
+            const targetDepthUnit = document.getElementById('target-depth-unit');
+
             unitToggleButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const parentToggle = button.closest('.unit-toggle');
+                    const oldUnitBtn = parentToggle.querySelector('.unit-btn.active');
+                    const oldUnit = oldUnitBtn ? oldUnitBtn.dataset.unit : null;
+                    const newUnit = button.dataset.unit;
+
+                    // If the unit hasn't changed, do nothing
+                    if (oldUnit === newUnit) return;
+
+                    // Update button active state
                     parentToggle.querySelectorAll('.unit-btn').forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
+
+                    // Get current values
+                    const currentDepthValue = parseFloat(currentDepthInput.value);
+                    const targetDepthValue = parseFloat(targetDepthInput.value);
+
+                    // --- Conversion Logic ---
+                    if (newUnit === 'ft' && oldUnit === 'm') {
+                        if (!isNaN(currentDepthValue)) {
+                            currentDepthInput.value = (currentDepthValue / 0.3048).toFixed(1);
+                        }
+                        if (!isNaN(targetDepthValue)) {
+                            targetDepthInput.value = (targetDepthValue / 0.3048).toFixed(1);
+                        }
+                    } else if (newUnit === 'm' && oldUnit === 'ft') {
+                        if (!isNaN(currentDepthValue)) {
+                            currentDepthInput.value = (currentDepthValue * 0.3048).toFixed(1);
+                        }
+                        if (!isNaN(targetDepthValue)) {
+                            targetDepthInput.value = (targetDepthValue * 0.3048).toFixed(1);
+                        }
+                    }
+
+                    // Update labels
                     const rateLabel = document.getElementById('rate-label');
-                    if(rateLabel) rateLabel.textContent = `Rate (${button.dataset.unit}/min)`;
-                    updateTimeToTarget();
+                    if(rateLabel) rateLabel.textContent = `Rate (${newUnit}/min)`;
+                    if(targetDepthUnit) targetDepthUnit.textContent = newUnit.toUpperCase();
+                    
+                    // Trigger an input event to make sure "Time to Target" recalculates
+                    currentDepthInput.dispatchEvent(new Event('input'));
                 });
             });
 

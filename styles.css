@@ -671,13 +671,13 @@ body.light-mode .checklist-complete {
         .battery-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 1rem;
+            font-size: 1.2rem; /* Increased font size */
         }
         .battery-table th, .battery-table td {
             border: 2px solid var(--border-color);
-            padding: 8px;
+            padding: 6px; /* Adjusted padding */
             text-align: center;
-        }
+}
         .battery-table th {
             background-color: var(--inactive-tab-bg);
             text-transform: uppercase;
@@ -685,6 +685,9 @@ body.light-mode .checklist-complete {
         .battery-table .note-col {
              color: var(--note-color);
              font-weight: 600;
+        }
+        .battery-table .bold-col {
+            font-weight: bold;
         }
 
         /* Keyframes for pulsing animation */

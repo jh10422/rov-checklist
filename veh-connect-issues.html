@@ -343,13 +343,17 @@
             <a href="home.html" id="next-checklist-btn" class="footer-btn" style="display: none;">GO TO HOME</a>
         </footer>
         <footer class="theme-footer">
-            <a href="home.html" class="footer-btn">HOME</a>
-            <span style="width: 20px;"></span>
+            <button id="theme-toggle" class="footer-btn">DARK</button>
+            <span style="width: 10px;"></span>
             <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
             <span style="padding: 0 10px;">ZOOM</span>
             <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
             <span style="width: 20px;"></span>
-            <button id="theme-toggle" class="footer-btn">DARK MODE</button>
+            <span style="width: 30px;"></span>
+            <button id="chkl-reset-btn" class="footer-btn">CHKL RESET</button>
+            <button id="chck-ovrd-btn" class="footer-btn" disabled>CHCK OVRD</button>
+            <span style="width: 50px;"></span>
+            <button id="chck-ovrd-btn" class="footer-btn" onclick="window.location.href='home.html'">GO HOME</button>
         </footer>
     </div>
 
@@ -359,6 +363,7 @@
            const themeToggle = document.getElementById('theme-toggle');
            const zoomInBtn = document.getElementById('zoom-in-btn');
            const zoomOutBtn = document.getElementById('zoom-out-btn');
+           const chklResetBtn = document.getElementById('chkl-reset-btn');
            
            const checklistItems = document.querySelectorAll('.checklist-item');
            const progressText = document.getElementById('progress-text');
@@ -396,17 +401,68 @@
                applyZoom(currentZoom);
                localStorage.setItem('rovChecklistZoom', currentZoom);
            }
-        
+
            zoomInBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom + 0.1));
            zoomOutBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom - 0.1));
         
-           // --- THEME FUNCTIONALITY ---
+           // --- THEME FUNCTIONALITY --- 
            themeToggle.addEventListener('click', () => {
                body.classList.toggle('light-mode');
                const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : 'dark-mode';
-               themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+               themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
                localStorage.setItem('theme', currentTheme);
            });
+
+            // --- CHECKLIST RESET ---
+            function resetChecklist() {
+                const activePage = document.querySelector('.page.active');
+                if (!activePage) return;
+
+                // Uncheck all checklist items on the current page
+                activePage.querySelectorAll('.checklist-item').forEach(item => {
+                    item.classList.remove('checked');
+                });
+
+                // Reset all question/option rows on the current page
+                activePage.querySelectorAll('.options-row').forEach(row => {
+                    row.classList.remove('selection-made');
+                    row.querySelectorAll('.option-btn').forEach(btn => {
+                        btn.classList.remove('selected');
+                        // Disabled state will be recalculated by checkPrerequisites
+                    });
+                });
+
+                // Hide all conditional elements on the current page
+                activePage.querySelectorAll('.conditional').forEach(el => {
+                    el.style.display = 'none';
+                });
+                
+                // Explicitly hide any special instruction rows that might be on the current page
+                const specialInstructionsOnPage = {
+                    1: ['blueos-restart-instruction'], // Page 2 is index 1
+                    2: ['vc-battery-try-again-instruction', 'vc-q2b-reselect-instruction', 'vc-blueos-restore-instruction'] // Page 3 is index 2
+                };
+
+                if (specialInstructionsOnPage[currentPage]) {
+                    specialInstructionsOnPage[currentPage].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.style.display = 'none';
+                    });
+                }
+
+                // Reset scroll position for the current page to the top
+                scrollPositions[currentPage] = 0;
+                const activeWrapper = activePage.querySelector('.scroll-wrapper');
+                if (activeWrapper) {
+                    activeWrapper.style.transform = 'translateY(0px)';
+                }
+
+                // Update the entire UI state (progress, buttons, etc.)
+                updateProgress();
+            }
+            chklResetBtn.addEventListener('click', resetChecklist);
+
+
         
            // --- SCROLL FUNCTIONALITY ---
            function updateScrollState() {
@@ -764,7 +820,7 @@
                } else {
                    body.classList.add('light-mode');
                }
-               themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+               themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
         
                const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
                currentZoom = savedZoom;

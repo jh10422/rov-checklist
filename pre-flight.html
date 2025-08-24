@@ -232,13 +232,17 @@
             <a href="during-flight.html" id="next-checklist-btn" class="footer-btn">GO TO DURING-FLIGHT CHECKLIST</a>
         </footer>
         <footer class="theme-footer">
-            <a href="home.html" class="footer-btn">HOME</a>
-            <span style="width: 20px;"></span>
+            <button id="theme-toggle" class="footer-btn">DARK</button>
+            <span style="width: 10px;"></span>
             <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
             <span style="padding: 0 10px;">ZOOM</span>
             <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
             <span style="width: 20px;"></span>
-            <button id="theme-toggle" class="footer-btn">DARK MODE</button>
+            <span style="width: 30px;"></span>
+            <button id="chkl-reset-btn" class="footer-btn">CHKL RESET</button>
+            <button id="chck-ovrd-btn" class="footer-btn">CHCK OVRD</button>
+            <span style="width: 50px;"></span>
+            <button id="chck-ovrd-btn" class="footer-btn" onclick="window.location.href='home.html'">GO HOME</button>
         </footer>
     </div>
 
@@ -248,7 +252,10 @@
             const themeToggle = document.getElementById('theme-toggle');
             const zoomInBtn = document.getElementById('zoom-in-btn');
             const zoomOutBtn = document.getElementById('zoom-out-btn');
-            
+
+            const chklResetBtn = document.getElementById('chkl-reset-btn');
+            const chckOvrdBtn = document.getElementById('chck-ovrd-btn');
+
             const checklistItems = document.querySelectorAll('.checklist-item');
             const progressText = document.getElementById('progress-text');
             const totalItems = checklistItems.length;
@@ -287,10 +294,48 @@
             zoomOutBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom - 0.1));
 
             // --- THEME FUNCTIONALITY ---
+            // --- CHECKLIST PAGE OVERRIDE/RESET ---
+            chklResetBtn.addEventListener('click', () => {
+                const activePage = document.querySelector('.page.active');
+                if (!activePage) return;
+
+                const itemsOnPage = activePage.querySelectorAll('.checklist-item');
+                itemsOnPage.forEach(item => {
+                    item.classList.remove('checked');
+                });
+
+                // --- START: Auto-scroll to top logic ---
+                // 1. Reset the stored scroll position for the current page to 0
+                scrollPositions[currentPage] = 0;
+
+                // 2. Apply the reset position to the active scroll wrapper
+                const activeWrapper = activePage.querySelector('.scroll-wrapper');
+                if (activeWrapper) {
+                    activeWrapper.style.transform = `translateY(0px)`;
+                }
+
+                // 3. Update the scroll buttons to reflect the new position
+                updateScrollState();
+                // --- END: Auto-scroll to top logic ---
+
+                updateProgress();
+            });
+
+            chckOvrdBtn.addEventListener('click', () => {
+                const activePage = document.querySelector('.page.active');
+                if (!activePage) return;
+
+                const itemsOnPage = activePage.querySelectorAll('.checklist-item');
+                itemsOnPage.forEach(item => {
+                    item.classList.add('checked');
+                });
+                updateProgress();
+            });
+
             themeToggle.addEventListener('click', () => {
                 body.classList.toggle('light-mode');
                 const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : 'dark-mode';
-                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
                 localStorage.setItem('theme', currentTheme);
             });
 
@@ -486,7 +531,7 @@
                 } else {
                     body.classList.add('light-mode');
                 }
-                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
 
                 const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
                 currentZoom = savedZoom;

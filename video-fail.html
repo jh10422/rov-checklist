@@ -22,7 +22,6 @@
                 <div class="scroll-wrapper">
                     <table>
                         <tbody>
-                            <!-- Initial Checks -->
                             <tr class="checklist-item" data-prereq-for="q1">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Confirm DISARMED</span></td>
                             </tr>
@@ -33,7 +32,6 @@
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Mode</span><span class="dots"></span><span class="item-status">Manual</span></td>
                             </tr>
 
-                            <!-- Question 1: Consistent Connection? -->
                             <tr class="checklist-item is-question" id="q1">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Do you have a Consistent Connection with the Vehicle?</span></td>
                             </tr>
@@ -47,17 +45,13 @@
                                 </td>
                             </tr>
 
-                            <!-- Path for "No" to Q1 -->
                             <tr class="action-row conditional" data-path="q1-no">
                                 <td colspan="2"><a href="veh-connect-issues.html" class="action-btn">Refer to Vehicle Connection Issues PAGE</a></td>
                             </tr>
 
-                            <!-- Path for "Yes" to Q1 -->
-                            <!-- Step to Arm Vehicle -->
                             <tr class="checklist-item conditional" data-path="q1-yes" data-prereq-for="q2">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Confirm ARMED</span></td>
                             </tr>
-                            <!-- Question 2: Is the vehicle armed? -->
                             <tr class="checklist-item is-question conditional" id="q2" data-path="q1-yes">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Is the vehicle armed?</span></td>
                             </tr>
@@ -68,12 +62,10 @@
                                 </td>
                             </tr>
                             
-                            <!-- Path for "No" to Q2 -->
-                             <tr class="action-row conditional" data-path="q2-no">
+                            <tr class="action-row conditional" data-path="q2-no">
                                 <td colspan="2"><a href="veh-arming.html" class="action-btn">Refer to Vehicle Arming Issues PAGE</a></td>
                             </tr>
 
-                            <!-- Path for "Yes" to Q2 -->
                             <tr class="checklist-item conditional" data-path="q2-yes" data-prereq-for="q3">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Confirm DISARMED</span></td>
                             </tr>
@@ -84,7 +76,6 @@
                                 <td colspan="2">- Wait until BlueOS is fully restarted >30 sec -</td>
                             </tr>
                             
-                            <!-- Question 3: Video Devices Detected? -->
                             <tr class="checklist-item is-question conditional" id="q3" data-path="q2-yes">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are the Desired Video Devices Detected?</span></td>
                             </tr>
@@ -98,7 +89,6 @@
                                 </td>
                             </tr>
 
-                            <!-- Path for "No" to Q3 -->
                             <tr class="checklist-item conditional" data-path="q3-no" id="blueos-restart-retry-item">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">BlueOS</span><span class="dots"></span><span class="item-status">Attempt Restart Again</span></td>
                             </tr>
@@ -106,7 +96,6 @@
                                 <td colspan="2">If devices are detected, re-select YES above. If still NO: <a href="abort-mission.html" class="action-btn">Abort Mission</a></td>
                             </tr>
                             
-                            <!-- Path for "Yes" to Q3 -->
                             <tr class="instruction conditional" data-path="q3-yes">
                                 <td colspan="2">- Ensure proper streaming settings are setup -</td>
                             </tr>
@@ -117,7 +106,6 @@
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Receiving Video Streams</span><span class="dots"></span><span class="item-status">Restarted</span></td>
                             </tr>
 
-                            <!-- Question 4: Are Video Streams showing now? -->
                             <tr class="checklist-item is-question conditional" id="q4" data-path="q3-yes">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are Video Streams showing now?</span></td>
                             </tr>
@@ -128,12 +116,10 @@
                                 </td>
                             </tr>
 
-                            <!-- Path for "Yes" to Q4 -->
                             <tr class="instruction success conditional" data-path="q4-yes">
                                 <td colspan="2">Checklist Complete</td>
                             </tr>
 
-                            <!-- Path for "No" to Q4 -->
                             <tr class="instruction conditional" data-path="q4-no" id="q4-retry-instruction">
                                 <td colspan="2">Re-setup Video Streams and Ensure Proper Connection Settings, Select YES above if video stream is returned.</td>
                             </tr>
@@ -155,13 +141,17 @@
             <a href="home.html" id="next-checklist-btn" class="footer-btn" style="display: none;">GO TO HOME</a>
         </footer>
         <footer class="theme-footer">
-            <a href="home.html" class="footer-btn">HOME</a>
-            <span style="width: 20px;"></span>
+            <button id="theme-toggle" class="footer-btn">DARK</button>
+            <span style="width: 10px;"></span>
             <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
             <span style="padding: 0 10px;">ZOOM</span>
             <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
             <span style="width: 20px;"></span>
-            <button id="theme-toggle" class="footer-btn">DARK MODE</button>
+            <span style="width: 30px;"></span>
+            <button id="chkl-reset-btn" class="footer-btn">CHKL RESET</button>
+            <button id="chck-ovrd-btn" class="footer-btn" disabled>CHCK OVRD</button>
+            <span style="width: 50px;"></span>
+            <button id="chck-ovrd-btn" class="footer-btn" onclick="window.location.href='home.html'">GO HOME</button>
         </footer>
     </div>
 
@@ -171,6 +161,7 @@
             const themeToggle = document.getElementById('theme-toggle');
             const zoomInBtn = document.getElementById('zoom-in-btn');
             const zoomOutBtn = document.getElementById('zoom-out-btn');
+            const chklResetBtn = document.getElementById('chkl-reset-btn');
             
             const checklistItems = document.querySelectorAll('.checklist-item');
             const progressText = document.getElementById('progress-text');
@@ -204,9 +195,47 @@
             themeToggle.addEventListener('click', () => {
                 body.classList.toggle('light-mode');
                 const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : 'dark-mode';
-                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
                 localStorage.setItem('theme', currentTheme);
             });
+
+            // --- CHECKLIST RESET ---
+            function resetChecklist() {
+                // Uncheck all checklist items
+                checklistItems.forEach(item => {
+                    item.classList.remove('checked');
+                });
+
+                // Reset all question/option rows
+                document.querySelectorAll('.options-row').forEach(row => {
+                    row.classList.remove('selection-made');
+                    row.querySelectorAll('.option-btn').forEach(btn => {
+                        btn.classList.remove('selected');
+                    });
+                });
+
+                // Hide all conditional elements
+                document.querySelectorAll('.conditional').forEach(el => {
+                    el.style.display = 'none';
+                });
+                
+                // Explicitly hide any special instruction rows
+                const q3Instruction = document.getElementById('q3-retry-instruction');
+                if (q3Instruction) {
+                    q3Instruction.style.display = 'none';
+                }
+
+                // Reset scroll position to the top
+                scrollPosition = 0;
+                if (scrollWrapper) {
+                    scrollWrapper.style.transform = 'translateY(0px)';
+                }
+
+                // Update the entire UI state (progress, buttons, etc.)
+                updateProgress();
+            }
+            chklResetBtn.addEventListener('click', resetChecklist);
+
 
             // --- SCROLL FUNCTIONALITY ---
             function updateScrollState() {
@@ -467,7 +496,7 @@
                 } else {
                     body.classList.add('light-mode');
                 }
-                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
                 const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
                 currentZoom = savedZoom;
                 applyZoom(currentZoom);

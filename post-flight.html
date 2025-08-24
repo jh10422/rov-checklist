@@ -22,7 +22,7 @@
             <button class="sub-tab">Control Station</button>
         </div>
 
-        <div class="progress-text" id="progress-text">0 / 16 ITEMS COMPLETE</div>
+        <div class="progress-text" id="progress-text">0 / 17 ITEMS COMPLETE</div>
         <div class="tab-title" id="tab-title"></div>
         
         <div class="page-content" id="page-content">
@@ -143,13 +143,17 @@
             <a href="home.html" id="next-checklist-btn" class="footer-btn" style="display: none;">GO TO HOME</a>
         </footer>
         <footer class="theme-footer">
-            <a href="home.html" class="footer-btn">HOME</a>
-            <span style="width: 20px;"></span>
+            <button id="theme-toggle" class="footer-btn">DARK</button>
+            <span style="width: 10px;"></span>
             <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
             <span style="padding: 0 10px;">ZOOM</span>
             <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
             <span style="width: 20px;"></span>
-            <button id="theme-toggle" class="footer-btn">DARK MODE</button>
+            <span style="width: 30px;"></span>
+            <button id="chkl-reset-btn" class="footer-btn">CHKL RESET</button>
+            <button id="chck-ovrd-btn" class="footer-btn">CHCK OVRD</button>
+            <span style="width: 50px;"></span>
+            <button id="go-home-btn" class="footer-btn" onclick="window.location.href='home.html'">GO HOME</button>
         </footer>
     </div>
 
@@ -159,6 +163,8 @@
             const themeToggle = document.getElementById('theme-toggle');
             const zoomInBtn = document.getElementById('zoom-in-btn');
             const zoomOutBtn = document.getElementById('zoom-out-btn');
+            const chklResetBtn = document.getElementById('chkl-reset-btn');
+            const chckOvrdBtn = document.getElementById('chck-ovrd-btn');
             
             const checklistItems = document.querySelectorAll('.checklist-item');
             const progressText = document.getElementById('progress-text');
@@ -204,8 +210,46 @@
             themeToggle.addEventListener('click', () => {
                 body.classList.toggle('light-mode');
                 const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : 'dark-mode';
-                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
                 localStorage.setItem('theme', currentTheme);
+            });
+
+            // --- CHECKLIST PAGE OVERRIDE/RESET ---
+            chklResetBtn.addEventListener('click', () => {
+                const activePage = document.querySelector('.page.active');
+                if (!activePage) return;
+
+                const itemsOnPage = activePage.querySelectorAll('.checklist-item');
+                itemsOnPage.forEach(item => {
+                    item.classList.remove('checked');
+                });
+
+                // --- START: Auto-scroll to top logic ---
+                // 1. Reset the stored scroll position for the current page to 0
+                scrollPositions[currentPage] = 0;
+
+                // 2. Apply the reset position to the active scroll wrapper
+                const activeWrapper = activePage.querySelector('.scroll-wrapper');
+                if (activeWrapper) {
+                    activeWrapper.style.transform = `translateY(0px)`;
+                }
+
+                // 3. Update the scroll buttons to reflect the new position
+                updateScrollState();
+                // --- END: Auto-scroll to top logic ---
+
+                updateProgress();
+            });
+
+            chckOvrdBtn.addEventListener('click', () => {
+                const activePage = document.querySelector('.page.active');
+                if (!activePage) return;
+
+                const itemsOnPage = activePage.querySelectorAll('.checklist-item');
+                itemsOnPage.forEach(item => {
+                    item.classList.add('checked');
+                });
+                updateProgress();
             });
 
             // --- SCROLL FUNCTIONALITY ---
@@ -218,7 +262,7 @@
                 const currentScroll = scrollPositions[currentPage];
                 const footerBuffer = 150;
                 
-                if (contentHeight <= containerHeight) {
+                if (contentHeight <= containerHeight + 5) { // Add small tolerance
                     scrollUpBtn.disabled = true;
                     scrollDownBtn.disabled = true;
                     return;
@@ -244,7 +288,6 @@
                     newScrollY += scrollStep;
                 }
 
-                // Add extra buffer to ensure content is never cut off by footer
                 const footerBuffer = 150;
                 const maxScroll = -(contentHeight - containerHeight + footerBuffer);
                 
@@ -269,14 +312,16 @@
                 const checkedCount = checkedVisibleItems.length;
                 const isTabComplete = checkedCount === totalVisible && totalVisible > 0;
                 
-                // Show "Proceed to next page" for each tab (except the last one)
                 const proceedElements = ['piloting-proceed', 'vehicle-proceed', 'tether-proceed'];
                 const proceedElement = document.getElementById(proceedElements[currentPage]);
                 if (proceedElement) {
+                    const wasHidden = proceedElement.style.display === 'none' || proceedElement.style.display === '';
                     proceedElement.style.display = isTabComplete ? 'table-row' : 'none';
+                    if (isTabComplete && wasHidden) {
+                        setTimeout(() => scrollContent('down', 200), 100);
+                    }
                 }
                 
-                // Highlight next page button
                 const nextPageBtn = document.getElementById('next-page-btn');
                 if (nextPageBtn) {
                     if (isTabComplete && currentPage < totalPages - 1) {
@@ -309,23 +354,24 @@
                 
                 const completionMessage = document.getElementById('completion-message-row');
                 
-                // Add completion message when all items are checked
                 if (checkedCount === totalItems) {
                     progressText.textContent += ' -- CHECKLIST COMPLETE';
                     progressText.style.color = 'var(--complete-color)';
                     if (completionMessage) {
+                        const wasHidden = completionMessage.style.display === 'none' || completionMessage.style.display === '';
                         completionMessage.style.display = 'table-row';
                         
-                        // Auto-scroll to show the completion message
-                        setTimeout(() => {
-                            updateScrollState();
-                            const messageRect = completionMessage.getBoundingClientRect();
-                            const containerRect = pageContent.getBoundingClientRect();
-                            if (messageRect.bottom > containerRect.bottom - 100) { // Extra margin from bottom
-                                const scrollAmount = messageRect.bottom - containerRect.bottom + 150; // More buffer
-                                scrollContent('down', scrollAmount);
-                            }
-                        }, 100);
+                        if (wasHidden) {
+                            setTimeout(() => {
+                                updateScrollState();
+                                const messageRect = completionMessage.getBoundingClientRect();
+                                const containerRect = pageContent.getBoundingClientRect();
+                                if (messageRect.bottom > containerRect.bottom - 100) {
+                                    const scrollAmount = messageRect.bottom - containerRect.bottom + 150;
+                                    scrollContent('down', scrollAmount);
+                                }
+                            }, 100);
+                        }
                     }
                 } else {
                     progressText.style.color = 'var(--dim-text-color)';
@@ -338,14 +384,19 @@
             }
 
             function showPage(pageIndex) {
-                pages.forEach((page, index) => page.classList.toggle('active', index === pageIndex));
+                pages.forEach((page, index) => {
+                    page.classList.toggle('active', index === pageIndex);
+                    const scrollWrapper = page.querySelector('.scroll-wrapper');
+                    if(scrollWrapper) {
+                        scrollWrapper.style.transform = `translateY(${scrollPositions[index]}px)`;
+                    }
+                });
                 subTabs.forEach((tab, index) => tab.classList.toggle('active', index === pageIndex));
                 tabTitle.textContent = pageTitles[pageIndex];
                 pageIndicator.textContent = `${pageIndex + 1} / ${totalPages}`;
                 prevBtn.disabled = pageIndex === 0;
                 nextBtn.disabled = pageIndex === totalPages - 1;
                 
-                // Remove highlighting when switching pages
                 const nextPageBtn = document.getElementById('next-page-btn');
                 if (nextPageBtn) {
                     nextPageBtn.classList.remove('highlighted');
@@ -389,25 +440,23 @@
 
             // --- INITIAL LOAD ---
             function initialize() {
-                // Load saved theme
                 const savedTheme = localStorage.getItem('theme') || 'light-mode';
                 if (savedTheme === 'dark-mode') {
                     body.classList.remove('light-mode');
                 } else {
                     body.classList.add('light-mode');
                 }
-                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
 
-                // Load saved zoom
                 const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
                 currentZoom = savedZoom;
                 applyZoom(currentZoom);
 
-                // Initial setup for checklist
                 updateProgress();
                 showPage(currentPage);
             }
 
+            window.addEventListener('resize', updateScrollState);
             initialize();
         });
     </script>

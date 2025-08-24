@@ -59,7 +59,6 @@
                                 <td colspan="2">- Slowly Test Pilot Input -</td>
                             </tr>
 
-                            <!-- Question 1: Are functions restored? -->
                             <tr class="checklist-item is-question" id="q1">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are functions restored?</span></td>
                             </tr>
@@ -70,12 +69,10 @@
                                 </td>
                             </tr>
 
-                            <!-- Path for "Yes" to Q1 -->
                             <tr class="instruction success conditional" data-path="q1-yes">
                                 <td colspan="2">- Continue with Mission in MANUAL MODE ONLY -</td>
                             </tr>
 
-                            <!-- Path for "No" to Q1 -->
                             <tr class="checklist-item conditional" data-path="q1-no" id="blueos-restart-item">
                                <td class="item-cell"><span class="checklist-box"></span><span class="item-name">BlueOS</span><span class="dots"></span><span class="item-status">Full Restart</span></td>
                             </tr>
@@ -106,13 +103,17 @@
             <a href="home.html" id="next-checklist-btn" class="footer-btn" style="display: none;">GO TO HOME</a>
         </footer>
         <footer class="theme-footer">
-            <a href="home.html" class="footer-btn">HOME</a>
-            <span style="width: 20px;"></span>
+            <button id="theme-toggle" class="footer-btn">DARK</button>
+            <span style="width: 10px;"></span>
             <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
             <span style="padding: 0 10px;">ZOOM</span>
             <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
             <span style="width: 20px;"></span>
-            <button id="theme-toggle" class="footer-btn">DARK MODE</button>
+            <span style="width: 30px;"></span>
+            <button id="chkl-reset-btn" class="footer-btn">CHKL RESET</button>
+            <button id="chck-ovrd-btn" class="footer-btn" disabled>CHCK OVRD</button>
+            <span style="width: 50px;"></span>
+            <button id="go-home-btn" class="footer-btn" onclick="window.location.href='home.html'">GO HOME</button>
         </footer>
     </div>
 
@@ -122,6 +123,7 @@
             const themeToggle = document.getElementById('theme-toggle');
             const zoomInBtn = document.getElementById('zoom-in-btn');
             const zoomOutBtn = document.getElementById('zoom-out-btn');
+            const chklResetBtn = document.getElementById('chkl-reset-btn');
             
             const checklistItems = document.querySelectorAll('.checklist-item');
             const progressText = document.getElementById('progress-text');
@@ -155,9 +157,44 @@
             themeToggle.addEventListener('click', () => {
                 body.classList.toggle('light-mode');
                 const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : 'dark-mode';
-                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
                 localStorage.setItem('theme', currentTheme);
             });
+
+            // --- CHECKLIST RESET ---
+            function resetChecklist() {
+                // Uncheck all checklist items
+                checklistItems.forEach(item => {
+                    item.classList.remove('checked');
+                });
+
+                // Reset all question/option rows
+                document.querySelectorAll('.options-row').forEach(row => {
+                    row.classList.remove('selection-made');
+                    row.querySelectorAll('.option-btn').forEach(btn => {
+                        btn.classList.remove('selected');
+                    });
+                });
+
+                // Hide all conditional elements
+                document.querySelectorAll('.conditional').forEach(el => {
+                    el.style.display = 'none';
+                });
+                
+                // Explicitly hide any special instruction rows
+                const q1Instruction = document.getElementById('q1-retry-instruction');
+                if (q1Instruction) q1Instruction.style.display = 'none';
+
+                // Reset scroll position to the top
+                scrollPosition = 0;
+                if (scrollWrapper) {
+                    scrollWrapper.style.transform = 'translateY(0px)';
+                }
+
+                // Update the entire UI state
+                updateProgress();
+            }
+            chklResetBtn.addEventListener('click', resetChecklist);
 
             // --- SCROLL FUNCTIONALITY ---
             function updateScrollState() {
@@ -222,11 +259,9 @@
                 });
             }
             
-            // --- CORRECTED AUTO-SCROLL LOGIC ---
             function autoScrollIfNeeded() {
                 const viewportRect = pageContent.getBoundingClientRect();
             
-                // Find the very first actionable item that is not yet complete.
                 const firstActionableItem = document.querySelector(
                     '.checklist-item:not(.is-question):not(.checked), .option-btn:not(:disabled)'
                 );
@@ -235,21 +270,17 @@
                     const finalAction = document.querySelector('.action-btn');
                     if (finalAction) {
                         const finalActionRect = finalAction.getBoundingClientRect();
-                        // A simplified check for the final button
                         if (finalActionRect.top > viewportRect.bottom) {
                             scrollIntoViewIfNeeded(finalAction);
                         }
                     }
-                    return; // No more items to process
+                    return;
                 }
             
                 const itemRect = firstActionableItem.getBoundingClientRect();
                 const isVisible = itemRect.height > 0;
-
-                // An item is considered "fully visible" if its top and bottom are both within the viewport.
                 const isFullyInView = itemRect.top >= viewportRect.top && itemRect.bottom <= viewportRect.bottom;
 
-                // If the first actionable item is not fully in the viewport and is actually displayed, scroll to it.
                 if (!isFullyInView && isVisible) {
                     scrollIntoViewIfNeeded(firstActionableItem);
                 }
@@ -295,7 +326,6 @@
                 checkPrerequisites();
                 updateScrollState();
                 
-                // Run the auto-scroll check after a tiny delay to allow the DOM to update.
                 setTimeout(autoScrollIfNeeded, 50);
             }
 
@@ -393,7 +423,7 @@
                 } else {
                     body.classList.add('light-mode');
                 }
-                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK MODE' : 'LIGHT MODE';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
                 const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
                 currentZoom = savedZoom;
                 applyZoom(currentZoom);

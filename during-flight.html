@@ -86,7 +86,7 @@
                     <div class="notes-container">
                         <div class="notes-fields">
                                                     <div class="notes-input-group">
-                                <label>Current Depth</label>
+                                <label>Initial Depth</label>
                                 <div class="unit-input-wrapper">
                                     <input type="text" id="current-depth" class="notes-input" readonly>
                                                                         <div class="unit-toggle">
@@ -224,11 +224,24 @@
             <button id="chkl-reset-btn" class="footer-btn" disabled>CHKL RST</button>
             <button id="chck-ovrd-btn" class="footer-btn" disabled>CHKL OVRD</button>
             <span style="width: 20px;"></span>
-            <button id="go-home-btn" class="footer-btn" onclick="window.location.href='home.html'">HOME</button>
+            <button id="go-home-btn" class="footer-btn" data-href="home.html">HOME</button>
         </footer>
+                <!-- Paste the modal HTML here -->
+        <div id="confirmation-modal" class="modal-overlay">
+            <div class="modal-content">
+                <h2>Warning</h2>
+                <p>Navigating away will clear all entered data. Are you sure you want to continue?</p>
+                <div class="modal-buttons">
+                    <button id="cancel-nav-btn">Cancel</button>
+                    <button id="confirm-nav-btn" class="confirm-btn">Continue</button>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- This is the closing tag for the .container div -->
     </div>
 
-    <script>
+<script>
         document.addEventListener('DOMContentLoaded', () => {
             const body = document.body;
             const themeToggle = document.getElementById('theme-toggle');
@@ -251,6 +264,59 @@
             let currentPage = 0;
             const totalPages = pages.length;
             let scrollPositions = Array(totalPages).fill(0);
+
+            // --- CONFIRMATION MODAL LOGIC ---
+            const confirmationModal = document.getElementById('confirmation-modal');
+            const confirmNavBtn = document.getElementById('confirm-nav-btn');
+            const cancelNavBtn = document.getElementById('cancel-nav-btn');
+            const navLinks = document.querySelectorAll('a.nav-arrow, #go-home-btn, #next-checklist-btn');
+            let navigationUrl = '';
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    // For the home button, we get the URL from its new data attribute
+                    if(link.id === 'go-home-btn') {
+                         navigationUrl = link.dataset.href;
+                    } else {
+                        // For other links, we get it from the href
+                        navigationUrl = link.href;
+                    }
+                    
+                    // Prevent the default link behavior
+                    event.preventDefault();
+                    
+                    // Show the modal
+                    if(confirmationModal) {
+                        confirmationModal.style.display = 'flex';
+                    }
+                });
+            });
+
+            if(cancelNavBtn) {
+                cancelNavBtn.addEventListener('click', () => {
+                    confirmationModal.style.display = 'none';
+                    navigationUrl = '';
+                });
+            }
+
+            if(confirmNavBtn) {
+                confirmNavBtn.addEventListener('click', () => {
+                    if (navigationUrl) {
+                        window.location.href = navigationUrl;
+                    }
+                });
+            }
+            
+            // Close modal if clicking on the overlay
+            if(confirmationModal){
+                confirmationModal.addEventListener('click', (event) => {
+                    if (event.target === confirmationModal) {
+                        confirmationModal.style.display = 'none';
+                        navigationUrl = '';
+                    }
+                });
+            }
+
 
             // --- STOPWATCH/TIMER LOGIC ---
             const timerDisplay = document.getElementById('timer-display');

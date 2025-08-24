@@ -34,6 +34,11 @@ body {
     line-height: 1.6; 
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cline x1='16' y1='4' x2='16' y2='28' stroke='%239400D3' stroke-width='3'/%3E%3Cline x1='4' y1='16' x2='28' y2='16' stroke='%239400D3' stroke-width='3'/%3E%3C/svg%3E") 16 16, crosshair;
     transition: background-color 0.3s, color 0.3s, zoom 0.2s;
+
+    /* Add these lines to disable text selection */
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none;     /* IE 10+ and Edge */
+    user-select: none;         /* Standard syntax */
 }
 
 .container {
@@ -45,6 +50,7 @@ body {
     flex-direction: column;
     height: 850px;
     box-sizing: border-box;
+     position: relative;
 }
 
 header {
@@ -947,4 +953,63 @@ body.light-mode .checklist-complete {
         #page-indicator {
             flex: 0 1 auto;
             text-align: center;
+        }
+        /* Styles for Confirmation Modal */
+        .modal-overlay {
+ position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: var(--display-bg);
+            padding: 2.5rem;
+            border: 2px solid var(--border-color);
+            width: 500px;
+            text-align: center;
+        }
+
+        .modal-content h2 {
+            color: var(--danger-color);
+            text-transform: uppercase;
+            margin-top: 0;
+            font-size: 1.8rem;
+        }
+
+        .modal-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .modal-buttons button {
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 1.2rem;
+            padding: 0.75rem 1.5rem;
+            margin: 0 1rem;
+            cursor: inherit;
+            text-transform: uppercase;
+        }
+
+        .modal-buttons button:hover {
+            background-color: var(--active-tab-bg);
+        }
+
+        .modal-buttons .confirm-btn {
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        .modal-buttons .confirm-btn:hover {
+            background-color: var(--danger-color);
+            color: var(--display-bg);
         }

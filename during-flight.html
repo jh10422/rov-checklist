@@ -592,6 +592,7 @@
             [targetDepthInput, currentDepthInput, ascentRateInput].forEach(input => {
                 if(input) input.addEventListener('input', updateTimeToTarget);
             });
+/* This is the new, correct block */
             const targetDepthUnit = document.getElementById('target-depth-unit');
 
             unitToggleButtons.forEach(button => {
@@ -601,16 +602,15 @@
                     const oldUnit = oldUnitBtn ? oldUnitBtn.dataset.unit : null;
                     const newUnit = button.dataset.unit;
 
-                    // If the unit hasn't changed, do nothing
                     if (oldUnit === newUnit) return;
 
-                    // Update button active state
                     parentToggle.querySelectorAll('.unit-btn').forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
 
-                    // Get current values
+                    // Get current values from all three fields
                     const currentDepthValue = parseFloat(currentDepthInput.value);
                     const targetDepthValue = parseFloat(targetDepthInput.value);
+                    const ascentRateValue = parseFloat(ascentRateInput.value);
 
                     // --- Conversion Logic ---
                     if (newUnit === 'ft' && oldUnit === 'm') {
@@ -620,12 +620,20 @@
                         if (!isNaN(targetDepthValue)) {
                             targetDepthInput.value = (targetDepthValue / 0.3048).toFixed(1);
                         }
+                        // Convert the rate field
+                        if (!isNaN(ascentRateValue)) {
+                            ascentRateInput.value = (ascentRateValue / 0.3048).toFixed(1);
+                        }
                     } else if (newUnit === 'm' && oldUnit === 'ft') {
                         if (!isNaN(currentDepthValue)) {
                             currentDepthInput.value = (currentDepthValue * 0.3048).toFixed(1);
                         }
                         if (!isNaN(targetDepthValue)) {
                             targetDepthInput.value = (targetDepthValue * 0.3048).toFixed(1);
+                        }
+                        // Convert the rate field
+                        if (!isNaN(ascentRateValue)) {
+                            ascentRateInput.value = (ascentRateValue * 0.3048).toFixed(1);
                         }
                     }
 

@@ -219,8 +219,22 @@
                 localStorage.setItem('theme', currentTheme);
             });
 
-            // --- INITIAL LOAD ---
+          // --- INITIAL LOAD ---
             function initialize() {
+                // --- START: Read tab parameter from URL ---
+                const urlParams = new URLSearchParams(window.location.search);
+                const targetTab = urlParams.get('tab');
+                let initialPage = 0; // Default to the first tab (index 0)
+
+                if (targetTab) {
+                    const tabIndex = parseInt(targetTab, 10);
+                    // Check if the index is a valid number and within the available tab range
+                    if (!isNaN(tabIndex) && tabIndex >= 0 && tabIndex < totalPages) {
+                        initialPage = tabIndex;
+                    }
+                }
+                // --- END: Read tab parameter from URL ---
+
                 const savedTheme = localStorage.getItem('theme') || 'light-mode';
                 if (savedTheme === 'dark-mode') {
                     body.classList.remove('light-mode');
@@ -233,7 +247,7 @@
                 currentZoom = savedZoom;
                 applyZoom(currentZoom);
 
-                showPage(0);
+                showPage(initialPage); // Use the determined tab index
                 updateScrollState();
             }
 

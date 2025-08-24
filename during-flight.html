@@ -124,9 +124,19 @@
                                 <input type="text" id="ascent-rate" class="notes-input" readonly>
                             </div>
                             <div class="notes-input-group">
-                                <label>Time to Target</label>
-                                <span id="time-to-target" class="time-display">-- min</span>
+                                <label>Return Heading</label>
+                                <div class="compass-input-wrapper">
+                                    <span id="return-heading-degrees" class="time-display">--</span>
+                                    <span class="degree-symbol">°</span>
+                                    <span id="return-direction" class="compass-display">--</span>
+                                </div>
                             </div>
+                            <div class="notes-input-group">
+                                <label>Time to Target</label>
+                                <span id="time-to-target" class="time-display">--</span>
+                                    <span class="unit-symbol">MIN</span>
+                            </div>
+
                         </div>
                         <div class="keypad-container">
                              <button class="keypad-btn" data-value="1">1</button>
@@ -555,7 +565,7 @@
                 const selectedUnit = document.querySelector('.unit-btn.active').dataset.unit;
                 
                 if (isNaN(targetDepth) || isNaN(currentDepth) || isNaN(rate) || rate === 0) {
-                    timeToTargetDisplay.textContent = '-- min';
+                    timeToTargetDisplay.textContent = '--';
                     return;
                 }
 
@@ -568,7 +578,7 @@
                 }
                 
                 const timeInMinutes = Math.abs(depthDiff / rateInSelectedUnit);
-                timeToTargetDisplay.textContent = `${timeInMinutes.toFixed(1)} min`;
+                timeToTargetDisplay.textContent = `${timeInMinutes.toFixed(1)}`;
             }
 
             [targetDepthInput, currentDepthInput, ascentRateInput].forEach(input => {
@@ -596,12 +606,26 @@
 
             const initialHeadingInput = document.getElementById('initial-heading');
             const initialDirectionDisplay = document.getElementById('initial-direction');
+            const returnHeadingDegreesDisplay = document.getElementById('return-heading-degrees');
+            const returnDirectionDisplay = document.getElementById('return-direction');
+
             if (initialHeadingInput) {
                 initialHeadingInput.addEventListener('input', () => {
                     const degrees = parseFloat(initialHeadingInput.value);
+                    
+                    // Update Initial Heading display
                     initialDirectionDisplay.textContent = getCompassDirection(degrees);
-                    if (initialHeadingInput.value === '') {
+
+                    // Calculate and Update Return Heading
+                    if (!isNaN(degrees) && initialHeadingInput.value.trim() !== '') {
+                        const returnDegrees = (degrees + 180) % 360;
+                        returnHeadingDegreesDisplay.textContent = returnDegrees.toFixed(0);
+                        returnDirectionDisplay.textContent = getCompassDirection(returnDegrees);
+                    } else {
+                        // Clear all heading fields if input is empty or invalid
                         initialDirectionDisplay.textContent = '--';
+                        returnHeadingDegreesDisplay.textContent = '--';
+                        returnDirectionDisplay.textContent = '--';
                     }
                 });
             }
@@ -683,6 +707,7 @@
             if(scrollDownBtn) scrollDownBtn.addEventListener('click', () => scrollContent('down'));
 
             // --- PAGE NAVIGATION ---
+            // This is the new, corrected function
             function showPage(pageIndex) {
                 pages.forEach((page, index) => {
                     page.classList.toggle('active', index === pageIndex);
@@ -691,6 +716,26 @@
                 tabTitle.textContent = pageTitles[pageIndex];
                 pageIndicator.textContent = `${pageIndex + 1} / ${totalPages}`;
                 
+                // --- Corrected Notes Tab Logic ---
+                if (pageIndex === 2) { // When entering the Notes tab
+                    // If an input was already selected, re-activate it.
+                    if (activeNotesInput) {
+                        setTimeout(() => activeNotesInput.click(), 50);
+                    } else {
+                    // Otherwise, this is the first visit, so select the default.
+                        const currentDepthInput = document.getElementById('current-depth');
+                        if (currentDepthInput) {
+                            setTimeout(() => currentDepthInput.click(), 50);
+                        }
+                    }
+                } else { // When leaving the Notes tab
+                    // Remove the visual highlight but DON'T forget the last active input.
+                    if (activeNotesInput) {
+                        activeNotesInput.classList.remove('active-input');
+                    }
+                }
+                // --- End of Correction ---
+
                 if (pageIndex === totalPages - 1) {
                     nextBtn.style.display = 'none';
                     nextChecklistBtn.style.display = 'inline-block';
@@ -700,7 +745,7 @@
                 }
                 
                 prevBtn.disabled = pageIndex === 0;
-            }
+}
 
 
 

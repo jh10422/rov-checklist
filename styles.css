@@ -657,8 +657,8 @@ body.light-mode .checklist-complete {
         #laps-container {
             margin-top: 1.5rem;
             width: 60%;
-            height: 100px;
-            overflow-y: auto;
+            height: 180px;
+
             text-align: center;
             font-size: 1.2rem;
             color: var(--dim-text-color);
@@ -897,27 +897,33 @@ body.light-mode .checklist-complete {
             color: var(--dim-text-color);
             margin-left: 5px;
         }
+        .unit-symbol {
+            font-size: 1.4rem;
+            color: var(--dim-text-color);
+            margin-left: 10px;
+        }
         .compass-display {
             background-color: var(--display-bg);
             border: 2px solid var(--border-color);
-            padding: 0.3rem;        /* Reduced */
-            font-size: 1.2rem;      /* Reduced */
-            min-width: 40px;        /* Reduced */
+            padding: 0.1rem;        /* Reduced */
+            font-size: 1.5rem;      /* Reduced */
+            min-width: 50px;        /* Reduced */
             text-align: center;
             color: var(--note-color);
             font-weight: 600;
-            margin-left: 0.5rem;
+            margin-left: 0.7rem;
         }
+/* After */
         .time-display {
-             background-color: var(--display-bg);
+            background-color: var(--display-bg);
             border: 2px solid var(--border-color);
-            padding: 0.5rem;
-            font-size: 1.4rem;
+            padding: 0.1rem;      /* Reduced */
+            font-size: 1.5rem;    /* Reduced */
             text-align: center;
             color: var(--note-color);
             font-weight: 600;
-            width: 10ch;
-        }
+            width: 7ch;
+}
         .keypad-container {
             flex: 1;
             display: grid;

@@ -522,6 +522,14 @@
             }
             
             // --- NOTES TAB LOGIC ---
+            // Add this block to prevent selection in input fields
+            document.querySelectorAll('.notes-input').forEach(input => {
+                // Prevent the default mousedown action, which is what initiates a text selection.
+                // This stops the selection and the cursor change before they can happen.
+                input.addEventListener('mousedown', function(event) {
+                    event.preventDefault();
+                });
+            });
             let activeNotesInput = null;
             const notesInputs = document.querySelectorAll('.notes-input');
             const keypad = document.querySelector('.keypad-container');

@@ -5,79 +5,367 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ROV During-Flight Checklist - B777 Interface</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Styles for the Timer/Stopwatch page */
+        .timer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+        #timer-display {
+            font-size: 4.5rem;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+        }
+        #timer-display .milliseconds {
+            font-size: 3rem;
+            color: var(--dim-text-color);
+        }
+        .timer-controls button {
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 1.5rem;
+            padding: 0.75rem 2rem;
+            margin: 0 0.5rem;
+            cursor: inherit;
+            min-width: 150px;
+            text-transform: uppercase;
+        }
+        .timer-controls button:hover {
+            background-color: var(--active-tab-bg);
+        }
+        #laps-container {
+            margin-top: 1.5rem;
+            width: 60%;
+            height: 100px;
+            overflow-y: auto;
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--dim-text-color);
+        }
+        .lap-item {
+            border-bottom: 2px dotted var(--border-color);
+            padding: 0.5rem 0;
+        }
+        /* Style for the battery chart table */
+        .battery-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1rem;
+        }
+        .battery-table th, .battery-table td {
+            border: 2px solid var(--border-color);
+            padding: 8px;
+            text-align: center;
+        }
+        .battery-table th {
+            background-color: var(--inactive-tab-bg);
+            text-transform: uppercase;
+        }
+        .battery-table .note-col {
+             color: var(--note-color);
+             font-weight: 600;
+        }
+
+        /* Keyframes for pulsing animation */
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        /* Style for the purple post-flight button */
+        #next-checklist-btn {
+            background-color: var(--note-color);
+            border-color: var(--note-color);
+            color: var(--display-bg);
+            padding: 0.25rem 0.75rem;
+            animation: pulse 2s infinite;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        #next-checklist-btn:hover {
+            background-color: var(--active-tab-bg);
+            animation-play-state: paused;
+        }
+
+        /* Styles for the Calculator */
+        .calculator-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem 0 0.25rem;
+            box-sizing: border-box;
+        }
+        .calculator-body {
+            display: flex;
+            width: 95%;
+            height: 100%;
+            gap: 10px;
+        }
+        .main-calculator {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+        }
+        .calculator-display {
+            width: 100%;
+            box-sizing: border-box;
+            background-color: var(--display-bg);
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
+            font-size: 2.2rem;
+            text-align: right;
+            padding: 0.1rem 1rem;
+            margin-bottom: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .calculator-buttons {
+            flex-grow: 1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 10px;
+        }
+        .calculator-btn {
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 2.4rem;
+            cursor: inherit;
+            transition: background-color 0.2s;
+        }
+        .calculator-btn:hover {
+            background-color: var(--active-tab-bg);
+        }
+        .calculator-btn.action {
+            color: var(--danger-color);
+        }
+        .calculator-btn.operator {
+            background-color: var(--active-tab-bg);
+        }
+        .calculator-btn.operator:hover {
+            background-color: #999;
+        }
+        body.light-mode .calculator-btn.operator:hover {
+            background-color: #AAAAAA;
+        }
+        .calculator-btn.plus {
+            grid-row: 2 / 4;
+            grid-column: 4 / 5;
+        }
+        .calculator-btn.equals {
+            grid-row: 4 / 6;
+            grid-column: 4 / 5;
+            background-color: var(--note-color);
+            color: var(--display-bg);
+        }
+        .calculator-btn.equals:hover {
+            background-color: var(--active-tab-bg);
+        }
+        .calculator-btn.zero {
+            grid-column: 1 / 3;
+        }
+        .conversion-tools {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .conv-btn {
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 1.5rem;
+            font-weight: 600;
+            cursor: inherit;
+            transition: background-color 0.2s;
+            flex-grow: 1;
+        }
+        .conv-btn:hover {
+            background-color: var(--active-tab-bg);
+        }
+
+        /* Styles for the Notes Tab */
+        .notes-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            align-items: center;
+            padding: 0.5rem 0 1rem;
+            box-sizing: border-box;
+            gap: 0.75rem;
+        }
+        .notes-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 0.75rem 1.5rem;
+            width: 95%;
+            flex-shrink: 0;
+        }
+        .notes-input-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .notes-input-group label {
+            font-size: 1.1rem;
+            color: var(--note-color);
+            text-transform: uppercase;
+            flex-shrink: 0;
+            margin-right: 10px;
+        }
+        .notes-input {
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 1.4rem;
+            padding: 0.5rem;
+            box-sizing: border-box;
+            text-align: right;
+            caret-color: transparent;
+            width: 8ch;
+            cursor: inherit;
+            transition: background-color 0.2s;
+        }
+        .notes-input:hover {
+            background-color: var(--active-tab-bg);
+        }
+        .notes-input:focus, .notes-input.active-input {
+            outline: none;
+            border-color: var(--note-color);
+        }
+        .unit-input-wrapper, .compass-input-wrapper {
+            display: flex;
+            align-items: center;
+        }
+        .unit-toggle {
+            display: flex;
+            margin-left: 0.5rem;
+        }
+        .unit-btn {
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            color: var(--dim-text-color);
+            font-family: inherit;
+            font-size: 1.2rem;
+            padding: 0.5rem 0.75rem;
+            cursor: inherit;
+            text-transform: uppercase;
+            transition: background-color 0.2s;
+        }
+        .unit-btn.active {
+            background-color: var(--active-tab-bg);
+            color: var(--text-color);
+            border-color: var(--note-color);
+        }
+        .unit-btn:not(.active):hover {
+            background-color: var(--active-tab-bg);
+        }
+        .degree-symbol {
+            font-size: 1.4rem;
+            color: var(--dim-text-color);
+            margin-left: 5px;
+        }
+        .compass-display {
+            background-color: var(--display-bg);
+            border: 2px solid var(--border-color);
+            padding: 0.5rem;
+            font-size: 1.4rem;
+            min-width: 45px;
+            text-align: center;
+            color: var(--note-color);
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        .time-display {
+             background-color: var(--display-bg);
+            border: 2px solid var(--border-color);
+            padding: 0.5rem;
+            font-size: 1.4rem;
+            flex-grow: 1;
+            text-align: center;
+            color: var(--note-color);
+            font-weight: 600;
+        }
+        .keypad-container {
+            flex-grow: 1;
+            width: 95%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .keypad-btn {
+            background-color: var(--inactive-tab-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 2.2rem;
+            cursor: inherit;
+        }
+        .keypad-btn:hover {
+            background-color: var(--active-tab-bg);
+        }
+        .keypad-btn.del-btn {
+            color: var(--danger-color);
+        }
+        
+        /* Footer Centering Fix */
+        .nav-controls {
+            flex: 1;
+        }
+        #pager-controls .nav-controls:first-of-type {
+            text-align: left;
+        }
+        #pager-controls .nav-controls:last-of-type {
+            text-align: right;
+        }
+        #page-indicator {
+            flex: 0 1 auto;
+            text-align: center;
+        }
+
+    </style>
 </head>
 <body class="light-mode">
 
     <div class="container">
         <header>
-            <a href="pre-flight.html" class="nav-arrow left">&lt;</a>
-            <h1>▶ DURING FLIGHT ◀</h1>
+            <a href="deployment.html" class="nav-arrow left">&lt;</a>
+            <h1>▶ VEHICLE MONITORING ◀</h1>
             <a href="post-flight.html" class="nav-arrow right">&gt;</a>
         </header>
 
         <div class="sub-tabs-container">
-            <button class="sub-tab">Deployment</button>
-            <button class="sub-tab">Piloting</button>
             <button class="sub-tab">Monitoring</button>
+            <button class="sub-tab">Battery</button>
+            <button class="sub-tab">Notes</button>
+            <button class="sub-tab">StopWatch</button>
+            <button class="sub-tab">Calculator</button>
         </div>
         
-        <div class="progress-text" id="progress-text">0 / 9 ITEMS COMPLETE</div>
+        <div class="progress-text" id="progress-text">MONITORING AND TOOLS PAGE</div>
         <div class="tab-title" id="tab-title"></div>
         
         <div class="page-content" id="page-content">
             <div class="page active">
-                <div class="scroll-wrapper">
-                    <table>
-                        <tbody>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Tether Strain Relief</span><span class="dots"></span><span class="item-status">CONFIRM Secure</span></td>
-                            </tr>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Tether Spool</span><span class="dots"></span><span class="item-status">Managed and Monitored</span></td>
-                            </tr>
-                            <tr><td class="instruction">- Slowly lower the vehicle into the water -</td></tr>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Buoyancy Check</span><span class="dots"></span><span class="item-status">Ensure ROV is Neutrally Buoyant</span></td>
-                            </tr>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Bubble Check</span><span class="dots"></span><span class="item-status">Check for any abnormal large air bubbles</span></td>
-                            </tr>
-                            <tr class="instruction" id="deployment-proceed" style="display: none;">
-                                <td colspan="2">PROCEED TO THE NEXT PAGE</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="page">
-                <div class="scroll-wrapper">
-                    <table>
-                        <tbody>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Depth Sensor</span><span class="dots"></span><span class="item-status">VERIFY Nominal Values</span></td>
-                            </tr>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Compass</span><span class="dots"></span><span class="item-status">VERIFY Nominal Ranges</span></td>
-                            </tr>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Attitude Indicator</span><span class="dots"></span><span class="item-status">VERIFY Nominal Ranges</span></td>
-                            </tr>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">SET and VERIFY armed</span></td>
-                            </tr>
-                            <tr><td class="instruction">- Verify all joystick input is functional -</td></tr>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Mode</span><span class="dots"></span><span class="item-status">SET to Depth Hold</span></td>
-                            </tr>
-                            <tr><td class="instruction">- Operate the Vehicle for the Specified Mission -</td></tr>
-                            <tr class="instruction" id="piloting-proceed" style="display: none;">
-                                <td colspan="2">PROCEED TO THE NEXT PAGE</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="page">
                 <div class="scroll-wrapper">
                      <table>
                         <tbody>
@@ -87,8 +375,9 @@
                             </tr>
                             <tr>
                                 <td class="item-cell-monitor"><div class="monitor-content"><span class="item-name">Battery Voltage</span><span class="dots"></span><span class="item-status">&gt; 12.8V</span></div></td>
-                            </tr>
                             <tr>
+                                <td class="item-note" colspan="2">(Use Battery Chart on the Next Page for Reference)</td>
+                            </tr>
                                 <td class="item-cell-monitor"><div class="monitor-content"><span class="item-name">Video Feed</span><span class="dots"></span><span class="item-status">CLEAR</span></div></td>
                             </tr>
                             <tr>
@@ -100,16 +389,153 @@
                             <tr>
                                 <td class="item-cell-monitor"><div class="monitor-content"><span class="item-name">Tether</span><span class="dots"></span><span class="item-status">Managing and Ensure Untangled</span></div></td>
                             </tr>
-                            <tr class="instruction" id="monitoring-complete" style="display: none;">
-                                <td colspan="2">DURING-FLIGHT CHECKLIST COMPLETE</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+            <div class="page">
+                <div class="scroll-wrapper">
+                    <table>
+                        <tbody>
+                            <tr><td class="instruction">- VEHICLE BATTERY VOLTAGE TO PERCENTAGE -</td></tr>
+                        </tbody>
+                    </table>
+                     <table class="battery-table">
+                        <thead>
+                            <tr>
+                                <th>Charge %</th>
+                                <th>4S Voltage</th>
+                                <th>Cell Voltage</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>100%</td><td>16.8 V</td><td>4.20 V</td><td class="note-col">Fully Charged</td></tr>
+                            <tr><td>80%</td><td>16.1 V</td><td>4.02 V</td><td></td></tr>
+                            <tr><td>50%</td><td>15.4 V</td><td>3.85 V</td><td class="note-col">Optimal Storage</td></tr>
+                            <tr><td>30%</td><td>14.8 V</td><td>3.70 V</td><td class="note-col">Nominal Voltage</td></tr>
+                            <tr><td>10%</td><td>13.2 V</td><td>3.30 V</td><td class="critical">RETRIEVE / LOW BATTERY</td></tr>
+                            <tr><td>0%</td><td>12.0 V</td><td>3.00 V</td><td class="critical">FULLY DISCHARGED</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+             <div class="page">
+                <div class="scroll-wrapper">
+                    <div class="notes-container">
+                        <div class="notes-header">
+                            <div class="notes-input-group">
+                                <label for="target-depth">Target Depth</label>
+                                <div class="unit-input-wrapper">
+                                    <input type="text" id="target-depth" class="notes-input" readonly>
+                                    <div class="unit-toggle">
+                                        <button class="unit-btn active" data-unit="m">M</button>
+                                        <button class="unit-btn" data-unit="ft">FT</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="notes-input-group">
+                                <label for="current-depth">Current Depth</label>
+                                <div class="unit-input-wrapper">
+                                    <input type="text" id="current-depth" class="notes-input" readonly>
+                                </div>
+                            </div>
+                            <div class="notes-input-group">
+                                <label for="initial-heading">Initial Heading</label>
+                                <div class="compass-input-wrapper">
+                                    <input type="text" id="initial-heading" class="notes-input" readonly>
+                                    <span class="degree-symbol">°</span>
+                                    <span id="initial-direction" class="compass-display">--</span>
+                                </div>
+                            </div>
+                             <div class="notes-input-group">
+                                <label for="target-heading">Target Heading</label>
+                                <div class="compass-input-wrapper">
+                                    <input type="text" id="target-heading" class="notes-input" readonly>
+                                    <span class="degree-symbol">°</span>
+                                    <span id="target-direction" class="compass-display">--</span>
+                                </div>
+                            </div>
+                            <div class="notes-input-group">
+                                <label for="ascent-rate">Rate (m/min)</label>
+                                <input type="text" id="ascent-rate" class="notes-input" readonly>
+                            </div>
+                            <div class="notes-input-group">
+                                <label>Time to Target</label>
+                                <span id="time-to-target" class="time-display">-- min</span>
+                            </div>
+                        </div>
+                        <div class="keypad-container">
+                             <button class="keypad-btn" data-value="1">1</button>
+                             <button class="keypad-btn" data-value="2">2</button>
+                             <button class="keypad-btn" data-value="3">3</button>
+                             <button class="keypad-btn" data-value="4">4</button>
+                             <button class="keypad-btn" data-value="5">5</button>
+                             <button class="keypad-btn" data-value="6">6</button>
+                             <button class="keypad-btn" data-value="7">7</button>
+                             <button class="keypad-btn" data-value="8">8</button>
+                             <button class="keypad-btn" data-value="9">9</button>
+                             <button class="keypad-btn" data-value=".">.</button>
+                             <button class="keypad-btn" data-value="0">0</button>
+                             <button class="keypad-btn del-btn" data-value="del">DEL</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page">
+                <div class="scroll-wrapper">
+                   <div class="timer-container">
+                        <div id="timer-display">00:00:00<span class="milliseconds">.0</span></div>
+                        <div class="timer-controls">
+                            <button id="start-stop-btn">Start</button>
+                            <button id="lap-btn">Lap</button>
+                            <button id="reset-btn">Reset</button>
+                        </div>
+                        <div id="laps-container"></div>
+                   </div>
+                </div>
+            </div>
+            <div class="page">
+                <div class="scroll-wrapper">
+                     <div class="calculator-container">
+                        <div class="calculator-body">
+                            <div class="main-calculator">
+                                <div class="calculator-display" id="calc-display">0</div>
+                                <div class="calculator-buttons">
+                                    <button class="calculator-btn action" data-value="clear">C</button>
+                                    <button class="calculator-btn operator" data-value="/">÷</button>
+                                    <button class="calculator-btn operator" data-value="*">×</button>
+                                    <button class="calculator-btn operator" data-value="-">−</button>
+                                    <button class="calculator-btn" data-value="7">7</button>
+                                    <button class="calculator-btn" data-value="8">8</button>
+                                    <button class="calculator-btn" data-value="9">9</button>
+                                    <button class="calculator-btn operator plus" data-value="+">+</button>
+                                    <button class="calculator-btn" data-value="4">4</button>
+                                    <button class="calculator-btn" data-value="5">5</button>
+                                    <button class="calculator-btn" data-value="6">6</button>
+                                    <button class="calculator-btn" data-value="1">1</button>
+                                    <button class="calculator-btn" data-value="2">2</button>
+                                    <button class="calculator-btn" data-value="3">3</button>
+                                    <button class="calculator-btn equals" data-value="=">=</button>
+                                    <button class="calculator-btn zero" data-value="0">0</button>
+                                    <button class="calculator-btn" data-value=".">.</button>
+                                </div>
+                            </div>
+                            <div class="conversion-tools">
+                                <button class="conv-btn" data-conversion="ft_to_m">ft → m</button>
+                                <button class="conv-btn" data-conversion="m_to_ft">m → ft</button>
+                                <button class="conv-btn" data-conversion="c_to_f">°C → °F</button>
+                                <button class="conv-btn" data-conversion="f_to_c">°F → °C</button>
+                                <button class="conv-btn" data-conversion="lbs_to_kg">lbs → kg</button>
+                                <button class="conv-btn" data-conversion="kg_to_lbs">kg → lbs</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="scroll-controls">
-                <button id="scroll-up-btn" class="scroll-btn">▲</button>
-                <button id="scroll-down-btn" class="scroll-btn">▼</button>
+                <button id="scroll-up-btn" class="scroll-btn" disabled>▲</button>
+                <button id="scroll-down-btn" class="scroll-btn" disabled>▼</button>
             </div>
         </div>
         
@@ -118,13 +544,12 @@
                 <div class="nav-controls">
                     <button id="prev-page-btn" class="footer-btn">&lt; PREV PAGE</button>
                 </div>
-                <div id="page-indicator">1 / 3</div>
+                <div id="page-indicator">1 / 5</div>
                 <div class="nav-controls">
                     <button id="next-page-btn" class="footer-btn">NEXT PAGE &gt;</button>
+                    <a href="post-flight.html" id="next-checklist-btn" class="footer-btn" style="display: none;">POST-FLIGHT &gt;</a>
                 </div>
             </div>
-
-             <a href="post-flight.html" id="next-checklist-btn" class="footer-btn" style="display: none;">GO TO POST-FLIGHT CHECKLIST</a>
         </footer>
         <footer class="theme-footer">
             <button id="theme-toggle" class="footer-btn">DARK</button>
@@ -133,8 +558,8 @@
             <span style="padding: 0 10px;">ZOOM</span>
             <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
             <span style="width: 20px;"></span>
-            <button id="chkl-reset-btn" class="footer-btn">CHKL RST</button>
-            <button id="chck-ovrd-btn" class="footer-btn">CHKL OVRD</button>
+            <button id="chkl-reset-btn" class="footer-btn" disabled>CHKL RST</button>
+            <button id="chck-ovrd-btn" class="footer-btn" disabled>CHKL OVRD</button>
             <span style="width: 20px;"></span>
             <button id="go-home-btn" class="footer-btn" onclick="window.location.href='home.html'">HOME</button>
         </footer>
@@ -146,46 +571,334 @@
             const themeToggle = document.getElementById('theme-toggle');
             const zoomInBtn = document.getElementById('zoom-in-btn');
             const zoomOutBtn = document.getElementById('zoom-out-btn');
-            const chklResetBtn = document.getElementById('chkl-reset-btn');
-            const chckOvrdBtn = document.getElementById('chck-ovrd-btn');
-            
-            const checklistItems = document.querySelectorAll('.checklist-item');
-            const progressText = document.getElementById('progress-text');
-            const totalItems = checklistItems.length;
             
             const pages = document.querySelectorAll('.page');
             const subTabs = document.querySelectorAll('.sub-tab');
             const prevBtn = document.getElementById('prev-page-btn');
             const nextBtn = document.getElementById('next-page-btn');
+            const nextChecklistBtn = document.getElementById('next-checklist-btn');
             const pageIndicator = document.getElementById('page-indicator');
             const tabTitle = document.getElementById('tab-title');
-
-            const pagerControls = document.getElementById('pager-controls');
-            const nextChecklistBtn = document.getElementById('next-checklist-btn');
             
             const scrollUpBtn = document.getElementById('scroll-up-btn');
             const scrollDownBtn = document.getElementById('scroll-down-btn');
             const pageContent = document.getElementById('page-content');
             
-            const pageTitles = ['DEPLOYMENT', 'PILOTING', 'MONITORING'];
+            const pageTitles = ['MONITORING', 'BATTERY CHART', 'OPERATION NOTES', 'STOPWATCH', 'CALCULATOR AND UNIT CONVERTER'];
             let currentPage = 0;
             const totalPages = pages.length;
             let scrollPositions = Array(totalPages).fill(0);
 
-            // --- ZOOM FUNCTIONALITY ---
-            let currentZoom = 1.0;
+            // --- STOPWATCH/TIMER LOGIC ---
+            const timerDisplay = document.getElementById('timer-display');
+            const startStopBtn = document.getElementById('start-stop-btn');
+            const lapBtn = document.getElementById('lap-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const lapsContainer = document.getElementById('laps-container');
 
-            function applyZoom(zoomLevel) {
-                body.style.zoom = zoomLevel;
+            let startTime;
+            let updatedTime;
+            let difference;
+            let tInterval;
+            let savedTime = 0;
+            let paused = true;
+            let lapCounter = 0;
+
+            function startStopTimer() {
+                if (paused) {
+                    paused = false;
+                    startTime = new Date().getTime();
+                    tInterval = setInterval(updateTime, 100);
+                    startStopBtn.textContent = 'Stop';
+                } else {
+                    paused = true;
+                    clearInterval(tInterval);
+                    savedTime = difference;
+                    startStopBtn.textContent = 'Start';
+                }
             }
 
+            function resetTimer() {
+                paused = true;
+                clearInterval(tInterval);
+                savedTime = 0;
+                difference = 0;
+                lapCounter = 0;
+                if(startStopBtn) startStopBtn.textContent = 'Start';
+                if(timerDisplay) timerDisplay.innerHTML = '00:00:00<span class="milliseconds">.0</span>';
+                if(lapsContainer) lapsContainer.innerHTML = '';
+            }
+
+            function addLap() {
+                if (!paused) {
+                    lapCounter++;
+                    const lapTime = timerDisplay.innerHTML;
+                    const lapElement = document.createElement('div');
+                    lapElement.classList.add('lap-item');
+                    lapElement.innerText = `Lap ${lapCounter}: ${lapTime.replace(/<[^>]*>/g, '')}`;
+                    lapsContainer.prepend(lapElement);
+                }
+            }
+
+            function updateTime() {
+                updatedTime = new Date().getTime();
+                difference = (updatedTime - startTime) + savedTime;
+                let hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((difference % (1000 * 60)) / 1000);
+                let milliseconds = Math.floor((difference % 1000) / 100);
+                hours = (hours < 10) ? "0" + hours : hours;
+                minutes = (minutes < 10) ? "0" + minutes : minutes;
+                seconds = (seconds < 10) ? "0" + seconds : seconds;
+                if(timerDisplay) timerDisplay.innerHTML = `${hours}:${minutes}:${seconds}<span class="milliseconds">.${milliseconds}</span>`;
+            }
+
+            if (startStopBtn) {
+                startStopBtn.addEventListener('click', startStopTimer);
+                resetBtn.addEventListener('click', resetTimer);
+                lapBtn.addEventListener('click', addLap);
+            }
+
+            // --- CALCULATOR & CONVERTER LOGIC ---
+            const calculatorState = {
+                displayValue: '0',
+                firstOperand: null,
+                waitingForSecondOperand: false,
+                operator: null,
+            };
+
+            function updateCalcDisplay() {
+                const display = document.getElementById('calc-display');
+                if (display) {
+                    display.textContent = calculatorState.displayValue;
+                }
+            }
+
+            function inputDigit(digit) {
+                const { displayValue, waitingForSecondOperand } = calculatorState;
+                if (waitingForSecondOperand === true) {
+                    calculatorState.displayValue = digit;
+                    calculatorState.waitingForSecondOperand = false;
+                } else {
+                    calculatorState.displayValue = displayValue === '0' ? digit : displayValue + digit;
+                }
+            }
+
+            function inputDecimal(dot) {
+                if (calculatorState.waitingForSecondOperand === true) {
+                    calculatorState.displayValue = '0.';
+                    calculatorState.waitingForSecondOperand = false;
+                    return;
+                }
+                if (!calculatorState.displayValue.includes(dot)) {
+                    calculatorState.displayValue += dot;
+                }
+            }
+
+            function performCalculation(first, second, op) {
+                switch (op) {
+                    case '+': return first + second;
+                    case '-': return first - second;
+                    case '*': return first * second;
+                    case '/': return first / second;
+                    default: return second;
+                }
+            }
+
+            function handleOperator(nextOperator) {
+                const { firstOperand, displayValue, operator } = calculatorState;
+                const inputValue = parseFloat(displayValue);
+
+                if (operator && calculatorState.waitingForSecondOperand) {
+                    calculatorState.operator = nextOperator;
+                    return;
+                }
+
+                if (firstOperand === null && !isNaN(inputValue)) {
+                    calculatorState.firstOperand = inputValue;
+                } else if (operator) {
+                    const result = performCalculation(firstOperand, inputValue, operator);
+                    calculatorState.displayValue = String(parseFloat(result.toFixed(7)));
+                    calculatorState.firstOperand = result;
+                }
+
+                calculatorState.waitingForSecondOperand = true;
+                calculatorState.operator = nextOperator;
+            }
+            
+            function resetCalculator() {
+                calculatorState.displayValue = '0';
+                calculatorState.firstOperand = null;
+                calculatorState.waitingForSecondOperand = false;
+                calculatorState.operator = null;
+            }
+
+            function handleConversion(type) {
+                const currentValue = parseFloat(calculatorState.displayValue);
+                if (isNaN(currentValue)) return;
+
+                let result;
+                switch (type) {
+                    case 'ft_to_m': result = currentValue * 0.3048; break;
+                    case 'm_to_ft': result = currentValue / 0.3048; break;
+                    case 'c_to_f': result = (currentValue * 9/5) + 32; break;
+                    case 'f_to_c': result = (currentValue - 32) * 5/9; break;
+                    case 'lbs_to_kg': result = currentValue / 2.20462; break;
+                    case 'kg_to_lbs': result = currentValue * 2.20462; break;
+                    default: return;
+                }
+                calculatorState.displayValue = String(parseFloat(result.toFixed(4)));
+                calculatorState.firstOperand = null;
+                calculatorState.operator = null;
+                calculatorState.waitingForSecondOperand = true;
+            }
+
+            const calcKeys = document.querySelector('.calculator-buttons');
+            if (calcKeys) {
+                calcKeys.addEventListener('click', (event) => {
+                    const { target } = event;
+                    if (!target.matches('button.calculator-btn')) return;
+                    const { value } = target.dataset;
+
+                    if (value === '=') { handleOperator(value); } 
+                    else if (target.classList.contains('operator')) { handleOperator(value); } 
+                    else if (value === '.') { inputDecimal(value); } 
+                    else if (value === 'clear') { resetCalculator(); } 
+                    else { inputDigit(value); }
+                    
+                    updateCalcDisplay();
+                });
+            }
+
+            const convTools = document.querySelector('.conversion-tools');
+            if (convTools) {
+                convTools.addEventListener('click', (event) => {
+                    const { target } = event;
+                    if (target.matches('button.conv-btn')) {
+                        const { conversion } = target.dataset;
+                        handleConversion(conversion);
+                        updateCalcDisplay();
+                    }
+                });
+            }
+            
+            // --- NOTES TAB LOGIC ---
+            let activeNotesInput = null;
+            const notesInputs = document.querySelectorAll('.notes-input');
+            const keypad = document.querySelector('.keypad-container');
+            const unitToggleButtons = document.querySelectorAll('.unit-btn');
+            const targetDepthInput = document.getElementById('target-depth');
+            const currentDepthInput = document.getElementById('current-depth');
+            const ascentRateInput = document.getElementById('ascent-rate');
+            const timeToTargetDisplay = document.getElementById('time-to-target');
+
+            notesInputs.forEach(input => {
+                input.addEventListener('click', (event) => {
+                    notesInputs.forEach(el => el.classList.remove('active-input'));
+                    event.target.classList.add('active-input');
+                    activeNotesInput = event.target;
+                });
+            });
+
+            if (keypad) {
+                keypad.addEventListener('click', (event) => {
+                    if (!activeNotesInput || !event.target.matches('.keypad-btn')) return;
+
+                    const btnValue = event.target.dataset.value;
+
+                    if (btnValue === 'del') {
+                        activeNotesInput.value = activeNotesInput.value.slice(0, -1);
+                    } else if (btnValue === '.') {
+                        if (!activeNotesInput.value.includes('.')) {
+                             activeNotesInput.value += btnValue;
+                        }
+                    } else {
+                        activeNotesInput.value += btnValue;
+                    }
+                    activeNotesInput.dispatchEvent(new Event('input'));
+                });
+            }
+
+            function updateTimeToTarget() {
+                const targetDepth = parseFloat(targetDepthInput.value);
+                const currentDepth = parseFloat(currentDepthInput.value);
+                const rate = parseFloat(ascentRateInput.value);
+                const selectedUnit = document.querySelector('.unit-btn.active').dataset.unit;
+                
+                if (isNaN(targetDepth) || isNaN(currentDepth) || isNaN(rate) || rate === 0) {
+                    timeToTargetDisplay.textContent = '-- min';
+                    return;
+                }
+
+                let depthDiff = targetDepth - currentDepth;
+                let rateInSelectedUnit = rate;
+
+                if (selectedUnit === 'ft') {
+                    depthDiff *= 0.3048; // Convert feet difference to meters
+                    rateInSelectedUnit *= 0.3048; // Convert ft/min to m/min
+                }
+                
+                const timeInMinutes = Math.abs(depthDiff / rateInSelectedUnit);
+                timeToTargetDisplay.textContent = `~ ${timeInMinutes.toFixed(1)} min`;
+            }
+
+            [targetDepthInput, currentDepthInput, ascentRateInput].forEach(input => {
+                if(input) input.addEventListener('input', updateTimeToTarget);
+            });
+            unitToggleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const parentToggle = button.closest('.unit-toggle');
+                    parentToggle.querySelectorAll('.unit-btn').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const rateLabel = document.querySelector('label[for="ascent-rate"]');
+                    if(rateLabel) rateLabel.textContent = `Rate (${button.dataset.unit}/min)`;
+                    updateTimeToTarget();
+                });
+            });
+
+            function getCompassDirection(degrees) {
+                if (degrees === null || isNaN(degrees) || degrees < 0 || degrees > 360) {
+                    return '--';
+                }
+                const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+                const index = Math.round(((degrees %= 360) < 0 ? degrees + 360 : degrees) / 45) % 8;
+                return directions[index];
+            }
+
+            const initialHeadingInput = document.getElementById('initial-heading');
+            const initialDirectionDisplay = document.getElementById('initial-direction');
+            if (initialHeadingInput) {
+                initialHeadingInput.addEventListener('input', () => {
+                    const degrees = parseFloat(initialHeadingInput.value);
+                    initialDirectionDisplay.textContent = getCompassDirection(degrees);
+                    if (initialHeadingInput.value === '') {
+                        initialDirectionDisplay.textContent = '--';
+                    }
+                });
+            }
+
+            const targetHeadingInput = document.getElementById('target-heading');
+            const targetDirectionDisplay = document.getElementById('target-direction');
+            if (targetHeadingInput) {
+                targetHeadingInput.addEventListener('input', () => {
+                    const degrees = parseFloat(targetHeadingInput.value);
+                    targetDirectionDisplay.textContent = getCompassDirection(degrees);
+                    if (targetHeadingInput.value === '') {
+                        targetDirectionDisplay.textContent = '--';
+                    }
+                });
+            }
+
+
+            // --- ZOOM FUNCTIONALITY ---
+            let currentZoom = 1.0;
+            function applyZoom(zoomLevel) { body.style.zoom = zoomLevel; }
             function saveAndApplyZoom(zoomLevel) {
                 const clampedZoom = Math.max(0.5, Math.min(zoomLevel, 2.0));
                 currentZoom = clampedZoom;
                 applyZoom(currentZoom);
                 localStorage.setItem('rovChecklistZoom', currentZoom);
             }
-
             zoomInBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom + 0.1));
             zoomOutBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom - 0.1));
 
@@ -197,263 +910,91 @@
                 localStorage.setItem('theme', currentTheme);
             });
             
-            // --- CHECKLIST PAGE OVERRIDE/RESET ---
-            // --- CHECKLIST PAGE OVERRIDE/RESET ---
-            chklResetBtn.addEventListener('click', () => {
-                const activePage = document.querySelector('.page.active');
-                if (!activePage) return;
-
-                const itemsOnPage = activePage.querySelectorAll('.checklist-item');
-                itemsOnPage.forEach(item => {
-                    item.classList.remove('checked');
-                });
-
-                // --- START: Auto-scroll to top logic ---
-                // 1. Reset the stored scroll position for the current page to 0
-                scrollPositions[currentPage] = 0;
-
-                // 2. Apply the reset position to the active scroll wrapper
-                const activeWrapper = activePage.querySelector('.scroll-wrapper');
-                if (activeWrapper) {
-                    activeWrapper.style.transform = `translateY(0px)`;
-                }
-
-                // 3. Update the scroll buttons to reflect the new position
-                updateScrollState();
-                // --- END: Auto-scroll to top logic ---
-
-                updateProgress();
-            });
-
-            chckOvrdBtn.addEventListener('click', () => {
-                const activePage = document.querySelector('.page.active');
-                if (!activePage) return;
-
-                const itemsOnPage = activePage.querySelectorAll('.checklist-item');
-                itemsOnPage.forEach(item => {
-                    item.classList.add('checked');
-                });
-                updateProgress();
-            });
-
             // --- SCROLL FUNCTIONALITY ---
             function updateScrollState() {
                 const activeWrapper = document.querySelector('.page.active .scroll-wrapper');
                 if (!activeWrapper) return;
-
                 const contentHeight = activeWrapper.scrollHeight;
                 const containerHeight = pageContent.clientHeight;
-                const currentScroll = scrollPositions[currentPage];
-                const footerBuffer = 150;
+                const needsScrolling = contentHeight > containerHeight;
                 
-                const needsScrolling = contentHeight > containerHeight || currentScroll !== 0;
-                
-                if (!needsScrolling) {
-                    scrollUpBtn.disabled = true;
-                    scrollDownBtn.disabled = true;
-                    return;
-                }
+                if (scrollUpBtn) scrollUpBtn.disabled = !needsScrolling;
+                if (scrollDownBtn) scrollDownBtn.disabled = !needsScrolling;
 
-                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
-                const upDisabled = currentScroll === 0;
-                const downDisabled = currentScroll <= maxScroll;
-                
-                scrollUpBtn.disabled = upDisabled;
-                scrollDownBtn.disabled = downDisabled;
+                if (!needsScrolling && scrollPositions[currentPage] !== 0) {
+                    scrollPositions[currentPage] = 0;
+                    activeWrapper.style.transform = `translateY(0px)`;
+                }
             }
 
-            function scrollContent(direction, amount = null) {
+            function scrollContent(direction) {
                 const activeWrapper = document.querySelector('.page.active .scroll-wrapper');
                 if (!activeWrapper) return;
-
                 const containerHeight = pageContent.clientHeight;
                 const contentHeight = activeWrapper.scrollHeight;
-                const scrollStep = amount !== null ? amount : containerHeight; 
+                if (contentHeight <= containerHeight) return;
                 
+                const scrollStep = containerHeight;
                 let newScrollY = scrollPositions[currentPage];
-                if (direction === 'down') {
-                    newScrollY -= scrollStep;
-                } else {
-                    newScrollY += scrollStep;
-                }
+
+                if (direction === 'down') { newScrollY -= scrollStep; } else { newScrollY += scrollStep; }
                 
-                const footerBuffer = 150; 
-                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
-                
+                const maxScroll = -(contentHeight - containerHeight);
                 newScrollY = Math.max(newScrollY, maxScroll);
                 newScrollY = Math.min(newScrollY, 0);
 
                 scrollPositions[currentPage] = newScrollY;
                 activeWrapper.style.transform = `translateY(${newScrollY}px)`;
                 
-                updateScrollState();
+                scrollUpBtn.disabled = (newScrollY === 0);
+                scrollDownBtn.disabled = (newScrollY <= maxScroll);
             }
 
-            scrollUpBtn.addEventListener('click', () => scrollContent('up'));
-            scrollDownBtn.addEventListener('click', () => scrollContent('down'));
+            if(scrollUpBtn) scrollUpBtn.addEventListener('click', () => scrollContent('up'));
+            if(scrollDownBtn) scrollDownBtn.addEventListener('click', () => scrollContent('down'));
 
-            // --- TAB COMPLETION CHECK ---
-            function checkTabCompletion() {
-                const currentPageElement = document.querySelector('.page.active');
-                const visibleCheckableItems = currentPageElement.querySelectorAll('.checklist-item');
-                const checkedVisibleItems = [...visibleCheckableItems].filter(item => item.classList.contains('checked'));
-                
-                const totalVisible = visibleCheckableItems.length;
-                const checkedCount = checkedVisibleItems.length;
-                const isTabComplete = checkedCount === totalVisible && totalVisible > 0;
-                
-                const proceedElements = ['deployment-proceed', 'piloting-proceed'];
-                if (currentPage < proceedElements.length) {
-                    const proceedElement = document.getElementById(proceedElements[currentPage]);
-                    if (proceedElement) {
-                        const wasHidden = proceedElement.style.display === 'none' || proceedElement.style.display === '';
-                        proceedElement.style.display = isTabComplete ? 'table-row' : 'none';
-                        
-                        if (isTabComplete && wasHidden) {
-                            setTimeout(() => {
-                                const messageRect = proceedElement.getBoundingClientRect();
-                                const containerRect = pageContent.getBoundingClientRect();
-                                if (messageRect.bottom > containerRect.bottom - 100) { 
-                                    const scrollAmount = messageRect.bottom - containerRect.bottom + 150; 
-                                    scrollContent('down', scrollAmount);
-                                }
-                            }, 100);
-                        }
-                    }
-                } else if (currentPage === 2) { 
-                    const completeElement = document.getElementById('monitoring-complete');
-                    if (completeElement) {
-                        const wasHidden = completeElement.style.display === 'none' || completeElement.style.display === '';
-                        completeElement.style.display = isTabComplete ? 'table-row' : 'none';
-                        
-                        if (isTabComplete && wasHidden) {
-                            setTimeout(() => {
-                                const messageRect = completeElement.getBoundingClientRect();
-                                const containerRect = pageContent.getBoundingClientRect();
-                                if (messageRect.bottom > containerRect.bottom - 100) { 
-                                    const scrollAmount = messageRect.bottom - containerRect.bottom + 150; 
-                                    scrollContent('down', scrollAmount);
-                                }
-                            }, 100);
-                        }
-                    }
-                }
-                
-                const nextPageBtn = document.getElementById('next-page-btn');
-                if (nextPageBtn) {
-                    if (isTabComplete && currentPage < totalPages - 1) {
-                        nextPageBtn.classList.add('highlighted');
-                    } else {
-                        nextPageBtn.classList.remove('highlighted');
-                    }
-                }
-            }
-
-            // --- CHECKLIST & FOOTER LOGIC ---
-            function updateFooter() {
-                const checkedCount = document.querySelectorAll('.checklist-item.checked').length;
-                const isComplete = checkedCount === totalItems;
-
-                if (isComplete && currentPage === totalPages - 1) {
-                    pagerControls.style.display = 'none';
-                    nextChecklistBtn.style.display = 'block';
-                } else {
-                    pagerControls.style.display = 'flex';
-                    nextChecklistBtn.style.display = 'none';
-                }
-            }
-
-            function updateProgress() {
-                const checkedCount = document.querySelectorAll('.checklist-item.checked').length;
-                progressText.textContent = `${checkedCount} / ${totalItems} ITEMS COMPLETE`;
-                
-                checkTabCompletion();
-                
-                if (checkedCount === totalItems) {
-                    progressText.textContent += ' -- CHECKLIST COMPLETE';
-                    progressText.style.color = 'var(--complete-color)';
-                } else {
-                    progressText.style.color = 'var(--dim-text-color)';
-                }
-                
-                updateFooter();
-            }
-
+            // --- PAGE NAVIGATION ---
             function showPage(pageIndex) {
                 pages.forEach((page, index) => {
                     page.classList.toggle('active', index === pageIndex);
-                    const scrollWrapper = page.querySelector('.scroll-wrapper');
-                    if (scrollWrapper) {
-                        scrollWrapper.style.transform = `translateY(${scrollPositions[index]}px)`;
-                    }
                 });
                 subTabs.forEach((tab, index) => tab.classList.toggle('active', index === pageIndex));
                 tabTitle.textContent = pageTitles[pageIndex];
                 pageIndicator.textContent = `${pageIndex + 1} / ${totalPages}`;
-                prevBtn.disabled = pageIndex === 0;
-                nextBtn.disabled = pageIndex === totalPages - 1;
                 
-                const nextPageBtn = document.getElementById('next-page-btn');
-                if (nextPageBtn) {
-                    nextPageBtn.classList.remove('highlighted');
+                if (pageIndex === totalPages - 1) {
+                    nextBtn.style.display = 'none';
+                    nextChecklistBtn.style.display = 'inline-block';
+                } else {
+                    nextBtn.style.display = 'inline-block';
+                    nextChecklistBtn.style.display = 'none';
                 }
                 
-                updateFooter();
-                updateScrollState();
-                
-                setTimeout(() => {
-                    updateProgress();
-                }, 50);
+                prevBtn.disabled = pageIndex === 0;
             }
 
-            checklistItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    item.classList.toggle('checked');
-                    updateProgress();
-                });
-            });
+
 
             subTabs.forEach((tab, index) => {
-                tab.addEventListener('click', () => {
-                    currentPage = index;
-                    showPage(currentPage);
-                });
+                tab.addEventListener('click', () => { currentPage = index; showPage(currentPage); });
             });
-
-            prevBtn.addEventListener('click', () => {
-                if (currentPage > 0) {
-                    currentPage--;
-                    showPage(currentPage);
-                }
-            });
-
-            nextBtn.addEventListener('click', () => {
-                if (currentPage < totalPages - 1) {
-                    currentPage++;
-                    showPage(currentPage);
-                }
-            });
+            prevBtn.addEventListener('click', () => { if (currentPage > 0) { currentPage--; showPage(currentPage); } });
+            nextBtn.addEventListener('click', () => { if (currentPage < totalPages - 1) { currentPage++; showPage(currentPage); } });
 
             // --- INITIAL LOAD ---
             function initialize() {
                 const savedTheme = localStorage.getItem('theme') || 'light-mode';
-                if (savedTheme === 'dark-mode') {
-                    body.classList.remove('light-mode');
-                } else {
-                    body.classList.add('light-mode');
-                }
+                if (savedTheme === 'dark-mode') { body.classList.remove('light-mode'); } 
+                else { body.classList.add('light-mode'); }
                 themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
-
                 const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
                 currentZoom = savedZoom;
                 applyZoom(currentZoom);
-
-                updateProgress();
                 showPage(currentPage);
+                updateCalcDisplay();
             }
 
             window.addEventListener('resize', updateScrollState);
-
             initialize();
         });
     </script>

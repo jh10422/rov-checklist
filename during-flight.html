@@ -5,344 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ROV During-Flight Checklist - B777 Interface</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Styles for the Timer/Stopwatch page */
-        .timer-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-        }
-        #timer-display {
-            font-size: 4.5rem;
-            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-            color: var(--text-color);
-            margin-bottom: 1.5rem;
-            letter-spacing: 2px;
-        }
-        #timer-display .milliseconds {
-            font-size: 3rem;
-            color: var(--dim-text-color);
-        }
-        .timer-controls button {
-            background-color: var(--inactive-tab-bg);
-            border: 2px solid var(--border-color);
-            color: var(--text-color);
-            font-family: inherit;
-            font-size: 1.5rem;
-            padding: 0.75rem 2rem;
-            margin: 0 0.5rem;
-            cursor: inherit;
-            min-width: 150px;
-            text-transform: uppercase;
-        }
-        .timer-controls button:hover {
-            background-color: var(--active-tab-bg);
-        }
-        #laps-container {
-            margin-top: 1.5rem;
-            width: 60%;
-            height: 100px;
-            overflow-y: auto;
-            text-align: center;
-            font-size: 1.2rem;
-            color: var(--dim-text-color);
-        }
-        .lap-item {
-            border-bottom: 2px dotted var(--border-color);
-            padding: 0.5rem 0;
-        }
-        /* Style for the battery chart table */
-        .battery-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 1rem;
-        }
-        .battery-table th, .battery-table td {
-            border: 2px solid var(--border-color);
-            padding: 8px;
-            text-align: center;
-        }
-        .battery-table th {
-            background-color: var(--inactive-tab-bg);
-            text-transform: uppercase;
-        }
-        .battery-table .note-col {
-             color: var(--note-color);
-             font-weight: 600;
-        }
-
-        /* Keyframes for pulsing animation */
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-
-        /* Style for the purple post-flight button */
-        #next-checklist-btn {
-            background-color: var(--note-color);
-            border-color: var(--note-color);
-            color: var(--display-bg);
-            padding: 0.25rem 0.75rem;
-            animation: pulse 2s infinite;
-            transition: background-color 0.2s ease-in-out;
-        }
-
-        #next-checklist-btn:hover {
-            background-color: var(--active-tab-bg);
-            animation-play-state: paused;
-        }
-
-        /* Styles for the Calculator */
-        .calculator-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-            padding: 0.5rem 0 0.25rem;
-            box-sizing: border-box;
-        }
-        .calculator-body {
-            display: flex;
-            width: 95%;
-            height: 100%;
-            gap: 10px;
-        }
-        .main-calculator {
-            flex: 3;
-            display: flex;
-            flex-direction: column;
-        }
-        .calculator-display {
-            width: 100%;
-            box-sizing: border-box;
-            background-color: var(--display-bg);
-            color: var(--text-color);
-            border: 2px solid var(--border-color);
-            font-size: 2.2rem;
-            text-align: right;
-            padding: 0.1rem 1rem;
-            margin-bottom: 10px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .calculator-buttons {
-            flex-grow: 1;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(5, 1fr);
-            gap: 10px;
-        }
-        .calculator-btn {
-            background-color: var(--inactive-tab-bg);
-            border: 2px solid var(--border-color);
-            color: var(--text-color);
-            font-family: inherit;
-            font-size: 2.4rem;
-            cursor: inherit;
-            transition: background-color 0.2s;
-        }
-        .calculator-btn:hover {
-            background-color: var(--active-tab-bg);
-        }
-        .calculator-btn.action {
-            color: var(--danger-color);
-        }
-        .calculator-btn.operator {
-            background-color: var(--active-tab-bg);
-        }
-        .calculator-btn.operator:hover {
-            background-color: #999;
-        }
-        body.light-mode .calculator-btn.operator:hover {
-            background-color: #AAAAAA;
-        }
-        .calculator-btn.plus {
-            grid-row: 2 / 4;
-            grid-column: 4 / 5;
-        }
-        .calculator-btn.equals {
-            grid-row: 4 / 6;
-            grid-column: 4 / 5;
-            background-color: var(--note-color);
-            color: var(--display-bg);
-        }
-        .calculator-btn.equals:hover {
-            background-color: var(--active-tab-bg);
-        }
-        .calculator-btn.zero {
-            grid-column: 1 / 3;
-        }
-        .conversion-tools {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .conv-btn {
-            background-color: var(--inactive-tab-bg);
-            border: 2px solid var(--border-color);
-            color: var(--text-color);
-            font-family: inherit;
-            font-size: 1.5rem;
-            font-weight: 600;
-            cursor: inherit;
-            transition: background-color 0.2s;
-            flex-grow: 1;
-        }
-        .conv-btn:hover {
-            background-color: var(--active-tab-bg);
-        }
-
-        /* Styles for the Notes Tab */
-        .notes-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            align-items: center;
-            padding: 0.5rem 0 1rem;
-            box-sizing: border-box;
-            gap: 0.75rem;
-        }
-        .notes-header {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto auto;
-            gap: 0.75rem 1.5rem;
-            width: 95%;
-            flex-shrink: 0;
-        }
-        .notes-input-group {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .notes-input-group label {
-            font-size: 1.1rem;
-            color: var(--note-color);
-            text-transform: uppercase;
-            flex-shrink: 0;
-            margin-right: 10px;
-        }
-        .notes-input {
-            background-color: var(--inactive-tab-bg);
-            border: 2px solid var(--border-color);
-            color: var(--text-color);
-            font-family: inherit;
-            font-size: 1.4rem;
-            padding: 0.5rem;
-            box-sizing: border-box;
-            text-align: right;
-            caret-color: transparent;
-            width: 8ch;
-            cursor: inherit;
-            transition: background-color 0.2s;
-        }
-        .notes-input:hover {
-            background-color: var(--active-tab-bg);
-        }
-        .notes-input:focus, .notes-input.active-input {
-            outline: none;
-            border-color: var(--note-color);
-        }
-        .unit-input-wrapper, .compass-input-wrapper {
-            display: flex;
-            align-items: center;
-        }
-        .unit-toggle {
-            display: flex;
-            margin-left: 0.5rem;
-        }
-        .unit-btn {
-            background-color: var(--inactive-tab-bg);
-            border: 2px solid var(--border-color);
-            color: var(--dim-text-color);
-            font-family: inherit;
-            font-size: 1.2rem;
-            padding: 0.5rem 0.75rem;
-            cursor: inherit;
-            text-transform: uppercase;
-            transition: background-color 0.2s;
-        }
-        .unit-btn.active {
-            background-color: var(--active-tab-bg);
-            color: var(--text-color);
-            border-color: var(--note-color);
-        }
-        .unit-btn:not(.active):hover {
-            background-color: var(--active-tab-bg);
-        }
-        .degree-symbol {
-            font-size: 1.4rem;
-            color: var(--dim-text-color);
-            margin-left: 5px;
-        }
-        .compass-display {
-            background-color: var(--display-bg);
-            border: 2px solid var(--border-color);
-            padding: 0.5rem;
-            font-size: 1.4rem;
-            min-width: 45px;
-            text-align: center;
-            color: var(--note-color);
-            font-weight: 600;
-            margin-left: 0.5rem;
-        }
-        .time-display {
-             background-color: var(--display-bg);
-            border: 2px solid var(--border-color);
-            padding: 0.5rem;
-            font-size: 1.4rem;
-            flex-grow: 1;
-            text-align: center;
-            color: var(--note-color);
-            font-weight: 600;
-        }
-        .keypad-container {
-            flex-grow: 1;
-            width: 95%;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(4, 1fr);
-            gap: 8px;
-        }
-        .keypad-btn {
-            background-color: var(--inactive-tab-bg);
-            border: 2px solid var(--border-color);
-            color: var(--text-color);
-            font-family: inherit;
-            font-size: 2.2rem;
-            cursor: inherit;
-        }
-        .keypad-btn:hover {
-            background-color: var(--active-tab-bg);
-        }
-        .keypad-btn.del-btn {
-            color: var(--danger-color);
-        }
-        
-        /* Footer Centering Fix */
-        .nav-controls {
-            flex: 1;
-        }
-        #pager-controls .nav-controls:first-of-type {
-            text-align: left;
-        }
-        #pager-controls .nav-controls:last-of-type {
-            text-align: right;
-        }
-        #page-indicator {
-            flex: 0 1 auto;
-            text-align: center;
-        }
-
-    </style>
 </head>
 <body class="light-mode">
 
@@ -375,9 +37,8 @@
                             </tr>
                             <tr>
                                 <td class="item-cell-monitor"><div class="monitor-content"><span class="item-name">Battery Voltage</span><span class="dots"></span><span class="item-status">&gt; 12.8V</span></div></td>
-                            <tr>
-                                <td class="item-note" colspan="2">(Use Battery Chart on the Next Page for Reference)</td>
                             </tr>
+                            <tr>
                                 <td class="item-cell-monitor"><div class="monitor-content"><span class="item-name">Video Feed</span><span class="dots"></span><span class="item-status">CLEAR</span></div></td>
                             </tr>
                             <tr>
@@ -423,25 +84,27 @@
              <div class="page">
                 <div class="scroll-wrapper">
                     <div class="notes-container">
-                        <div class="notes-header">
-                            <div class="notes-input-group">
-                                <label for="target-depth">Target Depth</label>
+                        <div class="notes-fields">
+                                                    <div class="notes-input-group">
+                                <label>Current Depth</label>
                                 <div class="unit-input-wrapper">
-                                    <input type="text" id="target-depth" class="notes-input" readonly>
-                                    <div class="unit-toggle">
+                                    <input type="text" id="current-depth" class="notes-input" readonly>
+                                                                        <div class="unit-toggle">
                                         <button class="unit-btn active" data-unit="m">M</button>
                                         <button class="unit-btn" data-unit="ft">FT</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="notes-input-group">
-                                <label for="current-depth">Current Depth</label>
+                             <div class="notes-input-group">
+                                <label>Target Depth</label>
                                 <div class="unit-input-wrapper">
-                                    <input type="text" id="current-depth" class="notes-input" readonly>
+                                    <input type="text" id="target-depth" class="notes-input" readonly>
+
                                 </div>
                             </div>
+    
                             <div class="notes-input-group">
-                                <label for="initial-heading">Initial Heading</label>
+                                <label>Initial Heading</label>
                                 <div class="compass-input-wrapper">
                                     <input type="text" id="initial-heading" class="notes-input" readonly>
                                     <span class="degree-symbol">°</span>
@@ -449,7 +112,7 @@
                                 </div>
                             </div>
                              <div class="notes-input-group">
-                                <label for="target-heading">Target Heading</label>
+                                <label>Target Heading</label>
                                 <div class="compass-input-wrapper">
                                     <input type="text" id="target-heading" class="notes-input" readonly>
                                     <span class="degree-symbol">°</span>
@@ -457,7 +120,7 @@
                                 </div>
                             </div>
                             <div class="notes-input-group">
-                                <label for="ascent-rate">Rate (m/min)</label>
+                                <label id="rate-label">Rate (m/min)</label>
                                 <input type="text" id="ascent-rate" class="notes-input" readonly>
                             </div>
                             <div class="notes-input-group">
@@ -584,7 +247,7 @@
             const scrollDownBtn = document.getElementById('scroll-down-btn');
             const pageContent = document.getElementById('page-content');
             
-            const pageTitles = ['MONITORING', 'BATTERY CHART', 'OPERATION NOTES', 'STOPWATCH', 'CALCULATOR AND UNIT CONVERTER'];
+            const pageTitles = ['MONITORING', 'BATTERY CHART', 'NOTES', 'STOPWATCH', 'CALCULATOR'];
             let currentPage = 0;
             const totalPages = pages.length;
             let scrollPositions = Array(totalPages).fill(0);
@@ -839,7 +502,7 @@
                 }
                 
                 const timeInMinutes = Math.abs(depthDiff / rateInSelectedUnit);
-                timeToTargetDisplay.textContent = `~ ${timeInMinutes.toFixed(1)} min`;
+                timeToTargetDisplay.textContent = `${timeInMinutes.toFixed(1)} min`;
             }
 
             [targetDepthInput, currentDepthInput, ascentRateInput].forEach(input => {
@@ -850,7 +513,7 @@
                     const parentToggle = button.closest('.unit-toggle');
                     parentToggle.querySelectorAll('.unit-btn').forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
-                    const rateLabel = document.querySelector('label[for="ascent-rate"]');
+                    const rateLabel = document.getElementById('rate-label');
                     if(rateLabel) rateLabel.textContent = `Rate (${button.dataset.unit}/min)`;
                     updateTimeToTarget();
                 });
@@ -923,7 +586,7 @@
 
                 if (!needsScrolling && scrollPositions[currentPage] !== 0) {
                     scrollPositions[currentPage] = 0;
-                    activeWrapper.style.transform = `translateY(0px)`;
+                    if(activeWrapper) activeWrapper.style.transform = `translateY(0px)`;
                 }
             }
 

@@ -150,7 +150,7 @@
                              <button class="keypad-btn" data-value="9">9</button>
                              <button class="keypad-btn" data-value=".">.</button>
                              <button class="keypad-btn" data-value="0">0</button>
-                             <button class="keypad-btn del-btn" data-value="del">DEL</button>
+                             <button class="keypad-btn del-btn" data-value="del">CLR</button>
                         </div>
                     </div>
                 </div>
@@ -175,7 +175,7 @@
                             <div class="main-calculator">
                                 <div class="calculator-display" id="calc-display">0</div>
                                 <div class="calculator-buttons">
-                                    <button class="calculator-btn action" data-value="clear">C</button>
+                                    <button class="calculator-btn action" data-value="clear">CLR</button>
                                     <button class="calculator-btn operator" data-value="/">÷</button>
                                     <button class="calculator-btn operator" data-value="*">×</button>
                                     <button class="calculator-btn operator" data-value="-">−</button>
@@ -554,7 +554,8 @@
                     const btnValue = event.target.dataset.value;
 
                     if (btnValue === 'del') {
-                        activeNotesInput.value = activeNotesInput.value.slice(0, -1);
+                        // This line now clears the whole field
+                        activeNotesInput.value = '';
                     } else if (btnValue === '.') {
                         if (!activeNotesInput.value.includes('.')) {
                              activeNotesInput.value += btnValue;

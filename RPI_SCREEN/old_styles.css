@@ -42,13 +42,13 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 950px;
     margin: 0 auto;
     border: 2px solid var(--border-color);
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    height: 650px;
+    height: 850px;
     box-sizing: border-box;
      position: relative;
 }

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FUMI ROV Checklist System</title>
+    
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Theme color for browser UI on mobile -->
+    <meta name="theme-color" content="#1e1e1e">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-mode">
+
+    <div class="container">
+        <header>
+            <h1>► FUMI ROV CHECKLIST SYSTEM ◄</h1>
+        </header>
+        
+        <div class="page-content welcome">
+            <div class="welcome-container">
+                <div class="system-title">OPERATIONAL CHECKLIST</div>
+                
+                <div class="welcome-text">
+                    This is a checklist system designed for the safe and efficient operation of the FUMI ROV.<br>
+
+                </div>
+                
+                <!-- This is the original button that navigates in the same tab -->
+                <a href="home.html" class="continue-btn">
+                    <span class="btn-title">CONTINUE TO CHECKLISTS</span>
+                    <span class="btn-description">Begin ROV operations</span>
+                </a>
+
+                <!-- This is the new button to open the checklist in a clean popup window -->
+                <a href="#" onclick="openCleanWindow()" class="continue-btn">
+                    <span class="btn-title">OPEN IN NEW WINDOW</span>
+                    <span class="btn-description">Launch in a focused view</span>
+                </a>
+            </div>
+        </div>
+        
+        <footer class="theme-footer">
+            <button id="theme-toggle" class="footer-btn">DARK</button>
+            <span style="width: 10px;"></span>
+            <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
+            <span style="padding: 0 10px;">ZOOM</span>
+            <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
+            <span style="width: 20px;"></span>
+            <button id="chkl-reset-btn" class="footer-btn" disabled>CHKL RST</button>
+            <button id="chck-ovrd-btn" class="footer-btn" disabled>CHKL OVRD</button>
+            <span style="width: 20px;"></span>
+            <button id="go-home-btn" class="footer-btn" onclick="window.location.href='home.html'" disabled>HOME</button>
+        </footer>
+        
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const zoomInBtn = document.getElementById('zoom-in-btn');
+            const zoomOutBtn = document.getElementById('zoom-out-btn');
+
+            let currentZoom = 1.0;
+
+            function applyZoom(zoomLevel) {
+                body.style.zoom = zoomLevel;
+            }
+
+            function saveAndApplyZoom(zoomLevel) {
+                const clampedZoom = Math.max(0.5, Math.min(zoomLevel, 2.0));
+                currentZoom = clampedZoom;
+                applyZoom(currentZoom);
+                localStorage.setItem('rovChecklistZoom', currentZoom);
+            }
+
+            zoomInBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom + 0.1));
+            zoomOutBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom - 0.1));
+
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : 'dark-mode';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
+                localStorage.setItem('theme', currentTheme);
+            });
+
+            function initialize() {
+                const savedTheme = localStorage.getItem('theme') || 'light-mode';
+                if (savedTheme === 'dark-mode') {
+                    body.classList.remove('light-mode');
+                } else {
+                    body.classList.add('light-mode');
+                }
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
+
+                const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
+                currentZoom = savedZoom;
+                applyZoom(currentZoom);
+            }
+
+            initialize();
+        });
+    function openCleanWindow() {
+  // Define the URL to open in the new window
+  const url = 'home.html';
+
+  // Define the features for the new window (no address bar, menu, etc.)
+  const windowFeatures = 'menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,width=1200,height=900';
+
+  // Open the new window
+  window.open(url, 'checklistWindow', windowFeatures);
+}
+        // --- PWA Service Worker Registration ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+    </script>
+
+</body>
+</html>

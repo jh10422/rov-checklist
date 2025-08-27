@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROV Pre-Flight Checklist</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-mode">
+
+    <div class="container full-height-sidebar-layout">
+        <div class="main-content-wrapper">
+            <header>
+                <a href="home.html" class="nav-arrow left">&lt;</a>
+                <h1>► PRE-FLIGHT ◄</h1>
+                <a href="deployment.html" class="nav-arrow right">&gt;</a>
+            </header>
+
+            <div class="sub-tabs-container">
+                <button class="sub-tab active">CONTROL</button>
+                <button class="sub-tab">VEHICLE</button>
+                <button class="sub-tab">TETHER</button>
+                <button class="sub-tab">SOFTWARE</button>
+                <button class="sub-tab">DRY TEST</button>
+            </div>
+            
+            <div class="progress-text" id="progress-text">0 / 43 ITEMS COMPLETE</div>
+            <div class="tab-title" id="tab-title"></div>
+            
+            <div class="page-content" id="page-content">
+                <div class="scroll-wrapper">
+                    <div class="page active">
+                        <table>
+                            <tbody>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Monitor Switch</span><span class="dots"></span><span class="item-status">ON</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Top Cover</span><span class="dots"></span><span class="item-status">OPEN Lid CAREFULLY</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Velcro Mounts</span><span class="dots"></span><span class="item-status">Verify SECURED</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                    <td class="item-cell"><span class="checklist-box"></span><span class="item-name">BAT Barrel Jack</span><span class="dots"></span><span class="item-status">Confirm CONNECTED</span></td>
+                                 </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">BAT Power Button</span><span class="dots"></span><span class="item-status">HOLD until ON</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">DC Output</span><span class="dots"></span><span class="item-status">Set ON, Set to <span class="notes-code">12V / 5A</span></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="item-note" colspan="2">(Verify DC power is ON with the battery display)</td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Ethernet and USB Connectors</span><span class="dots"></span><span class="item-status">Verify Secured</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Mac Power Button</span><span class="dots"></span><span class="item-status">Pressed</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="item-note" colspan="2">(Verify Mac Mini is ON)</td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Top Cover</span><span class="dots"></span><span class="item-status">Closed and Secured</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Monitor Power</span><span class="dots"></span><span class="item-status">Verify ON</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Connections</span><span class="dots"></span><span class="item-status">Joystick and buttons SECURE</span></td>
+                                </tr>
+                                 <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Joystick Frame</span><span class="dots"></span><span class="item-status">SECURED in holder</span></td>
+                                </tr>
+                                <tr class="instruction" id="control-proceed" style="display: none;">
+                                    <td colspan="2">PROCEED TO THE NEXT PAGE</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="page">
+                        <table>
+                            <tbody>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">M10 Bulkheads</span><span class="dots"></span><span class="item-status">Verify TIGHTENED</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Connectors (x2)</span><span class="dots"></span><span class="item-status">Plugged in - <span class="critical">Verify POLARITY</span></span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                    <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Startup 3 Beeps</span><span class="dots"></span><span class="item-status">Confirm HEARD</span></span></td>
+                                 </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Tether Connector</span><span class="dots"></span><span class="item-status">Plugged in</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Cobalt Sleeves</span><span class="dots"></span><span class="item-status">Verify SECURED with <span class="critical">NO THREADS SHOWING</span></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="item-note" colspan="2">(ONLY ONE METAL RING SHOULD BE SEEN ON THE BULKHEAD)</td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Electronic Tube OK Vent Cap</span><span class="dots"></span><span class="item-status">Confirm ON and Tightened</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                    <td class="item-cell"><span class="checklist-box"></span><span class="item-name">BAT Tube OK Vent Cap</span><span class="dots"></span><span class="item-status">Confirm ON and Tightened</span></td>
+                                 </tr>
+                                 <tr class="checklist-item">
+                                    <td class="item-cell"><span class="checklist-box"></span><span class="item-name">BAT Balance Connector</span><span class="dots"></span><span class="item-status">Confirm Plug is ON and Tightened</span></td>
+                                 </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Strain Relief</span><span class="dots"></span><span class="item-status">Carabiner is ATTACHED and SECURED</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Camera Lens Cap</span><span class="dots"></span><span class="item-status">REMOVED</span></td>
+                                </tr>
+                                <tr class="instruction" id="vehicle-proceed" style="display: none;">
+                                    <td colspan="2">PROCEED TO THE NEXT PAGE</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="page">
+                        <table>
+                             <tbody>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Cable</span><span class="dots"></span><span class="item-status">Securely attached to station and spool</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Tether</span><span class="dots"></span><span class="item-status">VERIFY Clear and untangled</span></td>
+                                </tr>
+                                <tr class="instruction" id="tether-proceed" style="display: none;">
+                                    <td colspan="2">PROCEED TO THE NEXT PAGE</td>
+                                </tr>
+                             </tbody>
+                        </table>
+                    </div>
+                    <div class="page">
+                         <table>
+                            <tbody>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Cockpit Software</span><span class="dots"></span><span class="item-status">LAUNCHED</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Connection</span><span class="dots"></span><span class="item-status">VERIFY in Software</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Depth Sensor</span><span class="dots"></span><span class="item-status">VERIFY at <span class="notes-code">0</span></span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Compass</span><span class="dots"></span><span class="item-status">VERIFY Heading with Phone Compass</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Voltage and Current</span><span class="dots"></span><span class="item-status">VERIFY above <span class="notes-code">14V</span>, below <span class="notes-code">1A</span></span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Attitude Indicator</span><span class="dots"></span><span class="item-status">VERIFY correct orientation</span></td>
+                                </tr>
+                                 <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Joystick Input</span><span class="dots"></span><span class="item-status">VERIFY in Software</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Video Streams</span><span class="dots"></span><span class="item-status">VERIFY function</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Recording Configuration</span><span class="dots"></span><span class="item-status">VERIFIED</span></td>
+                                </tr>
+                                <tr class="instruction" id="software-proceed" style="display: none;">
+                                    <td colspan="2">PROCEED TO THE NEXT PAGE</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="page">
+                        <table>
+                             <tbody>
+                                <tr><td class="instruction">- VEHICLE DRY TEST -</td></tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Pilot Gain</span><span class="dots"></span><span class="item-status">SET to <span class="notes-code">25</span> percent</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Mode</span><span class="dots"></span><span class="item-status">SET to <span class="notes-code">Manual</span></span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">SET and VERIFY armed</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Joystick Input</span><span class="dots"></span><span class="item-status">SLOWLY move each Axis</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Motor Movements</span><span class="dots"></span><span class="item-status">VERIFY</span></td>
+                                </tr>
+                                <tr><td class="instruction">- ALL FUNCTIONS CONFIRMED -</td></tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">SET and VERIFY disarmed</span></td>
+                                </tr>
+                                <tr id="completion-message-row" style="display: none;">
+                                    <td class="checklist-complete" colspan="2">PRE-FLIGHT CHECKLIST COMPLETE - VEHICLE IS READY FOR DEPLOYMENT</td>
+                                </tr>
+                                <tr id="not-ready-message-row" style="display: table-row;">
+                                    <td class="checklist-incomplete" colspan="2">VEHICLE IS NOT READY</td>
+                                </tr>
+                             </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="scroll-controls">
+                    <button id="scroll-up-btn" class="scroll-btn">▲</button>
+                    <button id="scroll-down-btn" class="scroll-btn">▼</button>
+                </div>
+            </div>
+            
+            <footer class="page-footer">
+                <div id="pager-controls">
+                    <div class="nav-controls">
+                        <button id="prev-page-btn" class="footer-btn">&lt; PREV PAGE</button>
+                    </div>
+                    <div id="page-indicator">1 / 5</div>
+                    <div class="nav-controls">
+                        <button id="next-page-btn" class="footer-btn">NEXT PAGE &gt;</button>
+                    </div>
+                </div>
+                <a href="deployment.html" id="next-checklist-btn" class="footer-btn" style="display: none;">GO TO VEHICLE DEPLOYMENT CHECKLIST</a>
+            </footer>
+        </div>
+
+        <aside class="side-controls">
+            <button id="theme-toggle" class="footer-btn">DARK</button>
+            <span style="height: 15px;"></span>
+            <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
+            <span style="padding: 5px 0;">ZOOM</span>
+            <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
+            <span style="height: 15px;"></span>
+            <button id="chkl-reset-btn" class="footer-btn">CHKL RST</button>
+            <button id="chck-ovrd-btn" class="footer-btn">CHKL OVRD</button>
+            <span style="height: 15px;"></span>
+            <button id="go-home-btn" class="footer-btn" onclick="window.location.href='home.html'">HOME</button>
+        </aside>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const zoomInBtn = document.getElementById('zoom-in-btn');
+            const zoomOutBtn = document.getElementById('zoom-out-btn');
+
+            const chklResetBtn = document.getElementById('chkl-reset-btn');
+            const chckOvrdBtn = document.getElementById('chck-ovrd-btn');
+
+            const checklistItems = document.querySelectorAll('.checklist-item');
+            const progressText = document.getElementById('progress-text');
+            const totalItems = checklistItems.length;
+            const completionMessage = document.getElementById('completion-message-row');
+            const notReadyMessage = document.getElementById('not-ready-message-row');
+            
+            const pagerControls = document.getElementById('pager-controls');
+            const nextChecklistBtn = document.getElementById('next-checklist-btn');
+            
+            const pages = document.querySelectorAll('.page');
+            const subTabs = document.querySelectorAll('.sub-tab');
+            const prevBtn = document.getElementById('prev-page-btn');
+            const nextBtn = document.getElementById('next-page-btn');
+            const pageIndicator = document.getElementById('page-indicator');
+            const tabTitle = document.getElementById('tab-title');
+            
+            const pageContent = document.getElementById('page-content');
+            const scrollUpBtn = document.getElementById('scroll-up-btn');
+            const scrollDownBtn = document.getElementById('scroll-down-btn');
+
+            const pageTitles = ['CONTROL STATION', 'VEHICLE', 'TETHER SPOOL', 'SOFTWARE', 'DRY TEST'];
+            let currentPage = 0;
+            const totalPages = pages.length;
+            let scrollPositions = Array(totalPages).fill(0);
+
+            // --- ZOOM FUNCTIONALITY ---
+            let currentZoom = 1.0;
+            function applyZoom(zoomLevel) { body.style.zoom = zoomLevel; }
+            function saveAndApplyZoom(zoomLevel) {
+                const clampedZoom = Math.max(0.5, Math.min(zoomLevel, 2.0));
+                currentZoom = clampedZoom;
+                applyZoom(currentZoom);
+                localStorage.setItem('rovChecklistZoom', currentZoom);
+            }
+            zoomInBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom + 0.1));
+            zoomOutBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom - 0.1));
+
+            // --- THEME FUNCTIONALITY ---
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : 'dark-mode';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
+                localStorage.setItem('theme', currentTheme);
+            });
+
+            // --- CHECKLIST PAGE OVERRIDE/RESET ---
+            chklResetBtn.addEventListener('click', () => {
+                const activePage = document.querySelector('.page.active');
+                if (!activePage) return;
+
+                const itemsOnPage = activePage.querySelectorAll('.checklist-item');
+                itemsOnPage.forEach(item => {
+                    item.classList.remove('checked');
+                });
+
+                scrollPositions[currentPage] = 0;
+                activePage.style.transform = `translateY(0px)`;
+
+                updateScrollState();
+                updateProgress();
+            });
+
+            chckOvrdBtn.addEventListener('click', () => {
+                const activePage = document.querySelector('.page.active');
+                if (!activePage) return;
+
+                const itemsOnPage = activePage.querySelectorAll('.checklist-item');
+                itemsOnPage.forEach(item => {
+                    item.classList.add('checked');
+                });
+                updateProgress();
+            });
+
+            // --- SCROLL FUNCTIONALITY ---
+            function updateScrollState() {
+                const activePage = document.querySelector('.page.active');
+                if (!activePage) return;
+
+                const contentHeight = activePage.scrollHeight;
+                const containerHeight = pageContent.clientHeight;
+                const currentScroll = scrollPositions[currentPage];
+                const footerBuffer = 150;
+                
+                if (contentHeight <= containerHeight) {
+                    scrollUpBtn.disabled = true;
+                    scrollDownBtn.disabled = true;
+                    return;
+                }
+
+                scrollUpBtn.disabled = currentScroll === 0;
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
+                scrollDownBtn.disabled = currentScroll <= maxScroll;
+            }
+
+            function scrollContent(direction, amount = null) {
+                const activePage = document.querySelector('.page.active');
+                if (!activePage) return;
+
+                const containerHeight = pageContent.clientHeight;
+                const contentHeight = activePage.scrollHeight;
+                const scrollStep = amount !== null ? amount : containerHeight * 0.6; 
+                
+                let newScrollY = scrollPositions[currentPage];
+                if (direction === 'down') {
+                    newScrollY -= scrollStep;
+                } else {
+                    newScrollY += scrollStep;
+                }
+
+                const footerBuffer = 150; 
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
+                
+                newScrollY = Math.max(newScrollY, maxScroll);
+                newScrollY = Math.min(newScrollY, 0);
+
+                scrollPositions[currentPage] = newScrollY;
+                activePage.style.transform = `translateY(${newScrollY}px)`;
+                updateScrollState();
+            }
+
+            scrollUpBtn.addEventListener('click', () => scrollContent('up'));
+            scrollDownBtn.addEventListener('click', () => scrollContent('down'));
+
+            // --- TAB COMPLETION CHECK ---
+            function checkTabCompletion() {
+                const currentPageElement = document.querySelector('.page.active');
+                const visibleCheckableItems = currentPageElement.querySelectorAll('.checklist-item');
+                const checkedVisibleItems = [...visibleCheckableItems].filter(item => item.classList.contains('checked'));
+                
+                const totalVisible = visibleCheckableItems.length;
+                const checkedCount = checkedVisibleItems.length;
+                const isTabComplete = checkedCount === totalVisible && totalVisible > 0;
+                
+                const proceedElements = ['control-proceed', 'vehicle-proceed', 'tether-proceed', 'software-proceed'];
+                const proceedElement = document.getElementById(proceedElements[currentPage]);
+                if (proceedElement) {
+                    const wasHidden = proceedElement.style.display === 'none' || proceedElement.style.display === '';
+                    proceedElement.style.display = isTabComplete ? 'table-row' : 'none';
+                    
+                    if (isTabComplete && wasHidden) {
+                        setTimeout(() => {
+                            updateScrollState();
+                            const messageRect = proceedElement.getBoundingClientRect();
+                            const containerRect = pageContent.getBoundingClientRect();
+                            if (messageRect.bottom > containerRect.bottom - 100) {
+                                const scrollAmount = messageRect.bottom - containerRect.bottom + 150;
+                                scrollContent('down', scrollAmount);
+                            }
+                        }, 100);
+                    }
+                }
+                
+                const nextPageBtn = document.getElementById('next-page-btn');
+                if (nextPageBtn) {
+                    if (isTabComplete && currentPage < totalPages - 1) {
+                        nextPageBtn.classList.add('highlighted');
+                    } else {
+                        nextPageBtn.classList.remove('highlighted');
+                    }
+                }
+            }
+
+            // --- CHECKLIST FUNCTIONALITY ---
+            function updateProgress() {
+                const checkedCount = document.querySelectorAll('.checklist-item.checked').length;
+                progressText.textContent = `${checkedCount} / ${totalItems} ITEMS COMPLETE`;
+                
+                checkTabCompletion();
+                
+                if (checkedCount === totalItems) {
+                    progressText.textContent += ' -- CHECKLIST COMPLETE';
+                    progressText.style.color = 'var(--complete-color)';
+                    completionMessage.style.display = 'table-row';
+                    notReadyMessage.style.display = 'none';
+                    pagerControls.style.display = 'none';
+                    nextChecklistBtn.style.display = 'block';
+                } else {
+                    progressText.style.color = 'var(--dim-text-color)';
+                    completionMessage.style.display = 'none';
+                    notReadyMessage.style.display = 'table-row';
+                    pagerControls.style.display = 'flex';
+                    nextChecklistBtn.style.display = 'none';
+                }
+            }
+
+            function showPage(pageIndex) {
+                currentPage = pageIndex;
+                pages.forEach((page, index) => {
+                    page.classList.toggle('active', index === pageIndex);
+                    page.style.transform = `translateY(${scrollPositions[index]}px)`;
+                });
+                subTabs.forEach((tab, index) => tab.classList.toggle('active', index === pageIndex));
+                tabTitle.textContent = pageTitles[pageIndex];
+                pageIndicator.textContent = `${pageIndex + 1} / ${totalPages}`;
+                prevBtn.disabled = pageIndex === 0;
+                nextBtn.disabled = pageIndex === totalPages - 1;
+                
+                const nextPageBtn = document.getElementById('next-page-btn');
+                if (nextPageBtn) {
+                    nextPageBtn.classList.remove('highlighted');
+                }
+                
+                setTimeout(() => {
+                    updateScrollState();
+                    updateProgress();
+                }, 50);
+            }
+
+            checklistItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    item.classList.toggle('checked');
+                    updateProgress();
+
+                    // --- START: AUTO-SCROLL LOGIC FIX ---
+                    const activePage = document.querySelector('.page.active');
+                    const itemsOnCurrentPage = [...activePage.querySelectorAll('.checklist-item')];
+                    // --- END: AUTO-SCROLL LOGIC FIX ---
+                    const containerRect = pageContent.getBoundingClientRect();
+                    
+                    const lastVisibleItem = itemsOnCurrentPage.filter(i => {
+                        const itemRect = i.getBoundingClientRect();
+                        return itemRect.top >= containerRect.top && itemRect.bottom <= containerRect.bottom;
+                    }).pop();
+
+                    if (item === lastVisibleItem) {
+                        const allVisibleChecked = itemsOnCurrentPage.filter(i => {
+                             const itemRect = i.getBoundingClientRect();
+                             return itemRect.top >= containerRect.top && itemRect.bottom <= containerRect.bottom;
+                        }).every(i => i.classList.contains('checked'));
+
+                        if (allVisibleChecked && !scrollDownBtn.disabled) {
+                            setTimeout(() => scrollContent('down'), 300);
+                        }
+                    }
+                });
+            });
+
+            subTabs.forEach((tab, index) => {
+                tab.addEventListener('click', () => {
+                    currentPage = index;
+                    showPage(currentPage);
+                });
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentPage > 0) {
+                    currentPage--;
+                    showPage(currentPage);
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (currentPage < totalPages - 1) {
+                    currentPage++;
+                    showPage(currentPage);
+                }
+            });
+
+            // --- INITIAL LOAD ---
+            function initialize() {
+                const savedTheme = localStorage.getItem('theme') || 'light-mode';
+                if (savedTheme === 'dark-mode') {
+                    body.classList.remove('light-mode');
+                } else {
+                    body.classList.add('light-mode');
+                }
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
+
+                const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
+                currentZoom = savedZoom;
+                applyZoom(currentZoom);
+
+                updateProgress();
+                showPage(currentPage);
+            }
+            
+            window.addEventListener('resize', updateScrollState);
+
+            initialize();
+        });
+    </script>
+
+</body>
+</html>

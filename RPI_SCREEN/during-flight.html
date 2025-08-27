@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROV During-Flight Checklist - B777 Interface</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-mode">
+
+    <div class="container">
+        <header>
+            <a href="deployment.html" class="nav-arrow left">&lt;</a>
+            <h1>▶ VEHICLE MONITORING ◀</h1>
+            <a href="post-flight.html" class="nav-arrow right">&gt;</a>
+        </header>
+
+        <div class="sub-tabs-container">
+            <button class="sub-tab">Monitoring</button>
+            <button class="sub-tab">Battery</button>
+            <button class="sub-tab">Notes</button>
+            <button class="sub-tab">StopWatch</button>
+            <button class="sub-tab">Calculator</button>
+        </div>
+        
+        <div class="progress-text" id="progress-text">MONITORING AND TOOLS PAGE</div>
+        <div class="tab-title" id="tab-title"></div>
+        
+        <div class="page-content" id="page-content">
+            <div class="page active">
+                <div class="scroll-wrapper">
+                     <table>
+                        <tbody>
+                            <tr><td class="instruction">- Continuously Monitor The Following Throughout The Flight -</td></tr>
+                            <tr>
+                                <td class="item-cell-monitor"><div class="monitor-content"><span class="item-name">DEPTH</span><span class="dots"></span><span class="item-status">MONITORING</span></div></td>
+                            </tr>
+                            <tr>
+                                <td class="item-cell-monitor"><div class="monitor-content"><span class="item-name">Battery Voltage</span><span class="dots"></span><span class="item-status">&gt; 12.8V</span></div></td>
+                            </tr>
+                            <tr>
+                                <td class="item-cell-monitor"><div class="monitor-content"><span class="item-name">Video Feed</span><span class="dots"></span><span class="item-status">CLEAR</span></div></td>
+                            </tr>
+                            <tr>
+                                <td class="item-cell-monitor"><div class="monitor-content"><span class="item-name">Vehicle Attitude</span><span class="dots"></span><span class="item-status">STABLE</span></div></td>
+                            </tr>
+                            <tr>
+                                <td class="item-cell-monitor"><div class="monitor-content"><span class="item-name">System Temps</span><span class="dots"></span><span class="item-status">NOMINAL</span></div></td>
+                            </tr>
+                            <tr>
+                                <td class="item-cell-monitor"><div class="monitor-content"><span class="item-name">Tether</span><span class="dots"></span><span class="item-status">Managing and Ensure Untangled</span></div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="page">
+                <div class="scroll-wrapper">
+                    <table>
+                        <tbody>
+                            <tr><td class="instruction">- VEHICLE BATTERY VOLTAGE TO PERCENTAGE -</td></tr>
+                        </tbody>
+                    </table>
+                     <table class="battery-table">
+                        <thead>
+                            <tr>
+                                <th>Charge %</th>
+                                <th>4S Voltage</th>
+                                <th>Cell Voltage</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                        <tr><td class="bold-col">100%</td><td class="bold-col">16.8 V</td><td>4.20 V</td><td class="note-col">Fully Charged</td></tr>
+                        <tr><td class="bold-col">80%</td><td class="bold-col">16.1 V</td><td>4.02 V</td><td></td></tr>
+                        <tr><td class="bold-col">50%</td><td class="bold-col">15.4 V</td><td>3.85 V</td><td class="note-col">Optimal Storage</td></tr>
+                        <tr><td class="bold-col">30%</td><td class="bold-col">14.8 V</td><td>3.70 V</td><td class="note-col">Nominal Voltage</td></tr>
+                        <tr><td class="bold-col">10%</td><td class="bold-col">13.2 V</td><td>3.30 V</td><td class="critical">RETRIEVE / LOW BATTERY</td></tr>
+                        <tr><td class="bold-col">0%</td><td class="bold-col">12.0 V</td><td>3.00 V</td><td class="critical">FULLY DISCHARGED</td></tr>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+             <div class="page">
+                <div class="scroll-wrapper">
+                    <div class="notes-container">
+                        <div class="notes-fields">
+                                                    <div class="notes-input-group">
+                                <label>Initial Depth</label>
+                                <div class="unit-input-wrapper">
+                                    <input type="text" id="current-depth" class="notes-input" readonly>
+                                                                        <div class="unit-toggle">
+                                        <button class="unit-btn active" data-unit="m">M</button>
+                                        <button class="unit-btn" data-unit="ft">FT</button>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="notes-input-group">
+                                <label>Target Depth</label>
+                                <div class="unit-input-wrapper">
+                                    <input type="text" id="target-depth" class="notes-input" readonly>
+<span id="target-depth-unit" class="degree-symbol" style="margin-left: 0.5rem; min-width: 25px; text-align: left;">M</span>
+                                </div>
+                            </div>
+    
+                            <div class="notes-input-group">
+                                <label>Initial Heading</label>
+                                <div class="compass-input-wrapper">
+                                    <input type="text" id="initial-heading" class="notes-input" readonly>
+                                    <span class="degree-symbol">°</span>
+                                    <span id="initial-direction" class="compass-display">--</span>
+                                </div>
+                            </div>
+                             <div class="notes-input-group">
+                                <label>Target Heading</label>
+                                <div class="compass-input-wrapper">
+                                    <input type="text" id="target-heading" class="notes-input" readonly>
+                                    <span class="degree-symbol">°</span>
+                                    <span id="target-direction" class="compass-display">--</span>
+                                </div>
+                            </div>
+                            <div class="notes-input-group">
+                                <label id="rate-label">Rate (m/min)</label>
+                                <input type="text" id="ascent-rate" class="notes-input" readonly>
+                            </div>
+                            <div class="notes-input-group">
+                                <label>Return Heading</label>
+                                <div class="compass-input-wrapper">
+                                    <span id="return-heading-degrees" class="time-display">--</span>
+                                    <span class="degree-symbol">°</span>
+                                    <span id="return-direction" class="compass-display">--</span>
+                                </div>
+                            </div>
+                            <div class="notes-input-group">
+                                <label>Time to Target</label>
+                                <span id="time-to-target" class="time-display">--</span>
+                                    <span class="unit-symbol">MIN</span>
+                            </div>
+
+                        </div>
+                        <div class="keypad-container">
+                             <button class="keypad-btn" data-value="1">1</button>
+                             <button class="keypad-btn" data-value="2">2</button>
+                             <button class="keypad-btn" data-value="3">3</button>
+                             <button class="keypad-btn" data-value="4">4</button>
+                             <button class="keypad-btn" data-value="5">5</button>
+                             <button class="keypad-btn" data-value="6">6</button>
+                             <button class="keypad-btn" data-value="7">7</button>
+                             <button class="keypad-btn" data-value="8">8</button>
+                             <button class="keypad-btn" data-value="9">9</button>
+                             <button class="keypad-btn" data-value=".">.</button>
+                             <button class="keypad-btn" data-value="0">0</button>
+                             <button class="keypad-btn del-btn" data-value="del">CLR</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page">
+                <div class="scroll-wrapper">
+                   <div class="timer-container">
+                        <div id="timer-display">00:00:00<span class="milliseconds">.0</span></div>
+                        <div class="timer-controls">
+                            <button id="start-stop-btn">Start</button>
+                            <button id="lap-btn">Lap</button>
+                            <button id="reset-btn">Reset</button>
+                        </div>
+                        <div id="laps-container"></div>
+                   </div>
+                </div>
+            </div>
+            <div class="page">
+                <div class="scroll-wrapper">
+                     <div class="calculator-container">
+                        <div class="calculator-body">
+                            <div class="main-calculator">
+                                <div class="calculator-display" id="calc-display">0</div>
+                                <div class="calculator-buttons">
+                                    <button class="calculator-btn action" data-value="clear">CLR</button>
+                                    <button class="calculator-btn operator" data-value="/">÷</button>
+                                    <button class="calculator-btn operator" data-value="*">×</button>
+                                    <button class="calculator-btn operator" data-value="-">−</button>
+                                    <button class="calculator-btn" data-value="7">7</button>
+                                    <button class="calculator-btn" data-value="8">8</button>
+                                    <button class="calculator-btn" data-value="9">9</button>
+                                    <button class="calculator-btn operator plus" data-value="+">+</button>
+                                    <button class="calculator-btn" data-value="4">4</button>
+                                    <button class="calculator-btn" data-value="5">5</button>
+                                    <button class="calculator-btn" data-value="6">6</button>
+                                    <button class="calculator-btn" data-value="1">1</button>
+                                    <button class="calculator-btn" data-value="2">2</button>
+                                    <button class="calculator-btn" data-value="3">3</button>
+                                    <button class="calculator-btn equals" data-value="=">=</button>
+                                    <button class="calculator-btn zero" data-value="0">0</button>
+                                    <button class="calculator-btn" data-value=".">.</button>
+                                </div>
+                            </div>
+                            <div class="conversion-tools">
+                                <button class="conv-btn" data-conversion="ft_to_m">ft → m</button>
+                                <button class="conv-btn" data-conversion="m_to_ft">m → ft</button>
+                                <button class="conv-btn" data-conversion="c_to_f">°C → °F</button>
+                                <button class="conv-btn" data-conversion="f_to_c">°F → °C</button>
+                                <button class="conv-btn" data-conversion="lbs_to_kg">lbs → kg</button>
+                                <button class="conv-btn" data-conversion="kg_to_lbs">kg → lbs</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-controls">
+                <button id="scroll-up-btn" class="scroll-btn" disabled>▲</button>
+                <button id="scroll-down-btn" class="scroll-btn" disabled>▼</button>
+            </div>
+        </div>
+        
+        <footer class="page-footer">
+            <div id="pager-controls">
+                <div class="nav-controls">
+                    <button id="prev-page-btn" class="footer-btn">&lt; PREV PAGE</button>
+                </div>
+                <div id="page-indicator">1 / 5</div>
+                <div class="nav-controls">
+                    <button id="next-page-btn" class="footer-btn">NEXT PAGE &gt;</button>
+                    <a href="post-flight.html" id="next-checklist-btn" class="footer-btn" style="display: none;">POST-FLIGHT &gt;</a>
+                </div>
+            </div>
+        </footer>
+        <footer class="theme-footer">
+            <button id="theme-toggle" class="footer-btn">DARK</button>
+            <span style="width: 10px;"></span>
+            <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
+            <span style="padding: 0 10px;">ZOOM</span>
+            <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
+            <span style="width: 20px;"></span>
+            <button id="chkl-reset-btn" class="footer-btn" disabled>CHKL RST</button>
+            <button id="chck-ovrd-btn" class="footer-btn" disabled>CHKL OVRD</button>
+            <span style="width: 20px;"></span>
+            <button id="go-home-btn" class="footer-btn" data-href="home.html">HOME</button>
+        </footer>
+                <!-- Paste the modal HTML here -->
+        <div id="confirmation-modal" class="modal-overlay">
+            <div class="modal-content">
+                <h2>Warning</h2>
+                <p>Navigating away will clear all entered data. Are you sure you want to continue?</p>
+                <div class="modal-buttons">
+                    <button id="cancel-nav-btn">Cancel</button>
+                    <button id="confirm-nav-btn" class="confirm-btn">Continue</button>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- This is the closing tag for the .container div -->
+    </div>
+
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const zoomInBtn = document.getElementById('zoom-in-btn');
+            const zoomOutBtn = document.getElementById('zoom-out-btn');
+            
+            const pages = document.querySelectorAll('.page');
+            const subTabs = document.querySelectorAll('.sub-tab');
+            const prevBtn = document.getElementById('prev-page-btn');
+            const nextBtn = document.getElementById('next-page-btn');
+            const nextChecklistBtn = document.getElementById('next-checklist-btn');
+            const pageIndicator = document.getElementById('page-indicator');
+            const tabTitle = document.getElementById('tab-title');
+            
+            const scrollUpBtn = document.getElementById('scroll-up-btn');
+            const scrollDownBtn = document.getElementById('scroll-down-btn');
+            const pageContent = document.getElementById('page-content');
+            
+            const pageTitles = ['MONITORING', 'BATTERY CHART', 'NOTES', 'STOPWATCH', 'CALCULATOR'];
+            let currentPage = 0;
+            const totalPages = pages.length;
+            let scrollPositions = Array(totalPages).fill(0);
+
+            // --- CONFIRMATION MODAL LOGIC ---
+            const confirmationModal = document.getElementById('confirmation-modal');
+            const confirmNavBtn = document.getElementById('confirm-nav-btn');
+            const cancelNavBtn = document.getElementById('cancel-nav-btn');
+            const navLinks = document.querySelectorAll('a.nav-arrow, #go-home-btn, #next-checklist-btn');
+            let navigationUrl = '';
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    // For the home button, we get the URL from its new data attribute
+                    if(link.id === 'go-home-btn') {
+                         navigationUrl = link.dataset.href;
+                    } else {
+                        // For other links, we get it from the href
+                        navigationUrl = link.href;
+                    }
+                    
+                    // Prevent the default link behavior
+                    event.preventDefault();
+                    
+                    // Show the modal
+                    if(confirmationModal) {
+                        confirmationModal.style.display = 'flex';
+                    }
+                });
+            });
+
+            if(cancelNavBtn) {
+                cancelNavBtn.addEventListener('click', () => {
+                    confirmationModal.style.display = 'none';
+                    navigationUrl = '';
+                });
+            }
+
+            if(confirmNavBtn) {
+                confirmNavBtn.addEventListener('click', () => {
+                    if (navigationUrl) {
+                        window.location.href = navigationUrl;
+                    }
+                });
+            }
+            
+            // Close modal if clicking on the overlay
+            if(confirmationModal){
+                confirmationModal.addEventListener('click', (event) => {
+                    if (event.target === confirmationModal) {
+                        confirmationModal.style.display = 'none';
+                        navigationUrl = '';
+                    }
+                });
+            }
+
+
+            // --- STOPWATCH/TIMER LOGIC ---
+            const timerDisplay = document.getElementById('timer-display');
+            const startStopBtn = document.getElementById('start-stop-btn');
+            const lapBtn = document.getElementById('lap-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const lapsContainer = document.getElementById('laps-container');
+
+            let startTime;
+            let updatedTime;
+            let difference;
+            let tInterval;
+            let savedTime = 0;
+            let paused = true;
+            let lapCounter = 0;
+
+            function startStopTimer() {
+                if (paused) {
+                    paused = false;
+                    startTime = new Date().getTime();
+                    tInterval = setInterval(updateTime, 100);
+                    startStopBtn.textContent = 'Stop';
+                } else {
+                    paused = true;
+                    clearInterval(tInterval);
+                    savedTime = difference;
+                    startStopBtn.textContent = 'Start';
+                }
+            }
+
+            function resetTimer() {
+                paused = true;
+                clearInterval(tInterval);
+                savedTime = 0;
+                difference = 0;
+                lapCounter = 0;
+                if(startStopBtn) startStopBtn.textContent = 'Start';
+                if(timerDisplay) timerDisplay.innerHTML = '00:00:00<span class="milliseconds">.0</span>';
+                if(lapsContainer) lapsContainer.innerHTML = '';
+            }
+
+            function addLap() {
+                if (!paused) {
+                    lapCounter++;
+                    const lapTime = timerDisplay.innerHTML;
+                    const lapElement = document.createElement('div');
+                    lapElement.classList.add('lap-item');
+                    lapElement.innerText = `Lap ${lapCounter}: ${lapTime.replace(/<[^>]*>/g, '')}`;
+                    lapsContainer.prepend(lapElement);
+                }
+            }
+
+            function updateTime() {
+                updatedTime = new Date().getTime();
+                difference = (updatedTime - startTime) + savedTime;
+                let hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((difference % (1000 * 60)) / 1000);
+                let milliseconds = Math.floor((difference % 1000) / 100);
+                hours = (hours < 10) ? "0" + hours : hours;
+                minutes = (minutes < 10) ? "0" + minutes : minutes;
+                seconds = (seconds < 10) ? "0" + seconds : seconds;
+                if(timerDisplay) timerDisplay.innerHTML = `${hours}:${minutes}:${seconds}<span class="milliseconds">.${milliseconds}</span>`;
+            }
+
+            if (startStopBtn) {
+                startStopBtn.addEventListener('click', startStopTimer);
+                resetBtn.addEventListener('click', resetTimer);
+                lapBtn.addEventListener('click', addLap);
+            }
+
+            // --- CALCULATOR & CONVERTER LOGIC ---
+            const calculatorState = {
+                displayValue: '0',
+                firstOperand: null,
+                waitingForSecondOperand: false,
+                operator: null,
+            };
+
+            function updateCalcDisplay() {
+                const display = document.getElementById('calc-display');
+                if (display) {
+                    display.textContent = calculatorState.displayValue;
+                }
+            }
+
+            function inputDigit(digit) {
+                const { displayValue, waitingForSecondOperand } = calculatorState;
+                if (waitingForSecondOperand === true) {
+                    calculatorState.displayValue = digit;
+                    calculatorState.waitingForSecondOperand = false;
+                } else {
+                    calculatorState.displayValue = displayValue === '0' ? digit : displayValue + digit;
+                }
+            }
+
+            function inputDecimal(dot) {
+                if (calculatorState.waitingForSecondOperand === true) {
+                    calculatorState.displayValue = '0.';
+                    calculatorState.waitingForSecondOperand = false;
+                    return;
+                }
+                if (!calculatorState.displayValue.includes(dot)) {
+                    calculatorState.displayValue += dot;
+                }
+            }
+
+            function performCalculation(first, second, op) {
+                switch (op) {
+                    case '+': return first + second;
+                    case '-': return first - second;
+                    case '*': return first * second;
+                    case '/': return first / second;
+                    default: return second;
+                }
+            }
+
+            function handleOperator(nextOperator) {
+                const { firstOperand, displayValue, operator } = calculatorState;
+                const inputValue = parseFloat(displayValue);
+
+                if (operator && calculatorState.waitingForSecondOperand) {
+                    calculatorState.operator = nextOperator;
+                    return;
+                }
+
+                if (firstOperand === null && !isNaN(inputValue)) {
+                    calculatorState.firstOperand = inputValue;
+                } else if (operator) {
+                    const result = performCalculation(firstOperand, inputValue, operator);
+                    calculatorState.displayValue = String(parseFloat(result.toFixed(7)));
+                    calculatorState.firstOperand = result;
+                }
+
+                calculatorState.waitingForSecondOperand = true;
+                calculatorState.operator = nextOperator;
+            }
+            
+            function resetCalculator() {
+                calculatorState.displayValue = '0';
+                calculatorState.firstOperand = null;
+                calculatorState.waitingForSecondOperand = false;
+                calculatorState.operator = null;
+            }
+
+            function handleConversion(type) {
+                const currentValue = parseFloat(calculatorState.displayValue);
+                if (isNaN(currentValue)) return;
+
+                let result;
+                switch (type) {
+                    case 'ft_to_m': result = currentValue * 0.3048; break;
+                    case 'm_to_ft': result = currentValue / 0.3048; break;
+                    case 'c_to_f': result = (currentValue * 9/5) + 32; break;
+                    case 'f_to_c': result = (currentValue - 32) * 5/9; break;
+                    case 'lbs_to_kg': result = currentValue / 2.20462; break;
+                    case 'kg_to_lbs': result = currentValue * 2.20462; break;
+                    default: return;
+                }
+                calculatorState.displayValue = String(parseFloat(result.toFixed(4)));
+                calculatorState.firstOperand = null;
+                calculatorState.operator = null;
+                calculatorState.waitingForSecondOperand = true;
+            }
+
+            const calcKeys = document.querySelector('.calculator-buttons');
+            if (calcKeys) {
+                calcKeys.addEventListener('click', (event) => {
+                    const { target } = event;
+                    if (!target.matches('button.calculator-btn')) return;
+                    const { value } = target.dataset;
+
+                    if (value === '=') { handleOperator(value); } 
+                    else if (target.classList.contains('operator')) { handleOperator(value); } 
+                    else if (value === '.') { inputDecimal(value); } 
+                    else if (value === 'clear') { resetCalculator(); } 
+                    else { inputDigit(value); }
+                    
+                    updateCalcDisplay();
+                });
+            }
+
+            const convTools = document.querySelector('.conversion-tools');
+            if (convTools) {
+                convTools.addEventListener('click', (event) => {
+                    const { target } = event;
+                    if (target.matches('button.conv-btn')) {
+                        const { conversion } = target.dataset;
+                        handleConversion(conversion);
+                        updateCalcDisplay();
+                    }
+                });
+            }
+            
+            // --- NOTES TAB LOGIC ---
+            // Add this block to prevent selection in input fields
+            document.querySelectorAll('.notes-input').forEach(input => {
+                // Prevent the default mousedown action, which is what initiates a text selection.
+                // This stops the selection and the cursor change before they can happen.
+                input.addEventListener('mousedown', function(event) {
+                    event.preventDefault();
+                });
+            });
+            let activeNotesInput = null;
+            const notesInputs = document.querySelectorAll('.notes-input');
+            const keypad = document.querySelector('.keypad-container');
+            const unitToggleButtons = document.querySelectorAll('.unit-btn');
+            const targetDepthInput = document.getElementById('target-depth');
+            const currentDepthInput = document.getElementById('current-depth');
+            const ascentRateInput = document.getElementById('ascent-rate');
+            const timeToTargetDisplay = document.getElementById('time-to-target');
+
+            notesInputs.forEach(input => {
+                input.addEventListener('click', (event) => {
+                    notesInputs.forEach(el => el.classList.remove('active-input'));
+                    event.target.classList.add('active-input');
+                    activeNotesInput = event.target;
+                });
+            });
+
+            if (keypad) {
+                keypad.addEventListener('click', (event) => {
+                    if (!activeNotesInput || !event.target.matches('.keypad-btn')) return;
+
+                    const btnValue = event.target.dataset.value;
+
+                    if (btnValue === 'del') {
+                        // This line now clears the whole field
+                        activeNotesInput.value = '';
+                    } else if (btnValue === '.') {
+                        if (!activeNotesInput.value.includes('.')) {
+                             activeNotesInput.value += btnValue;
+                        }
+                    } else {
+                        activeNotesInput.value += btnValue;
+                    }
+                    activeNotesInput.dispatchEvent(new Event('input'));
+                });
+            }
+
+            function updateTimeToTarget() {
+                const targetDepth = parseFloat(targetDepthInput.value);
+                const currentDepth = parseFloat(currentDepthInput.value);
+                const rate = parseFloat(ascentRateInput.value);
+                const selectedUnit = document.querySelector('.unit-btn.active').dataset.unit;
+                
+                if (isNaN(targetDepth) || isNaN(currentDepth) || isNaN(rate) || rate === 0) {
+                    timeToTargetDisplay.textContent = '--';
+                    return;
+                }
+
+                let depthDiff = targetDepth - currentDepth;
+                let rateInSelectedUnit = rate;
+
+                if (selectedUnit === 'ft') {
+                    depthDiff *= 0.3048; // Convert feet difference to meters
+                    rateInSelectedUnit *= 0.3048; // Convert ft/min to m/min
+                }
+                
+                const timeInMinutes = Math.abs(depthDiff / rateInSelectedUnit);
+                timeToTargetDisplay.textContent = `${timeInMinutes.toFixed(1)}`;
+            }
+
+            [targetDepthInput, currentDepthInput, ascentRateInput].forEach(input => {
+                if(input) input.addEventListener('input', updateTimeToTarget);
+            });
+/* This is the new, correct block */
+            const targetDepthUnit = document.getElementById('target-depth-unit');
+
+            unitToggleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const parentToggle = button.closest('.unit-toggle');
+                    const oldUnitBtn = parentToggle.querySelector('.unit-btn.active');
+                    const oldUnit = oldUnitBtn ? oldUnitBtn.dataset.unit : null;
+                    const newUnit = button.dataset.unit;
+
+                    if (oldUnit === newUnit) return;
+
+                    parentToggle.querySelectorAll('.unit-btn').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    // Get current values from all three fields
+                    const currentDepthValue = parseFloat(currentDepthInput.value);
+                    const targetDepthValue = parseFloat(targetDepthInput.value);
+                    const ascentRateValue = parseFloat(ascentRateInput.value);
+
+                    // --- Conversion Logic ---
+                    if (newUnit === 'ft' && oldUnit === 'm') {
+                        if (!isNaN(currentDepthValue)) {
+                            currentDepthInput.value = (currentDepthValue / 0.3048).toFixed(1);
+                        }
+                        if (!isNaN(targetDepthValue)) {
+                            targetDepthInput.value = (targetDepthValue / 0.3048).toFixed(1);
+                        }
+                        // Convert the rate field
+                        if (!isNaN(ascentRateValue)) {
+                            ascentRateInput.value = (ascentRateValue / 0.3048).toFixed(1);
+                        }
+                    } else if (newUnit === 'm' && oldUnit === 'ft') {
+                        if (!isNaN(currentDepthValue)) {
+                            currentDepthInput.value = (currentDepthValue * 0.3048).toFixed(1);
+                        }
+                        if (!isNaN(targetDepthValue)) {
+                            targetDepthInput.value = (targetDepthValue * 0.3048).toFixed(1);
+                        }
+                        // Convert the rate field
+                        if (!isNaN(ascentRateValue)) {
+                            ascentRateInput.value = (ascentRateValue * 0.3048).toFixed(1);
+                        }
+                    }
+
+                    // Update labels
+                    const rateLabel = document.getElementById('rate-label');
+                    if(rateLabel) rateLabel.textContent = `Rate (${newUnit}/min)`;
+                    if(targetDepthUnit) targetDepthUnit.textContent = newUnit.toUpperCase();
+                    
+                    // Trigger an input event to make sure "Time to Target" recalculates
+                    currentDepthInput.dispatchEvent(new Event('input'));
+                });
+            });
+
+            function getCompassDirection(degrees) {
+                if (degrees === null || isNaN(degrees) || degrees < 0 || degrees > 360) {
+                    return '--';
+                }
+                const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+                const index = Math.round(((degrees %= 360) < 0 ? degrees + 360 : degrees) / 45) % 8;
+                return directions[index];
+            }
+
+            const initialHeadingInput = document.getElementById('initial-heading');
+            const initialDirectionDisplay = document.getElementById('initial-direction');
+            const returnHeadingDegreesDisplay = document.getElementById('return-heading-degrees');
+            const returnDirectionDisplay = document.getElementById('return-direction');
+
+            if (initialHeadingInput) {
+                initialHeadingInput.addEventListener('input', () => {
+                    const degrees = parseFloat(initialHeadingInput.value);
+                    
+                    // Update Initial Heading display
+                    initialDirectionDisplay.textContent = getCompassDirection(degrees);
+
+                    // Calculate and Update Return Heading
+                    if (!isNaN(degrees) && initialHeadingInput.value.trim() !== '') {
+                        const returnDegrees = (degrees + 180) % 360;
+                        returnHeadingDegreesDisplay.textContent = returnDegrees.toFixed(0);
+                        returnDirectionDisplay.textContent = getCompassDirection(returnDegrees);
+                    } else {
+                        // Clear all heading fields if input is empty or invalid
+                        initialDirectionDisplay.textContent = '--';
+                        returnHeadingDegreesDisplay.textContent = '--';
+                        returnDirectionDisplay.textContent = '--';
+                    }
+                });
+            }
+
+            const targetHeadingInput = document.getElementById('target-heading');
+            const targetDirectionDisplay = document.getElementById('target-direction');
+            if (targetHeadingInput) {
+                targetHeadingInput.addEventListener('input', () => {
+                    const degrees = parseFloat(targetHeadingInput.value);
+                    targetDirectionDisplay.textContent = getCompassDirection(degrees);
+                    if (targetHeadingInput.value === '') {
+                        targetDirectionDisplay.textContent = '--';
+                    }
+                });
+            }
+
+
+            // --- ZOOM FUNCTIONALITY ---
+            let currentZoom = 1.0;
+            function applyZoom(zoomLevel) { body.style.zoom = zoomLevel; }
+            function saveAndApplyZoom(zoomLevel) {
+                const clampedZoom = Math.max(0.5, Math.min(zoomLevel, 2.0));
+                currentZoom = clampedZoom;
+                applyZoom(currentZoom);
+                localStorage.setItem('rovChecklistZoom', currentZoom);
+            }
+            zoomInBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom + 0.1));
+            zoomOutBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom - 0.1));
+
+            // --- THEME FUNCTIONALITY ---
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : 'dark-mode';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
+                localStorage.setItem('theme', currentTheme);
+            });
+            
+            // --- SCROLL FUNCTIONALITY ---
+            function updateScrollState() {
+                const activeWrapper = document.querySelector('.page.active .scroll-wrapper');
+                if (!activeWrapper) return;
+                const contentHeight = activeWrapper.scrollHeight;
+                const containerHeight = pageContent.clientHeight;
+                const needsScrolling = contentHeight > containerHeight;
+                
+                if (scrollUpBtn) scrollUpBtn.disabled = !needsScrolling;
+                if (scrollDownBtn) scrollDownBtn.disabled = !needsScrolling;
+
+                if (!needsScrolling && scrollPositions[currentPage] !== 0) {
+                    scrollPositions[currentPage] = 0;
+                    if(activeWrapper) activeWrapper.style.transform = `translateY(0px)`;
+                }
+            }
+
+            function scrollContent(direction) {
+                const activeWrapper = document.querySelector('.page.active .scroll-wrapper');
+                if (!activeWrapper) return;
+                const containerHeight = pageContent.clientHeight;
+                const contentHeight = activeWrapper.scrollHeight;
+                if (contentHeight <= containerHeight) return;
+                
+                const scrollStep = containerHeight;
+                let newScrollY = scrollPositions[currentPage];
+
+                if (direction === 'down') { newScrollY -= scrollStep; } else { newScrollY += scrollStep; }
+                
+                const maxScroll = -(contentHeight - containerHeight);
+                newScrollY = Math.max(newScrollY, maxScroll);
+                newScrollY = Math.min(newScrollY, 0);
+
+                scrollPositions[currentPage] = newScrollY;
+                activeWrapper.style.transform = `translateY(${newScrollY}px)`;
+                
+                scrollUpBtn.disabled = (newScrollY === 0);
+                scrollDownBtn.disabled = (newScrollY <= maxScroll);
+            }
+
+            if(scrollUpBtn) scrollUpBtn.addEventListener('click', () => scrollContent('up'));
+            if(scrollDownBtn) scrollDownBtn.addEventListener('click', () => scrollContent('down'));
+
+            // --- PAGE NAVIGATION ---
+            // This is the new, corrected function
+            function showPage(pageIndex) {
+                pages.forEach((page, index) => {
+                    page.classList.toggle('active', index === pageIndex);
+                });
+                subTabs.forEach((tab, index) => tab.classList.toggle('active', index === pageIndex));
+                tabTitle.textContent = pageTitles[pageIndex];
+                pageIndicator.textContent = `${pageIndex + 1} / ${totalPages}`;
+                
+                // --- Corrected Notes Tab Logic ---
+                if (pageIndex === 2) { // When entering the Notes tab
+                    // If an input was already selected, re-activate it.
+                    if (activeNotesInput) {
+                        setTimeout(() => activeNotesInput.click(), 50);
+                    } else {
+                    // Otherwise, this is the first visit, so select the default.
+                        const currentDepthInput = document.getElementById('current-depth');
+                        if (currentDepthInput) {
+                            setTimeout(() => currentDepthInput.click(), 50);
+                        }
+                    }
+                } else { // When leaving the Notes tab
+                    // Remove the visual highlight but DON'T forget the last active input.
+                    if (activeNotesInput) {
+                        activeNotesInput.classList.remove('active-input');
+                    }
+                }
+                // --- End of Correction ---
+
+                if (pageIndex === totalPages - 1) {
+                    nextBtn.style.display = 'none';
+                    nextChecklistBtn.style.display = 'inline-block';
+                } else {
+                    nextBtn.style.display = 'inline-block';
+                    nextChecklistBtn.style.display = 'none';
+                }
+                
+                prevBtn.disabled = pageIndex === 0;
+}
+
+
+
+            subTabs.forEach((tab, index) => {
+                tab.addEventListener('click', () => { currentPage = index; showPage(currentPage); });
+            });
+            prevBtn.addEventListener('click', () => { if (currentPage > 0) { currentPage--; showPage(currentPage); } });
+            nextBtn.addEventListener('click', () => { if (currentPage < totalPages - 1) { currentPage++; showPage(currentPage); } });
+
+            // --- INITIAL LOAD ---
+            function initialize() {
+                const savedTheme = localStorage.getItem('theme') || 'light-mode';
+                if (savedTheme === 'dark-mode') { body.classList.remove('light-mode'); } 
+                else { body.classList.add('light-mode'); }
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
+                const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
+                currentZoom = savedZoom;
+                applyZoom(currentZoom);
+                showPage(currentPage);
+                updateCalcDisplay();
+            }
+
+            window.addEventListener('resize', updateScrollState);
+            initialize();
+        });
+    </script>
+
+</body>
+</html>

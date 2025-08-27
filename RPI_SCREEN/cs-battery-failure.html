@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROV Non-Normal Checklist - B777 Interface</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-mode">
+
+    <div class="container">
+        <header>
+            <a href="#" class="nav-arrow left disabled">&lt;</a>
+            <h1 class="danger">► CS BATTERY PROBLEMS ◄</h1>
+            <a href="#" class="nav-arrow right disabled">&gt;</a>
+        </header>
+
+        <div class="progress-text" id="progress-text">0 / 8 ITEMS COMPLETE</div>
+        
+        <div class="page-content" id="page-content">
+            <div class="page active">
+                <div class="scroll-wrapper">
+                    <table>
+                        <tbody>
+                            <tr class="checklist-item" data-prereq-for="q1">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Top Cover</span><span class="dots"></span><span class="item-status">OPEN Lid CAREFULLY</span></td>
+                            </tr>
+                            <tr class="checklist-item" data-prereq-for="q1">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Barrel Jack</span><span class="dots"></span><span class="item-status">Disconnected</span></td>
+                            </tr>
+                            <tr class="checklist-item" data-prereq-for="q1">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Velcro Mount</span><span class="dots"></span><span class="item-status">Carefully Removed</span></td>
+                            </tr>
+                            
+                            <tr class="checklist-item is-question" id="q1">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Is the screen on the Battery ON?</span></td>
+                            </tr>
+                            <tr class="options-row" data-question="q1">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes" disabled>YES</button>
+                                    <button class="option-btn" data-choice="no" disabled>NO</button>
+                                </td>
+                            </tr>
+
+                            <tr class="checklist-item conditional" data-path="q1-no" id="battery-power-button-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Power Button</span><span class="dots"></span><span class="item-status">HOLD for 5 Seconds</span></td>
+                            </tr>
+                            <tr class="instruction" id="battery-instructions" style="display: none;">
+                                <td colspan="2">If battery screen is still OFF, try 3 more times: If ON, Re-Select YES on the item above. If STILL OFF:</td>
+                            </tr>
+                            <tr class="action-row" id="battery-abort-action" style="display: none;">
+                               <td colspan="2">
+                                   <a href="abort-mission.html" class="action-btn">GO TO ABORT MISSION CHECKLIST</a>
+                               </td>
+                            </tr>
+
+                            <tr class="checklist-item is-question conditional" id="q2" data-path="q1-yes">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Does Battery Screen show a low battery symbol?</span></td>
+                            </tr>
+                            <tr class="options-row conditional" data-question="q2" data-path="q1-yes">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes">YES</button>
+                                    <button class="option-btn" data-choice="no">NO</button>
+                                </td>
+                            </tr>
+
+                            <tr class="action-row conditional" data-path="q2-yes">
+                               <td colspan="2"><a href="abort-mission.html" class="action-btn">GO TO ABORT MISSION CHECKLIST</a></td>
+                            </tr>
+
+                            <tr class="checklist-item conditional" data-path="q2-no" data-prereq-for="q3">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">DC Output</span><span class="dots"></span><span class="item-status">Set ON, Set to 12V / 5A</span></td>
+                            </tr>
+                            <tr class="checklist-item is-question conditional" id="q3" data-path="q2-no">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Does the DC Light Turn On?</span></td>
+                            </tr>
+                            <tr class="options-row conditional" data-question="q3" data-path="q2-no">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes" disabled>YES</button>
+                                    <button class="option-btn" data-choice="no" disabled>NO</button>
+                                </td>
+                            </tr>
+
+                            <tr class="checklist-item conditional" data-path="q3-no" id="q3-battery-off-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Power Button</span><span class="dots"></span><span class="item-status">HOLD until OFF</span></td>
+                            </tr>
+                             <tr class="checklist-item conditional" data-path="q3-no" id="q3-battery-on-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Power Button</span><span class="dots"></span><span class="item-status">HOLD until ON</span></td>
+                            </tr>
+                             <tr class="checklist-item conditional" data-path="q3-no" id="q3-dc-output-item">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">DC Output</span><span class="dots"></span><span class="item-status">Set ON, Set to 12V / 5A</span></td>
+                            </tr>
+                            <tr class="instruction" id="q3-instructions" style="display: none;">
+                                <td colspan="2">If DC Light is still OFF, try 3 more times: If ON, Re-Select YES on the item above. If STILL OFF:</td>
+                            </tr>
+                            <tr class="action-row" id="q3-abort-action" style="display: none;">
+                               <td colspan="2"><a href="abort-mission.html" class="action-btn">GO TO ABORT MISSION CHECKLIST</a></td>
+                            </tr>
+
+                            <tr class="checklist-item conditional" data-path="q3-yes" data-prereq-for="q4">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Monitor Switch</span><span class="dots"></span><span class="item-status">ON</span></td>
+                            </tr>
+                            <tr class="checklist-item conditional" data-path="q3-yes" data-prereq-for="q4">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Velcro Mount</span><span class="dots"></span><span class="item-status">Carefully Mounted</span></td>
+                            </tr>
+                            <tr class="checklist-item conditional" data-path="q3-yes" data-prereq-for="q4">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Barrel Jack</span><span class="dots"></span><span class="item-status">Connected</span></td>
+                            </tr>
+                            <tr class="checklist-item conditional" data-path="q3-yes" data-prereq-for="q4">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Mac Mini Power Button</span><span class="dots"></span><span class="item-status">Pressed</span></td>
+                            </tr>
+                            <tr class="checklist-item is-question conditional" id="q4" data-path="q3-yes">
+                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Does the Monitor have Power?</span></td>
+                            </tr>
+                             <tr class="options-row conditional" data-question="q4" data-path="q3-yes">
+                                <td colspan="2">
+                                    <button class="option-btn" data-choice="yes" disabled>YES</button>
+                                    <button class="option-btn" data-choice="no" disabled>NO</button>
+                                </td>
+                            </tr>
+
+                            <tr class="action-row conditional" data-path="q4-no">
+                               <td colspan="2"><a href="abort-mission.html" class="action-btn">GO TO ABORT MISSION CHECKLIST</a></td>
+                            </tr>
+                            
+                            <tr class="instruction success conditional" data-path="q4-yes">
+                               <td colspan="2">Continue with Mission</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="scroll-controls">
+                <button id="scroll-up-btn" class="scroll-btn">▲</button>
+                <button id="scroll-down-btn" class="scroll-btn">▼</button>
+            </div>
+        </div>
+        
+        <footer class="theme-footer">
+            <button id="theme-toggle" class="footer-btn">DARK</button>
+            <span style="width: 10px;"></span>
+            <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
+            <span style="padding: 0 10px;">ZOOM</span>
+            <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
+            <span style="width: 20px;"></span>
+            <button id="chkl-reset-btn" class="footer-btn">CHKL RST</button>
+            <button id="chck-ovrd-btn" class="footer-btn" disabled>CHKL OVRD</button>
+            <span style="width: 20px;"></span>
+            <button id="go-home-btn" class="footer-btn" onclick="window.location.href='home.html?tab=1'">HOME</button>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const zoomInBtn = document.getElementById('zoom-in-btn');
+            const zoomOutBtn = document.getElementById('zoom-out-btn');
+            const chklResetBtn = document.getElementById('chkl-reset-btn');
+            
+            const allChecklistItems = document.querySelectorAll('.checklist-item');
+            const progressText = document.getElementById('progress-text');
+            const optionBtns = document.querySelectorAll('.options-row .option-btn');
+            const pageContent = document.getElementById('page-content');
+            const scrollUpBtn = document.getElementById('scroll-up-btn');
+            const scrollDownBtn = document.getElementById('scroll-down-btn');
+            const scrollWrapper = document.querySelector('.scroll-wrapper');
+            let scrollPosition = 0;
+
+            // --- ZOOM FUNCTIONALITY ---
+            let currentZoom = 1.0;
+            function applyZoom(zoomLevel) { body.style.zoom = zoomLevel; }
+            function saveAndApplyZoom(zoomLevel) {
+                const clampedZoom = Math.max(0.5, Math.min(zoomLevel, 2.0));
+                currentZoom = clampedZoom;
+                applyZoom(currentZoom);
+                localStorage.setItem('rovChecklistZoom', currentZoom);
+            }
+            zoomInBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom + 0.1));
+            zoomOutBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom - 0.1));
+
+            // --- THEME FUNCTIONALITY ---
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : 'dark-mode';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
+                localStorage.setItem('theme', currentTheme);
+            });
+
+            // --- CHECKLIST RESET ---
+            function resetChecklist() {
+                // Uncheck all items
+                allChecklistItems.forEach(item => item.classList.remove('checked'));
+
+                // Reset all questions and options
+                document.querySelectorAll('.options-row').forEach(row => {
+                    row.classList.remove('selection-made');
+                    row.querySelectorAll('.option-btn').forEach(btn => {
+                        btn.classList.remove('selected');
+                        btn.disabled = true; // Will be re-enabled by checkPrerequisites if conditions are met
+                    });
+                });
+
+                // Hide all conditional paths and special instruction rows
+                document.querySelectorAll('[data-path], .instruction, .action-row').forEach(el => {
+                    // Don't hide the main success message row template initially
+                    if (el.dataset.path !== 'q4-yes') {
+                        el.style.display = 'none';
+                    }
+                });
+
+                // Reset scroll to top
+                scrollPosition = 0;
+                scrollWrapper.style.transform = `translateY(0px)`;
+                
+                // Update UI
+                updateProgress();
+                updateScrollState();
+            }
+            chklResetBtn.addEventListener('click', resetChecklist);
+
+
+            // --- SCROLL FUNCTIONALITY ---
+            function updateScrollState() {
+                const contentHeight = scrollWrapper.scrollHeight;
+                const containerHeight = pageContent.clientHeight;
+                const footerBuffer = 150;
+                
+                if (contentHeight <= containerHeight) {
+                    scrollUpBtn.disabled = true;
+                    scrollDownBtn.disabled = true;
+                    return;
+                }
+
+                scrollUpBtn.disabled = scrollPosition === 0;
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
+                scrollDownBtn.disabled = scrollPosition <= maxScroll;
+            }
+
+            function scrollContent(direction, amount = null) {
+                const containerHeight = pageContent.clientHeight;
+                const contentHeight = scrollWrapper.scrollHeight;
+                const scrollStep = amount !== null ? amount : containerHeight;
+                
+                let newScrollY = scrollPosition;
+                if (direction === 'down') {
+                    newScrollY -= scrollStep;
+                } else {
+                    newScrollY += scrollStep;
+                }
+
+                const footerBuffer = 150; 
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
+                
+                newScrollY = Math.max(newScrollY, maxScroll);
+                newScrollY = Math.min(newScrollY, 0);
+
+                scrollPosition = newScrollY;
+                scrollWrapper.style.transform = `translateY(${newScrollY}px)`;
+                updateScrollState();
+            }
+
+            scrollUpBtn.addEventListener('click', () => scrollContent('up'));
+            scrollDownBtn.addEventListener('click', () => scrollContent('down'));
+
+            // --- CHECKLIST LOGIC ---
+            function checkPrerequisites() {
+                document.querySelectorAll('.options-row').forEach(row => {
+                    const questionId = row.dataset.question;
+                    const prereqItems = document.querySelectorAll(`[data-prereq-for="${questionId}"]`);
+                    let allPrereqsMet = prereqItems.length === 0; 
+                    
+                    if (prereqItems.length > 0) {
+                        allPrereqsMet = [...prereqItems].every(item => item.classList.contains('checked'));
+                    }
+
+                    row.querySelectorAll('.option-btn').forEach(btn => {
+                        if(!btn.closest('.options-row').classList.contains('selection-made')) {
+                           btn.disabled = !allPrereqsMet;
+                        }
+                    });
+                });
+            }
+
+            function updateProgress() {
+                const checkedCount = document.querySelectorAll('.checklist-item:not(.is-question).checked').length;
+                const totalCheckableItems = document.querySelectorAll('.checklist-item:not(.is-question)').length;
+                
+                progressText.textContent = `${checkedCount} / ${totalCheckableItems} ITEMS COMPLETE`;
+                
+                if (checkedCount === totalCheckableItems) {
+                    progressText.textContent += ' -- CHECKLIST COMPLETE';
+                    progressText.style.color = 'var(--complete-color)';
+                } else {
+                    progressText.style.color = 'var(--dim-text-color)';
+                }
+                
+                checkPrerequisites();
+            }
+
+            allChecklistItems.forEach(item => {
+                if (!item.classList.contains('is-question')) {
+                    item.addEventListener('click', (e) => {
+                        if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
+                        item.classList.toggle('checked');
+                        updateProgress();
+
+                        if (item.id === 'battery-power-button-item') {
+                            const instructionElements = [
+                                document.getElementById('battery-instructions'),
+                                document.getElementById('battery-abort-action')
+                            ];
+                            const q1OptionsRow = document.querySelector('[data-question="q1"]');
+                            
+                            if (item.classList.contains('checked')) {
+                                instructionElements.forEach(el => { if (el) el.style.display = 'table-row'; });
+                                q1OptionsRow.classList.remove('selection-made');
+                                q1OptionsRow.querySelectorAll('.option-btn').forEach(btn => {
+                                    btn.disabled = false;
+                                    btn.classList.remove('selected');
+                                });
+                            } else {
+                                instructionElements.forEach(el => { if (el) el.style.display = 'none'; });
+                            }
+                        }
+
+                        if (item.id === 'q3-battery-off-item' || item.id === 'q3-battery-on-item' || item.id === 'q3-dc-output-item') {
+                            const q3Item1 = document.getElementById('q3-battery-off-item');
+                            const q3Item2 = document.getElementById('q3-battery-on-item');
+                            const q3Item3 = document.getElementById('q3-dc-output-item');
+                            
+                            if (q3Item1?.classList.contains('checked') && 
+                                q3Item2?.classList.contains('checked') && 
+                                q3Item3?.classList.contains('checked')) {
+                                
+                                document.getElementById('q3-instructions').style.display = 'table-row';
+                                document.getElementById('q3-abort-action').style.display = 'table-row';
+                                
+                                const q3OptionsRow = document.querySelector('[data-question="q3"]');
+                                if (q3OptionsRow) {
+                                    q3OptionsRow.classList.remove('selection-made');
+                                    q3OptionsRow.querySelectorAll('.option-btn').forEach(btn => {
+                                        btn.disabled = false;
+                                        btn.classList.remove('selected');
+                                    });
+                                }
+                                
+                                setTimeout(() => {
+                                    const abortButton = document.getElementById('q3-abort-action');
+                                    const itemRect = abortButton.getBoundingClientRect();
+                                    const containerRect = pageContent.getBoundingClientRect();
+                                    if (itemRect.bottom > containerRect.bottom - 100) {
+                                        scrollContent('down', itemRect.bottom - containerRect.bottom + 150);
+                                    }
+                                }, 100);
+                            }
+                        }
+
+                        const prereqFor = item.dataset.prereqFor;
+                        if (prereqFor) {
+                            const allPrereqs = document.querySelectorAll(`[data-prereq-for="${prereqFor}"]`);
+                            const allMet = [...allPrereqs].every(pr => pr.classList.contains('checked'));
+                            
+                            if (allMet) {
+                                const questionElement = document.getElementById(prereqFor);
+                                setTimeout(() => {
+                                    const itemRect = questionElement.getBoundingClientRect();
+                                    const containerRect = pageContent.getBoundingClientRect();
+                                    if (itemRect.bottom > containerRect.bottom) {
+                                        scrollContent('down', itemRect.bottom - containerRect.bottom + 20);
+                                    }
+                                }, 100);
+                            }
+                        }
+                    });
+                }
+            });
+
+            optionBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    if(btn.disabled) return;
+
+                    const choice = e.target.dataset.choice;
+                    const questionRow = e.target.closest('.options-row');
+                    if (!questionRow) return; 
+                    const questionId = questionRow.dataset.question;
+                    const questionItem = document.getElementById(questionId);
+
+                    questionItem.classList.add('checked');
+
+                    questionRow.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                    questionRow.classList.add('selection-made');
+                    questionRow.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+                    
+                    if (questionId === 'q1' && choice === 'yes') {
+                        document.getElementById('battery-instructions').style.display = 'none';
+                        document.getElementById('battery-abort-action').style.display = 'none';
+                    }
+                    
+                    if (questionId === 'q3' && choice === 'yes') {
+                        document.getElementById('q3-instructions').style.display = 'none';
+                        document.getElementById('q3-abort-action').style.display = 'none';
+                    }
+                    
+                    document.querySelectorAll(`[data-path]`).forEach(el => {
+                       if(el.dataset.path.startsWith(questionId) && el.dataset.path !== `${questionId}-${choice}`) {
+                           el.style.display = 'none';
+                       }
+                    });
+
+                    const pathToShow = `[data-path="${questionId}-${choice}"]`;
+                    document.querySelectorAll(pathToShow).forEach(el => {
+                        el.style.display = el.tagName === 'TR' ? 'table-row' : 'block';
+                    });
+                    
+                    updateProgress();
+                    
+                    setTimeout(() => {
+                        updateScrollState();
+                        const newlyShownItems = document.querySelectorAll(pathToShow);
+                        if (newlyShownItems.length > 0) {
+                            const lastNewItem = newlyShownItems[newlyShownItems.length - 1];
+                            const itemRect = lastNewItem.getBoundingClientRect();
+                            const containerRect = pageContent.getBoundingClientRect();
+                            if (itemRect.bottom > containerRect.bottom) {
+                                scrollContent('down', itemRect.bottom - containerRect.bottom + 20);
+                            }
+                        }
+                    }, 100);
+                });
+            });
+            
+            // --- INITIAL LOAD ---
+            function initialize() {
+                const savedTheme = localStorage.getItem('theme') || 'light-mode';
+                if (savedTheme === 'dark-mode') {
+                    body.classList.remove('light-mode');
+                } else {
+                    body.classList.add('light-mode');
+                }
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
+
+                const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
+                currentZoom = savedZoom;
+                applyZoom(currentZoom);
+
+                updateProgress();
+                updateScrollState();
+            }
+
+            initialize();
+        });
+    </script>
+
+</body>
+</html>

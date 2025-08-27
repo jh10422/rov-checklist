@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROV During-Flight Checklist - B777 Interface</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="light-mode">
+
+    <div class="main-wrapper">
+        <div class="container">
+            <header>
+                <a href="pre-flight.html" class="nav-arrow left">&lt;</a>
+                <h1>▶ VEHICLE DEPLOYMENT ◀</h1>
+                <a href="during-flight.html" class="nav-arrow right">&gt;</a>
+            </header>
+
+            <div class="sub-tabs-container">
+                <button class="sub-tab">Deployment</button>
+                <button class="sub-tab">Piloting</button>
+            </div>
+            
+            <div class="progress-text" id="progress-text">0 / 9 ITEMS COMPLETE</div>
+            <div class="tab-title" id="tab-title"></div>
+            
+            <div class="page-content" id="page-content">
+                <div class="page active">
+                    <div class="scroll-wrapper">
+                        <table>
+                            <tbody>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Tether Strain Relief</span><span class="dots"></span><span class="item-status">CONFIRM Secure</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Tether Spool</span><span class="dots"></span><span class="item-status">Managed and Monitored</span></td>
+                                </tr>
+                                <tr><td class="instruction">- Slowly lower the vehicle into the water -</td></tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Buoyancy Check</span><span class="dots"></span><span class="item-status">Ensure ROV is Neutrally Buoyant</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Bubble Check</span><span class="dots"></span><span class="item-status">Check for any abnormal large air bubbles</span></td>
+                                </tr>
+                                <tr class="instruction" id="deployment-proceed" style="display: none;">
+                                    <td colspan="2">PROCEED TO THE NEXT PAGE</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="page">
+                    <div class="scroll-wrapper">
+                        <table>
+                            <tbody>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Depth Sensor</span><span class="dots"></span><span class="item-status">VERIFY Nominal Values</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Compass</span><span class="dots"></span><span class="item-status">VERIFY Nominal Ranges</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Attitude Indicator</span><span class="dots"></span><span class="item-status">VERIFY Nominal Ranges</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">SET and VERIFY armed</span></td>
+                                </tr>
+                                <tr><td class="instruction">- Verify all joystick input is functional -</td></tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Mode</span><span class="dots"></span><span class="item-status">SET to Depth Hold</span></td>
+                                </tr>
+                                <tr><td class="instruction">- Operate the Vehicle for the Specified Mission -</td></tr>
+                                <tr class="instruction success" id="piloting-proceed" style="display: none;">
+                                    <td colspan="2">VEHICLE DEPLOYMENT CHECKLIST COMPLETE</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="scroll-controls">
+                    <button id="scroll-up-btn" class="scroll-btn">▲</button>
+                    <button id="scroll-down-btn" class="scroll-btn">▼</button>
+                </div>
+            </div>
+            
+            <footer class="page-footer">
+                <div id="pager-controls">
+                    <div class="nav-controls">
+                        <button id="prev-page-btn" class="footer-btn">&lt; PREV PAGE</button>
+                    </div>
+                    <div id="page-indicator">1 / 2</div>
+                    <div class="nav-controls">
+                        <button id="next-page-btn" class="footer-btn">NEXT PAGE &gt;</button>
+                    </div>
+                </div>
+                 <a href="during-flight.html" id="next-checklist-btn" class="footer-btn" style="display: none;">GO TO VEHICLE MONITORING</a>
+            </footer>
+        </div>
+
+        <aside class="side-controls">
+            <button id="theme-toggle" class="footer-btn">DARK</button>
+            <span class="zoom-controls">
+                <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
+                <span class="zoom-label">ZOOM</span>
+                <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
+            </span>
+            <button id="chkl-reset-btn" class="footer-btn">CHKL RST</button>
+            <button id="chck-ovrd-btn" class="footer-btn">CHKL OVRD</button>
+            <button id="go-home-btn" class="footer-btn" onclick="window.location.href='home.html'">HOME</button>
+        </aside>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const zoomInBtn = document.getElementById('zoom-in-btn');
+            const zoomOutBtn = document.getElementById('zoom-out-btn');
+            const chklResetBtn = document.getElementById('chkl-reset-btn');
+            const chckOvrdBtn = document.getElementById('chck-ovrd-btn');
+            
+            const checklistItems = document.querySelectorAll('.checklist-item');
+            const progressText = document.getElementById('progress-text');
+            const totalItems = checklistItems.length;
+            
+            const pages = document.querySelectorAll('.page');
+            const subTabs = document.querySelectorAll('.sub-tab');
+            const prevBtn = document.getElementById('prev-page-btn');
+            const nextBtn = document.getElementById('next-page-btn');
+            const pageIndicator = document.getElementById('page-indicator');
+            const tabTitle = document.getElementById('tab-title');
+
+            const pagerControls = document.getElementById('pager-controls');
+            const nextChecklistBtn = document.getElementById('next-checklist-btn');
+            
+            const scrollUpBtn = document.getElementById('scroll-up-btn');
+            const scrollDownBtn = document.getElementById('scroll-down-btn');
+            const pageContent = document.getElementById('page-content');
+            
+            const pageTitles = ['DEPLOYMENT', 'PILOTING', 'MONITORING'];
+            let currentPage = 0;
+            const totalPages = pages.length;
+            let scrollPositions = Array(totalPages).fill(0);
+
+            // --- ZOOM FUNCTIONALITY ---
+            let currentZoom = 1.0;
+
+            function applyZoom(zoomLevel) {
+                body.style.zoom = zoomLevel;
+            }
+
+            function saveAndApplyZoom(zoomLevel) {
+                const clampedZoom = Math.max(0.5, Math.min(zoomLevel, 2.0));
+                currentZoom = clampedZoom;
+                applyZoom(currentZoom);
+                localStorage.setItem('rovChecklistZoom', currentZoom);
+            }
+
+            zoomInBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom + 0.1));
+            zoomOutBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom - 0.1));
+
+            // --- THEME FUNCTIONALITY ---
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('light-mode');
+                const currentTheme = body.classList.contains('light-mode') ? 'light-mode' : 'dark-mode';
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
+                localStorage.setItem('theme', currentTheme);
+            });
+            
+            // --- CHECKLIST PAGE OVERRIDE/RESET ---
+            chklResetBtn.addEventListener('click', () => {
+                const activePage = document.querySelector('.page.active');
+                if (!activePage) return;
+
+                const itemsOnPage = activePage.querySelectorAll('.checklist-item');
+                itemsOnPage.forEach(item => {
+                    item.classList.remove('checked');
+                });
+
+                scrollPositions[currentPage] = 0;
+                const activeWrapper = activePage.querySelector('.scroll-wrapper');
+                if (activeWrapper) {
+                    activeWrapper.style.transform = `translateY(0px)`;
+                }
+                updateScrollState();
+                updateProgress();
+            });
+
+            chckOvrdBtn.addEventListener('click', () => {
+                const activePage = document.querySelector('.page.active');
+                if (!activePage) return;
+
+                const itemsOnPage = activePage.querySelectorAll('.checklist-item');
+                itemsOnPage.forEach(item => {
+                    item.classList.add('checked');
+                });
+                updateProgress();
+            });
+
+            // --- SCROLL FUNCTIONALITY ---
+            function updateScrollState() {
+                const activeWrapper = document.querySelector('.page.active .scroll-wrapper');
+                if (!activeWrapper) return;
+
+                const contentHeight = activeWrapper.scrollHeight;
+                const containerHeight = pageContent.clientHeight;
+                const currentScroll = scrollPositions[currentPage];
+                const footerBuffer = 150;
+                
+                if (contentHeight <= containerHeight) {
+                    scrollUpBtn.disabled = true;
+                    scrollDownBtn.disabled = true;
+                    return;
+                }
+
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
+                scrollUpBtn.disabled = currentScroll === 0;
+                scrollDownBtn.disabled = currentScroll <= maxScroll;
+            }
+
+            function scrollContent(direction, amount = null) {
+                const activeWrapper = document.querySelector('.page.active .scroll-wrapper');
+                if (!activeWrapper) return;
+
+                const containerHeight = pageContent.clientHeight;
+                const contentHeight = activeWrapper.scrollHeight;
+                const scrollStep = amount !== null ? amount : containerHeight; 
+                
+                let newScrollY = scrollPositions[currentPage];
+                if (direction === 'down') {
+                    newScrollY -= scrollStep;
+                } else {
+                    newScrollY += scrollStep;
+                }
+                
+                const footerBuffer = 150; 
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
+                
+                newScrollY = Math.max(newScrollY, maxScroll);
+                newScrollY = Math.min(newScrollY, 0);
+
+                scrollPositions[currentPage] = newScrollY;
+                activeWrapper.style.transform = `translateY(${newScrollY}px)`;
+                updateScrollState();
+            }
+
+            scrollUpBtn.addEventListener('click', () => scrollContent('up'));
+            scrollDownBtn.addEventListener('click', () => scrollContent('down'));
+
+            // --- TAB COMPLETION CHECK ---
+            function checkTabCompletion() {
+                const currentPageElement = document.querySelector('.page.active');
+                const visibleCheckableItems = currentPageElement.querySelectorAll('.checklist-item');
+                const checkedVisibleItems = [...visibleCheckableItems].filter(item => item.classList.contains('checked'));
+                
+                const totalVisible = visibleCheckableItems.length;
+                const checkedCount = checkedVisibleItems.length;
+                const isTabComplete = checkedCount === totalVisible && totalVisible > 0;
+                
+                const proceedElements = ['deployment-proceed', 'piloting-proceed'];
+                if (currentPage < proceedElements.length) {
+                    const proceedElement = document.getElementById(proceedElements[currentPage]);
+                    if (proceedElement) {
+                        const wasHidden = proceedElement.style.display === 'none' || proceedElement.style.display === '';
+                        proceedElement.style.display = isTabComplete ? 'table-row' : 'none';
+                        
+                        if (isTabComplete && wasHidden) {
+                            setTimeout(() => {
+                                updateScrollState();
+                                const messageRect = proceedElement.getBoundingClientRect();
+                                const containerRect = pageContent.getBoundingClientRect();
+                                if (messageRect.bottom > containerRect.bottom - 100) { 
+                                    const scrollAmount = messageRect.bottom - containerRect.bottom + 150; 
+                                    scrollContent('down', scrollAmount);
+                                }
+                            }, 100);
+                        }
+                    }
+                }
+                
+                const nextPageBtn = document.getElementById('next-page-btn');
+                if (nextPageBtn) {
+                    if (isTabComplete && currentPage < totalPages - 1) {
+                        nextPageBtn.classList.add('highlighted');
+                    } else {
+                        nextPageBtn.classList.remove('highlighted');
+                    }
+                }
+            }
+
+            // --- CHECKLIST & FOOTER LOGIC ---
+            function updateFooter() {
+                const checkedCount = document.querySelectorAll('.checklist-item.checked').length;
+                const isComplete = checkedCount === totalItems;
+
+                if (isComplete && currentPage === totalPages - 1) {
+                    pagerControls.style.display = 'none';
+                    nextChecklistBtn.style.display = 'block';
+                } else {
+                    pagerControls.style.display = 'flex';
+                    nextChecklistBtn.style.display = 'none';
+                }
+            }
+
+            function updateProgress() {
+                const checkedCount = document.querySelectorAll('.checklist-item.checked').length;
+                progressText.textContent = `${checkedCount} / ${totalItems} ITEMS COMPLETE`;
+                
+                checkTabCompletion();
+                
+                if (checkedCount === totalItems) {
+                    progressText.textContent += ' -- CHECKLIST COMPLETE';
+                    progressText.style.color = 'var(--complete-color)';
+                } else {
+                    progressText.style.color = 'var(--dim-text-color)';
+                }
+                
+                updateFooter();
+            }
+
+            function showPage(pageIndex) {
+                pages.forEach((page, index) => {
+                    page.classList.toggle('active', index === pageIndex);
+                });
+                subTabs.forEach((tab, index) => tab.classList.toggle('active', index === pageIndex));
+                tabTitle.textContent = pageTitles[pageIndex];
+                pageIndicator.textContent = `${pageIndex + 1} / ${totalPages}`;
+                prevBtn.disabled = pageIndex === 0;
+                nextBtn.disabled = pageIndex === totalPages - 1;
+                
+                const nextPageBtn = document.getElementById('next-page-btn');
+                if (nextPageBtn) {
+                    nextPageBtn.classList.remove('highlighted');
+                }
+                
+                setTimeout(() => {
+                    updateFooter();
+                    updateScrollState();
+                    updateProgress();
+                }, 50);
+            }
+
+            checklistItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    item.classList.toggle('checked');
+                    updateProgress();
+                });
+            });
+
+            subTabs.forEach((tab, index) => {
+                tab.addEventListener('click', () => {
+                    currentPage = index;
+                    showPage(currentPage);
+                });
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentPage > 0) {
+                    currentPage--;
+                    showPage(currentPage);
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (currentPage < totalPages - 1) {
+                    currentPage++;
+                    showPage(currentPage);
+                }
+            });
+
+            // --- INITIAL LOAD ---
+            function initialize() {
+                const savedTheme = localStorage.getItem('theme') || 'light-mode';
+                if (savedTheme === 'dark-mode') {
+                    body.classList.remove('light-mode');
+                } else {
+                    body.classList.add('light-mode');
+                }
+                themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
+
+                const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
+                currentZoom = savedZoom;
+                applyZoom(currentZoom);
+
+                updateProgress();
+                showPage(currentPage);
+            }
+
+            window.addEventListener('resize', updateScrollState);
+
+            initialize();
+        });
+    </script>
+
+</body>
+</html>

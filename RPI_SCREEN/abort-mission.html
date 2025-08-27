@@ -9,234 +9,234 @@
 <body class="light-mode">
 
     <div class="container">
-        <header>
-            <a href="#" class="nav-arrow left disabled">&lt;</a>
-            <h1 class="danger">► ABORT MISSION ◄</h1>
-            <a href="#" class="nav-arrow right disabled">&gt;</a>
-        </header>
+        <div class="main-content">
+            <header>
+                <a href="#" class="nav-arrow left disabled">&lt;</a>
+                <h1 class="danger">► ABORT MISSION ◄</h1>
+                <a href="#" class="nav-arrow right disabled">&gt;</a>
+            </header>
 
-        <div class="sub-tabs-container">
-            <button class="sub-tab">Immediate Actions</button>
-            <button class="sub-tab">Vehicle</button>
-            <button class="sub-tab">Tether</button>
-            <button class="sub-tab">Control Station</button>
+            <div class="sub-tabs-container">
+                <button class="sub-tab">Immediate Actions</button>
+                <button class="sub-tab">Vehicle</button>
+                <button class="sub-tab">Tether</button>
+                <button class="sub-tab">Control Station</button>
+            </div>
+
+            <div class="progress-text" id="progress-text">0 / 1 ITEMS COMPLETE</div>
+            <div class="tab-title" id="tab-title"></div>
+            
+            <div class="page-content" id="page-content">
+                <div class="page active">
+                    <div class="scroll-wrapper">
+                        <table>
+                            <tbody>
+                                <tr class="checklist-item is-question" id="q1">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are there any leaks detected?</span></td>
+                                </tr>
+                                <tr class="options-row" data-question="q1">
+                                    <td colspan="2">
+                                        <button class="option-btn" data-choice="yes">YES</button>
+                                        <button class="option-btn" data-choice="no">NO</button>
+                                    </td>
+                                </tr>
+
+                                <tr class="instruction conditional" data-path="q1-yes">
+                                    <td colspan="2">Retrieve Vehicle via Tether Pulling and PROCEED TO NEXT PAGE</td>
+                                </tr>
+
+                                <tr class="checklist-item is-question conditional" id="q2" data-path="q1-no">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are You Able to Arm the Vehicle?</span></td>
+                                </tr>
+                                <tr class="options-row conditional" data-question="q2" data-path="q1-no">
+                                    <td colspan="2">
+                                        <button class="option-btn" data-choice="yes">YES</button>
+                                        <button class="option-btn" data-choice="no">NO</button>
+                                    </td>
+                                </tr>
+
+                                <tr class="instruction conditional" data-path="q2-no">
+                                    <td colspan="2">Retrieve Vehicle via Tether Pulling and PROCEED TO NEXT PAGE</td>
+                                </tr>
+
+                                <tr class="checklist-item conditional" data-path="q2-yes" data-prereq-for="q3">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">MODE</span><span class="dots"></span><span class="item-status">Set to Manual</span></td>
+                                </tr>
+                                <tr class="checklist-item conditional" data-path="q2-yes" data-prereq-for="q3">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Gain</span><span class="dots"></span><span class="item-status">Set to 25%</span></td>
+                                </tr>
+                                <tr class="instruction conditional" data-path="q2-yes">
+                                    <td colspan="2">- Slowly Test Pilot Input -</td>
+                                </tr>
+
+                                <tr class="checklist-item is-question conditional" id="q3" data-path="q2-yes">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Is Vehicle Controllable?</span></td>
+                                </tr>
+                                <tr class="options-row conditional" data-question="q3" data-path="q2-yes">
+                                    <td colspan="2">
+                                        <button class="option-btn" data-choice="yes" disabled>YES</button>
+                                        <button class="option-btn" data-choice="no" disabled>NO</button>
+                                    </td>
+                                </tr>
+
+                                <tr class="checklist-item conditional" data-path="q3-no" id="vehicle-disarm-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Disarmed</span></td>
+                                </tr>
+                                <tr class="instruction" id="disarm-instructions" style="display: none;">
+                                    <td colspan="2">Retrieve Vehicle via Tether Pulling and Proceed to next page</td>
+                                </tr>
+
+                                <tr class="instruction conditional" data-path="q3-yes">
+                                    <td colspan="2">Set Gain as Needed, Surface and Pilot back to Dock</td>
+                                </tr>
+                                <tr class="checklist-item conditional" data-path="q3-yes" id="vehicle-retrieved-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle</span><span class="dots"></span><span class="item-status">Retrieved via Tether and Piloting</span></td>
+                                </tr>
+                                <tr class="instruction" id="vehicle-instructions" style="display: none;">
+                                    <td colspan="2">Proceed to the next page</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="page">
+                    <div class="scroll-wrapper">
+                        <table>
+                            <tbody>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Connectors (GROUND)</span><span class="dots"></span><span class="item-status">Un-Plugged</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Tether Connector</span><span class="dots"></span><span class="item-status">Disconnected</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Strain Relief</span><span class="dots"></span><span class="item-status">Tether Carabiner is Removed</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Lens Cover Cap</span><span class="dots"></span><span class="item-status">Installed</span></td>
+                                </tr>
+                                <tr><td class="instruction">- Note of Any Leaks or Visible Damage -</td></tr>
+                                <tr class="instruction" id="vehicle-proceed" style="display: none;">
+                                    <td colspan="2">Proceed to next page</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="page">
+                    <div class="scroll-wrapper">
+                        <table>
+                            <tbody>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Roll Spool Back</span><span class="dots"></span><span class="item-status">COMPLETE</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Strain Relief</span><span class="dots"></span><span class="item-status">Carabiner Attached to Handle</span></td>
+                                </tr>
+                                <tr class="checklist-item">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Cable</span><span class="dots"></span><span class="item-status">Disconnected from Spool</span></td>
+                                </tr>
+                                <tr class="instruction" id="tether-proceed" style="display: none;">
+                                    <td colspan="2">Proceed to next page</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="page">
+                    <div class="scroll-wrapper">
+                        <table>
+                            <tbody>
+                                <tr class="checklist-item is-question" id="cs-q1">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Is the Control Station Operable?</span></td>
+                                </tr>
+                                <tr class="options-row" data-question="cs-q1">
+                                    <td colspan="2">
+                                        <button class="option-btn" data-choice="yes">YES</button>
+                                        <button class="option-btn" data-choice="no">NO</button>
+                                    </td>
+                                </tr>
+
+                                <tr class="checklist-item conditional" data-path="cs-q1-yes">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Video Recordings</span><span class="dots"></span><span class="item-status">Saved</span></td>
+                                </tr>
+                                <tr class="checklist-item conditional" data-path="cs-q1-yes">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Monitor Switch</span><span class="dots"></span><span class="item-status">OFF</span></td>
+                                </tr>
+                                <tr class="checklist-item conditional" data-path="cs-q1-yes">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Top Cover</span><span class="dots"></span><span class="item-status">OPEN Lid CAREFULLY</span></td>
+                                </tr>
+                                <tr class="checklist-item conditional" data-path="cs-q1-yes">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Power Button</span><span class="dots"></span><span class="item-status">Hold until OFF</span></td>
+                                </tr>
+                                <tr class="checklist-item conditional" data-path="cs-q1-yes">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Joystick Frame</span><span class="dots"></span><span class="item-status">STOWED</span></td>
+                                </tr>
+                                <tr class="checklist-item conditional" data-path="cs-q1-yes">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Cable</span><span class="dots"></span><span class="item-status">STOWED</span></td>
+                                </tr>
+                                <tr class="checklist-item conditional" data-path="cs-q1-yes">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Station Lid</span><span class="dots"></span><span class="item-status">Securely CLOSED</span></td>
+                                </tr>
+                                <tr class="instruction conditional" id="cs-yes-complete" style="display: none;">
+                                    <td colspan="2">Checklist Complete - System Secured</td>
+                                </tr>
+
+                                <tr class="checklist-item conditional" data-path="cs-q1-no">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Monitor Switch</span><span class="dots"></span><span class="item-status">OFF</span></td>
+                                </tr>
+                                <tr class="checklist-item conditional" data-path="cs-q1-no">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Top Cover</span><span class="dots"></span><span class="item-status">OPEN Lid CAREFULLY</span></td>
+                                </tr>
+                                <tr class="checklist-item conditional" data-path="cs-q1-no">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Power Button</span><span class="dots"></span><span class="item-status">Hold until OFF</span></td>
+                                </tr>
+                                <tr class="checklist-item conditional" data-path="cs-q1-no">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Joystick Frame</span><span class="dots"></span><span class="item-status">STOWED</span></td>
+                                </tr>
+                                <tr class="checklist-item conditional" data-path="cs-q1-no">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Cable</span><span class="dots"></span><span class="item-status">STOWED</span></td>
+                                </tr>
+                                <tr class="checklist-item conditional" data-path="cs-q1-no">
+                                   <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Station Lid</span><span class="dots"></span><span class="item-status">Securely CLOSED</span></td>
+                                </tr>
+                                <tr class="instruction conditional" id="cs-no-complete" style="display: none;">
+                                    <td colspan="2">Checklist Complete - System Secured</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="scroll-controls">
+                    <button id="scroll-up-btn" class="scroll-btn">▲</button>
+                    <button id="scroll-down-btn" class="scroll-btn">▼</button>
+                </div>
+            </div>
+            
+            <footer class="page-footer">
+                <div id="pager-controls">
+                    <div class="nav-controls">
+                        <button id="prev-page-btn" class="footer-btn">&lt; PREV PAGE</button>
+                    </div>
+                    <div id="page-indicator">1 / 4</div>
+                    <div class="nav-controls">
+                        <button id="next-page-btn" class="footer-btn">NEXT PAGE &gt;</button>
+                    </div>
+                </div>
+                <a href="home.html" id="next-checklist-btn" class="footer-btn" style="display: none;">GO TO HOME</a>
+            </footer>
         </div>
 
-        <div class="progress-text" id="progress-text">0 / 1 ITEMS COMPLETE</div>
-        <div class="tab-title" id="tab-title"></div>
-        
-        <div class="page-content" id="page-content">
-            <div class="page active">
-                <div class="scroll-wrapper">
-                    <table>
-                        <tbody>
-                            <tr class="checklist-item is-question" id="q1">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are there any leaks detected?</span></td>
-                            </tr>
-                            <tr class="options-row" data-question="q1">
-                                <td colspan="2">
-                                    <button class="option-btn" data-choice="yes">YES</button>
-                                    <button class="option-btn" data-choice="no">NO</button>
-                                </td>
-                            </tr>
-
-                            <tr class="instruction conditional" data-path="q1-yes">
-                                <td colspan="2">Retrieve Vehicle via Tether Pulling and PROCEED TO NEXT PAGE</td>
-                            </tr>
-
-                            <tr class="checklist-item is-question conditional" id="q2" data-path="q1-no">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Are You Able to Arm the Vehicle?</span></td>
-                            </tr>
-                            <tr class="options-row conditional" data-question="q2" data-path="q1-no">
-                                <td colspan="2">
-                                    <button class="option-btn" data-choice="yes">YES</button>
-                                    <button class="option-btn" data-choice="no">NO</button>
-                                </td>
-                            </tr>
-
-                            <tr class="instruction conditional" data-path="q2-no">
-                                <td colspan="2">Retrieve Vehicle via Tether Pulling and PROCEED TO NEXT PAGE</td>
-                            </tr>
-
-                            <tr class="checklist-item conditional" data-path="q2-yes" data-prereq-for="q3">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">MODE</span><span class="dots"></span><span class="item-status">Set to Manual</span></td>
-                            </tr>
-                            <tr class="checklist-item conditional" data-path="q2-yes" data-prereq-for="q3">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Gain</span><span class="dots"></span><span class="item-status">Set to 25%</span></td>
-                            </tr>
-                            <tr class="instruction conditional" data-path="q2-yes">
-                                <td colspan="2">- Slowly Test Pilot Input -</td>
-                            </tr>
-
-                            <tr class="checklist-item is-question conditional" id="q3" data-path="q2-yes">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Is Vehicle Controllable?</span></td>
-                            </tr>
-                            <tr class="options-row conditional" data-question="q3" data-path="q2-yes">
-                                <td colspan="2">
-                                    <button class="option-btn" data-choice="yes" disabled>YES</button>
-                                    <button class="option-btn" data-choice="no" disabled>NO</button>
-                                </td>
-                            </tr>
-
-                            <tr class="checklist-item conditional" data-path="q3-no" id="vehicle-disarm-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle Arming</span><span class="dots"></span><span class="item-status">Disarmed</span></td>
-                            </tr>
-                            <tr class="instruction" id="disarm-instructions" style="display: none;">
-                                <td colspan="2">Retrieve Vehicle via Tether Pulling and Proceed to next page</td>
-                            </tr>
-
-                            <tr class="instruction conditional" data-path="q3-yes">
-                                <td colspan="2">Set Gain as Needed, Surface and Pilot back to Dock</td>
-                            </tr>
-                            <tr class="checklist-item conditional" data-path="q3-yes" id="vehicle-retrieved-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Vehicle</span><span class="dots"></span><span class="item-status">Retrieved via Tether and Piloting</span></td>
-                            </tr>
-                            <tr class="instruction" id="vehicle-instructions" style="display: none;">
-                                <td colspan="2">Proceed to the next page</td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="page">
-                <div class="scroll-wrapper">
-                    <table>
-                        <tbody>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Connectors (GROUND)</span><span class="dots"></span><span class="item-status">Un-Plugged</span></td>
-                            </tr>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Tether Connector</span><span class="dots"></span><span class="item-status">Disconnected</span></td>
-                            </tr>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Strain Relief</span><span class="dots"></span><span class="item-status">Tether Carabiner is Removed</span></td>
-                            </tr>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Lens Cover Cap</span><span class="dots"></span><span class="item-status">Installed</span></td>
-                            </tr>
-                            <tr><td class="instruction">- Note of Any Leaks or Visible Damage -</td></tr>
-                            <tr class="instruction" id="vehicle-proceed" style="display: none;">
-                                <td colspan="2">Proceed to next page</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="page">
-                <div class="scroll-wrapper">
-                    <table>
-                        <tbody>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Roll Spool Back</span><span class="dots"></span><span class="item-status">COMPLETE</span></td>
-                            </tr>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Strain Relief</span><span class="dots"></span><span class="item-status">Carabiner Attached to Handle</span></td>
-                            </tr>
-                            <tr class="checklist-item">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Cable</span><span class="dots"></span><span class="item-status">Disconnected from Spool</span></td>
-                            </tr>
-                            <tr class="instruction" id="tether-proceed" style="display: none;">
-                                <td colspan="2">Proceed to next page</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="page">
-                <div class="scroll-wrapper">
-                    <table>
-                        <tbody>
-                            <tr class="checklist-item is-question" id="cs-q1">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Is the Control Station Operable?</span></td>
-                            </tr>
-                            <tr class="options-row" data-question="cs-q1">
-                                <td colspan="2">
-                                    <button class="option-btn" data-choice="yes">YES</button>
-                                    <button class="option-btn" data-choice="no">NO</button>
-                                </td>
-                            </tr>
-
-                            <tr class="checklist-item conditional" data-path="cs-q1-yes">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Video Recordings</span><span class="dots"></span><span class="item-status">Saved</span></td>
-                            </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-yes">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Monitor Switch</span><span class="dots"></span><span class="item-status">OFF</span></td>
-                            </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-yes">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Top Cover</span><span class="dots"></span><span class="item-status">OPEN Lid CAREFULLY</span></td>
-                            </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-yes">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Power Button</span><span class="dots"></span><span class="item-status">Hold until OFF</span></td>
-                            </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-yes">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Joystick Frame</span><span class="dots"></span><span class="item-status">STOWED</span></td>
-                            </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-yes">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Cable</span><span class="dots"></span><span class="item-status">STOWED</span></td>
-                            </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-yes">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Station Lid</span><span class="dots"></span><span class="item-status">Securely CLOSED</span></td>
-                            </tr>
-                            <tr class="instruction conditional" id="cs-yes-complete" style="display: none;">
-                                <td colspan="2">Checklist Complete - System Secured</td>
-                            </tr>
-
-                            <tr class="checklist-item conditional" data-path="cs-q1-no">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Monitor Switch</span><span class="dots"></span><span class="item-status">OFF</span></td>
-                            </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-no">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Top Cover</span><span class="dots"></span><span class="item-status">OPEN Lid CAREFULLY</span></td>
-                            </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-no">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Battery Power Button</span><span class="dots"></span><span class="item-status">Hold until OFF</span></td>
-                            </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-no">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Joystick Frame</span><span class="dots"></span><span class="item-status">STOWED</span></td>
-                            </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-no">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Cable</span><span class="dots"></span><span class="item-status">STOWED</span></td>
-                            </tr>
-                            <tr class="checklist-item conditional" data-path="cs-q1-no">
-                               <td class="item-cell"><span class="checklist-box"></span><span class="item-name">Control Station Lid</span><span class="dots"></span><span class="item-status">Securely CLOSED</span></td>
-                            </tr>
-                            <tr class="instruction conditional" id="cs-no-complete" style="display: none;">
-                                <td colspan="2">Checklist Complete - System Secured</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="scroll-controls">
-                <button id="scroll-up-btn" class="scroll-btn">▲</button>
-                <button id="scroll-down-btn" class="scroll-btn">▼</button>
-            </div>
-        </div>
-        
-        <footer class="page-footer">
-            <div id="pager-controls">
-                <div class="nav-controls">
-                    <button id="prev-page-btn" class="footer-btn">&lt; PREV PAGE</button>
-                </div>
-                <div id="page-indicator">1 / 4</div>
-                <div class="nav-controls">
-                    <button id="next-page-btn" class="footer-btn">NEXT PAGE &gt;</button>
-                </div>
-            </div>
-            <a href="home.html" id="next-checklist-btn" class="footer-btn" style="display: none;">GO TO HOME</a>
-        </footer>
-        <footer class="theme-footer">
+        <div class="button-sidebar">
             <button id="theme-toggle" class="footer-btn">DARK</button>
-            <span style="width: 10px;"></span>
             <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
-            <span style="padding: 0 10px;">ZOOM</span>
+            <span>ZOOM</span>
             <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
-            <span style="width: 20px;"></span>
             <button id="chkl-reset-btn" class="footer-btn">CHKL RST</button>
             <button id="chck-ovrd-btn" class="footer-btn" disabled>CHKL OVRD</button>
-            <span style="width: 20px;"></span>
             <button id="go-home-btn" class="footer-btn" onclick="window.location.href='home.html?tab=1'">HOME</button>
-        </footer>
+        </div>
     </div>
 
     <script>
@@ -272,18 +272,13 @@
 
             // --- ZOOM FUNCTIONALITY ---
             let currentZoom = 1.0;
-
-            function applyZoom(zoomLevel) {
-                body.style.zoom = zoomLevel;
-            }
-
+            function applyZoom(zoomLevel) { body.style.zoom = zoomLevel; }
             function saveAndApplyZoom(zoomLevel) {
                 const clampedZoom = Math.max(0.5, Math.min(zoomLevel, 2.0));
                 currentZoom = clampedZoom;
                 applyZoom(currentZoom);
                 localStorage.setItem('rovChecklistZoom', clampedZoom);
             }
-
             zoomInBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom + 0.1));
             zoomOutBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom - 0.1));
 
@@ -299,69 +294,52 @@
             function resetChecklist() {
                 const activePage = document.querySelector('.page.active');
                 if (!activePage) return;
-
-                // Uncheck all checklist items on the current page
                 activePage.querySelectorAll('.checklist-item').forEach(item => {
                     item.classList.remove('checked');
                 });
-
-                // Reset all question/option rows on the current page
                 activePage.querySelectorAll('.options-row').forEach(row => {
                     row.classList.remove('selection-made');
                     row.querySelectorAll('.option-btn').forEach(btn => {
                         btn.classList.remove('selected');
                     });
                 });
-
-                // Hide all conditional elements on the current page
                 activePage.querySelectorAll('.conditional').forEach(el => {
                     el.style.display = 'none';
                 });
-                
-                // Explicitly hide any special instruction rows that might be on the current page
                 const specialInstructionsOnPage = {
                     0: ['disarm-instructions', 'vehicle-instructions'],
                     1: ['vehicle-proceed'],
                     2: ['tether-proceed'],
                     3: ['cs-yes-complete', 'cs-no-complete']
                 };
-
                 if (specialInstructionsOnPage[currentPage]) {
                     specialInstructionsOnPage[currentPage].forEach(id => {
                         const el = document.getElementById(id);
                         if (el) el.style.display = 'none';
                     });
                 }
-
-                // Reset scroll position for the current page to the top
                 scrollPositions[currentPage] = 0;
                 const activeWrapper = activePage.querySelector('.scroll-wrapper');
                 if (activeWrapper) {
                     activeWrapper.style.transform = 'translateY(0px)';
                 }
-
-                // Update the entire UI state
                 updateProgress();
             }
             chklResetBtn.addEventListener('click', resetChecklist);
-
 
             // --- SCROLL FUNCTIONALITY ---
             function updateScrollState() {
                 const activeWrapper = document.querySelector('.page.active .scroll-wrapper');
                 if (!activeWrapper) return;
-
                 const contentHeight = activeWrapper.scrollHeight;
                 const containerHeight = pageContent.clientHeight;
                 const currentScroll = scrollPositions[currentPage];
                 const footerBuffer = 150;
-                
                 if (contentHeight <= containerHeight) {
                     scrollUpBtn.disabled = true;
                     scrollDownBtn.disabled = true;
                     return;
                 }
-
                 scrollUpBtn.disabled = currentScroll === 0;
                 const maxScroll = -(contentHeight - containerHeight + footerBuffer);
                 scrollDownBtn.disabled = currentScroll <= maxScroll;
@@ -370,24 +348,19 @@
             function scrollContent(direction, amount = null) {
                 const activeWrapper = document.querySelector('.page.active .scroll-wrapper');
                 if (!activeWrapper) return;
-
                 const containerHeight = pageContent.clientHeight;
                 const contentHeight = activeWrapper.scrollHeight;
                 const scrollStep = amount !== null ? amount : containerHeight;
-                
                 let newScrollY = scrollPositions[currentPage];
                 if (direction === 'down') {
                     newScrollY -= scrollStep;
                 } else {
                     newScrollY += scrollStep;
                 }
-
                 const footerBuffer = 150;
                 const maxScroll = -(contentHeight - containerHeight + footerBuffer);
-                
                 newScrollY = Math.max(newScrollY, maxScroll);
                 newScrollY = Math.min(newScrollY, 0);
-
                 scrollPositions[currentPage] = newScrollY;
                 activeWrapper.style.transform = `translateY(${newScrollY}px)`;
                 updateScrollState();
@@ -402,11 +375,9 @@
                     const questionId = row.dataset.question;
                     const prereqItems = document.querySelectorAll(`[data-prereq-for="${questionId}"]`);
                     let allPrereqsMet = prereqItems.length === 0; 
-                    
                     if (prereqItems.length > 0) {
                         allPrereqsMet = [...prereqItems].every(item => item.classList.contains('checked'));
                     }
-
                     row.querySelectorAll('.option-btn').forEach(btn => {
                         if(!btn.closest('.options-row').classList.contains('selection-made')) {
                            btn.disabled = !allPrereqsMet;
@@ -417,12 +388,10 @@
             
             function checkControlStationCompletion() {
                 if (currentPage !== 3) return;
-
                 const checkPath = (path, messageId) => {
                     const items = document.querySelectorAll(`.checklist-item.conditional[data-path="${path}"]:not(.is-question)`);
                     const completionMessage = document.getElementById(messageId);
                     if (!completionMessage) return;
-
                     if (items.length > 0 && items[0].style.display === 'table-row') {
                         const allChecked = [...items].every(item => item.classList.contains('checked'));
                         completionMessage.style.display = allChecked ? 'table-row' : 'none';
@@ -430,7 +399,6 @@
                         completionMessage.style.display = 'none';
                     }
                 };
-                
                 checkPath('cs-q1-yes', 'cs-yes-complete');
                 checkPath('cs-q1-no', 'cs-no-complete');
             }
@@ -441,22 +409,17 @@
                 const q3YesPathComplete = document.getElementById('vehicle-instructions')?.style.display === 'table-row';
                 const q3NoPathComplete = document.getElementById('disarm-instructions')?.style.display === 'table-row';
                 const immediateActionsComplete = q1YesPathComplete || q2NoPathComplete || q3YesPathComplete || q3NoPathComplete;
-
                 const vehicleItems = document.querySelectorAll('.page:nth-child(2) .checklist-item:not(.is-question)');
                 const vehicleComplete = vehicleItems.length === 0 || [...vehicleItems].every(item => item.classList.contains('checked'));
-                
                 const tetherItems = document.querySelectorAll('.page:nth-child(3) .checklist-item:not(.is-question)');
                 const tetherComplete = tetherItems.length === 0 || [...tetherItems].every(item => item.classList.contains('checked'));
-                
                 const csComplete = document.getElementById('cs-yes-complete')?.style.display === 'table-row' || 
                                   document.getElementById('cs-no-complete')?.style.display === 'table-row';
-                
                 return immediateActionsComplete && vehicleComplete && tetherComplete && csComplete;
             }
 
             function updateFooter() {
                 const allTabsComplete = checkAllTabsComplete();
-
                 if (allTabsComplete) {
                     pagerControls.style.display = 'none';
                     nextChecklistBtn.style.display = 'block';
@@ -472,23 +435,17 @@
                 const currentPageElement = document.querySelector('.page.active');
                 const visibleCheckableItems = currentPageElement.querySelectorAll('.checklist-item:not(.is-question):not(.conditional), .checklist-item:not(.is-question).conditional[style*="table-row"]');
                 const checkedVisibleItems = [...visibleCheckableItems].filter(item => item.classList.contains('checked'));
-                
                 const totalVisible = visibleCheckableItems.length;
                 const checkedCount = checkedVisibleItems.length;
-                
                 progressText.textContent = totalVisible > 0 ? `${checkedCount} / ${totalVisible} ITEMS COMPLETE` : 'NO ITEMS TO COMPLETE';
-                
                 checkTabCompletion();
-                
                 const allTabsComplete = checkAllTabsComplete();
-                
                 if (allTabsComplete) {
                     progressText.textContent = 'CHECKLIST COMPLETE - SYSTEM SECURED';
                     progressText.style.color = 'var(--complete-color)';
                 } else {
                     progressText.style.color = 'var(--dim-text-color)';
                 }
-                
                 checkPrerequisites();
                 updateFooter();
             }
@@ -497,13 +454,11 @@
                 const currentPageElement = document.querySelector('.page.active');
                 const visibleCheckableItems = currentPageElement.querySelectorAll('.checklist-item:not(.is-question):not(.conditional), .checklist-item:not(.is-question).conditional[style*="table-row"]');
                 const isTabComplete = visibleCheckableItems.length > 0 && [...visibleCheckableItems].every(item => item.classList.contains('checked'));
-                
                 if (currentPage === 1) {
                     document.getElementById('vehicle-proceed').style.display = isTabComplete ? 'table-row' : 'none';
                 } else if (currentPage === 2) {
                     document.getElementById('tether-proceed').style.display = isTabComplete ? 'table-row' : 'none';
                 }
-                
                 const nextPageBtn = document.getElementById('next-page-btn');
                 if (nextPageBtn) {
                     let shouldHighlight = false;
@@ -516,7 +471,6 @@
                     } else if (currentPage === 1 || currentPage === 2) {
                         shouldHighlight = isTabComplete;
                     }
-                    
                     if (shouldHighlight && currentPage < totalPages - 1) {
                         nextPageBtn.classList.add('highlighted');
                     } else {
@@ -530,12 +484,10 @@
                 subTabs.forEach((tab, index) => tab.classList.toggle('active', index === pageIndex));
                 tabTitle.textContent = pageTitles[pageIndex];
                 pageIndicator.textContent = `${pageIndex + 1} / ${totalPages}`;
-                
                 const nextPageBtn = document.getElementById('next-page-btn');
                 if (nextPageBtn) {
                     nextPageBtn.classList.remove('highlighted');
                 }
-                
                 setTimeout(() => {
                     updateScrollState();
                     updateProgress();
@@ -547,18 +499,14 @@
                     item.addEventListener('click', (e) => {
                         if (e.target.tagName === 'BUTTON') return;
                         item.classList.toggle('checked');
-                        
                         if (item.id === 'vehicle-retrieved-item') {
                             document.getElementById('vehicle-instructions').style.display = item.classList.contains('checked') ? 'table-row' : 'none';
                         }
-
                         if (item.id === 'vehicle-disarm-item') {
                             document.getElementById('disarm-instructions').style.display = item.classList.contains('checked') ? 'table-row' : 'none';
                         }
-                        
                         checkControlStationCompletion();
                         updateProgress();
-
                         const prereqFor = item.dataset.prereqFor;
                         if (prereqFor) {
                             const allPrereqs = document.querySelectorAll(`[data-prereq-for="${prereqFor}"]`);
@@ -585,26 +533,21 @@
                     const questionRow = e.target.closest('.options-row');
                     if (!questionRow) return; 
                     const questionId = questionRow.dataset.question;
-                    
                     document.getElementById(questionId).classList.add('checked');
                     questionRow.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
                     e.target.classList.add('selected');
                     questionRow.classList.add('selection-made');
                     questionRow.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-                    
                     document.querySelectorAll(`[data-path]`).forEach(el => {
                        if(el.dataset.path.startsWith(questionId) && el.dataset.path !== `${questionId}-${choice}`) {
                            el.style.display = 'none';
                        }
                     });
-
                     const pathToShow = `[data-path="${questionId}-${choice}"]`;
                     document.querySelectorAll(pathToShow).forEach(el => {
                         el.style.display = el.tagName === 'TR' ? 'table-row' : 'block';
                     });
-                    
                     updateProgress();
-                    
                     requestAnimationFrame(() => {
                         updateScrollState();
                         const newlyShownItems = document.querySelectorAll(pathToShow);
@@ -650,11 +593,9 @@
                     body.classList.add('light-mode');
                 }
                 themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
-
                 const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
                 currentZoom = savedZoom;
                 applyZoom(currentZoom);
-                
                 showPage(currentPage);
             }
 

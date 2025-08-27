@@ -28,7 +28,7 @@ body {
     background-color: var(--display-bg);
     color: var(--text-color);
     margin: 0;
-    padding: 1rem;
+    padding: 0.3rem;
     font-size: 22px; 
     font-weight: 500;
     line-height: 1.6; 
@@ -42,26 +42,36 @@ body {
 }
 
 .container {
-    max-width: 1800px; /* MODIFIED */
+    max-width: 1390px;
     margin: 0 auto;
     border: 2px solid var(--border-color);
-    padding: 1.5rem;
+    padding: 0; /* Removed padding to allow content to fill edges */
+    display: flex; /* Changed to flexbox */
+    flex-direction: row; /* Main content and sidebar sit side-by-side */
+    height: 690px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.main-content {
+    flex-grow: 1; /* Allows this section to take up available space */
     display: flex;
     flex-direction: column;
-    height: 70vh; /* MODIFIED */
+    height: 100%;
+    padding: 1rem; /* Add padding back to the content area */
     box-sizing: border-box;
-     position: relative;
 }
+
 
 header {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.4rem;
     flex-shrink: 0;
     border-bottom: 2px solid var(--border-color);
-    margin-bottom: 1rem;
+    margin-bottom: 0.7rem;
 }
 
 h1 {
@@ -121,7 +131,7 @@ h1.smaller {
     display: flex;
     justify-content: space-around;
     gap: 5px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.7rem;
     flex-shrink: 0;
 }
 
@@ -154,8 +164,6 @@ h1.smaller {
 .progress-text {
     text-align: center;
     font-weight: 400;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
     font-size: 0.8em;
     text-transform: uppercase;
     color: var(--dim-text-color);
@@ -171,21 +179,14 @@ h1.smaller {
     height: 1.2em;
 }
 
-/* NEW: Wrapper for content and sidebar */
-.content-and-sidebar-wrapper {
-    display: flex;
-    flex-grow: 1;
-    border-top: 2px solid var(--border-color);
-    border-bottom: 2px solid var(--border-color);
-    overflow: hidden;
-}
-
 .page-content {
     flex-grow: 1;
     overflow: hidden;
+    border-top: 2px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
+    padding: 0.5rem 0;
     position: relative;
     display: flex;
-    /* Borders and padding moved to wrapper */
 }
 
 .scroll-wrapper {
@@ -535,12 +536,13 @@ body.light-mode .checklist-complete {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-top: 1rem;
+    padding-top: 0.2rem; /* Adjusted top padding */
     text-transform: uppercase;
     font-size: 1.2em; 
     flex-shrink: 0;
     margin-top: auto;
-    min-height: 2.5em;
+    min-height: 1.5em;   /* Adjusted min-height */
+    margin-bottom: -0.8rem; /* <-- ADD THIS LINE */
 }
 
 #pager-controls {
@@ -550,17 +552,22 @@ body.light-mode .checklist-complete {
     align-items: center;
 }
 
-/* MODIFIED: Styles for the new sidebar */
-.theme-footer {
+/* --- NEW Button Sidebar --- */
+.button-sidebar {
+    flex-shrink: 0; /* Prevents the sidebar from shrinking */
+    width: 170px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 1rem 0.5rem;
-    text-transform: uppercase;
-    font-size: 1.2em; 
-    flex-shrink: 0;
     border-left: 2px solid var(--border-color);
+    text-transform: uppercase;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.theme-footer {
+    display: none; /* Hiding the old footer if it exists */
 }
 
 .footer-btn {
@@ -575,10 +582,11 @@ body.light-mode .checklist-complete {
     cursor: inherit;
     transition: background-color 0.2s;
     text-decoration: none;
-    margin: 8px 0;
-    width: 90%;
+    margin: 8px; /* Vertical margin */
+    width: 80%;
     text-align: center;
 }
+/* --- END OF NEW STYLES --- */
 
 .footer-btn:disabled {
     background-color: var(--display-bg);
@@ -611,6 +619,8 @@ body.light-mode .checklist-complete {
     justify-content: space-between;
     padding: 0 10px;
     box-sizing: border-box;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
 }
 
 .scroll-btn {
@@ -714,7 +724,7 @@ body.light-mode .checklist-complete {
             background-color: var(--note-color);
             border-color: var(--note-color);
             color: var(--display-bg);
-            padding: 0.25rem 0.75rem;
+            padding: 0.15rem 0.75rem;
             animation: pulse 2s infinite;
             transition: background-color 0.2s ease-in-out;
         }
@@ -977,7 +987,7 @@ body.light-mode .checklist-complete {
         }
         /* Styles for Confirmation Modal */
         .modal-overlay {
-         position: absolute;
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
@@ -1034,63 +1044,3 @@ body.light-mode .checklist-complete {
             background-color: var(--danger-color);
             color: var(--display-bg);
         }
-/* --- STYLES FOR NEW FULL-HEIGHT SIDEBAR LAYOUT --- */
-
-/* --- STYLES FOR NEW FULL-HEIGHT SIDEBAR LAYOUT --- */
-
-/* This class on the main container enables the new layout */
-/* --- STYLES FOR NEW FULL-HEIGHT SIDEBAR LAYOUT --- */
-
-/* This class on the main container enables the new layout */
-.container.full-height-sidebar-layout {
-    display: flex;
-    flex-direction: row; /* Arrange content and sidebar horizontally */
-    padding: 0; /* Remove padding from the outer container */
-    border: none; /* The border will be on the inner containers */
-    height: 75vh; /* Adjusted height as per your request */
-}
-
-/* This new wrapper holds all the main page content */
-.main-content-wrapper {
-    flex-grow: 1; /* Allows this wrapper to take up all available space */
-    display: flex;
-    flex-direction: column;
-    border: 2px solid var(--border-color);
-    border-right: none; /* Remove the right border to connect with the sidebar */
-    padding: 1.5rem;
-    box-sizing: border-box;
-    overflow: hidden; /* Add this to prevent content from spilling */
-}
-
-/* The sidebar now has its own border and is part of the main flex layout */
-.full-height-sidebar-layout > .side-controls {
-    flex-shrink: 0;
-    border: 2px solid var(--border-color);
-    border-left: none; /* Remove the left border to connect with the main content */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem 0.5rem;
-}
-
-/* We need to re-define the page-content styles for this specific layout */
-.main-content-wrapper .page-content {
-    border-top: 2px solid var(--border-color);
-    border-bottom: 2px solid var(--border-color);
-    flex-grow: 1;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-}
-
-/* --- FIX FOR SCROLLING --- */
-/* NOTE: In your main styles.css, please remove the 'transform' and 'transition' 
-   properties from the '.scroll-wrapper' rule if they exist there. */
-
-.page {
-    /* This rule restores smooth scrolling by animating the transform */
-    display: none;
-    transform: translateY(0);
-    transition: transform 0.4s ease-in-out;
-}

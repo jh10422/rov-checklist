@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROV During-Flight Checklist - B777 Interface</title>
+    <title>ROV Deployment Checklist - B777 Interface</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="light-mode">
 
-    <div class="main-wrapper">
-        <div class="container">
+    <div class="container">
+        <div class="main-content">
             <header>
                 <a href="pre-flight.html" class="nav-arrow left">&lt;</a>
                 <h1>▶ VEHICLE DEPLOYMENT ◀</h1>
@@ -98,17 +98,15 @@
             </footer>
         </div>
 
-        <aside class="side-controls">
+        <div class="button-sidebar">
             <button id="theme-toggle" class="footer-btn">DARK</button>
-            <span class="zoom-controls">
-                <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
-                <span class="zoom-label">ZOOM</span>
-                <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
-            </span>
+            <button id="zoom-out-btn" class="footer-btn" title="Zoom Out">-</button>
+            <span>ZOOM</span>
+            <button id="zoom-in-btn" class="footer-btn" title="Zoom In">+</button>
             <button id="chkl-reset-btn" class="footer-btn">CHKL RST</button>
             <button id="chck-ovrd-btn" class="footer-btn">CHKL OVRD</button>
             <button id="go-home-btn" class="footer-btn" onclick="window.location.href='home.html'">HOME</button>
-        </aside>
+        </div>
     </div>
 
     <script>
@@ -138,25 +136,20 @@
             const scrollDownBtn = document.getElementById('scroll-down-btn');
             const pageContent = document.getElementById('page-content');
             
-            const pageTitles = ['DEPLOYMENT', 'PILOTING', 'MONITORING'];
+            const pageTitles = ['DEPLOYMENT', 'PILOTING'];
             let currentPage = 0;
             const totalPages = pages.length;
             let scrollPositions = Array(totalPages).fill(0);
 
             // --- ZOOM FUNCTIONALITY ---
             let currentZoom = 1.0;
-
-            function applyZoom(zoomLevel) {
-                body.style.zoom = zoomLevel;
-            }
-
+            function applyZoom(zoomLevel) { body.style.zoom = zoomLevel; }
             function saveAndApplyZoom(zoomLevel) {
                 const clampedZoom = Math.max(0.5, Math.min(zoomLevel, 2.0));
                 currentZoom = clampedZoom;
                 applyZoom(currentZoom);
                 localStorage.setItem('rovChecklistZoom', currentZoom);
             }
-
             zoomInBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom + 0.1));
             zoomOutBtn.addEventListener('click', () => saveAndApplyZoom(currentZoom - 0.1));
 
@@ -172,12 +165,8 @@
             chklResetBtn.addEventListener('click', () => {
                 const activePage = document.querySelector('.page.active');
                 if (!activePage) return;
-
                 const itemsOnPage = activePage.querySelectorAll('.checklist-item');
-                itemsOnPage.forEach(item => {
-                    item.classList.remove('checked');
-                });
-
+                itemsOnPage.forEach(item => item.classList.remove('checked'));
                 scrollPositions[currentPage] = 0;
                 const activeWrapper = activePage.querySelector('.scroll-wrapper');
                 if (activeWrapper) {
@@ -190,11 +179,8 @@
             chckOvrdBtn.addEventListener('click', () => {
                 const activePage = document.querySelector('.page.active');
                 if (!activePage) return;
-
                 const itemsOnPage = activePage.querySelectorAll('.checklist-item');
-                itemsOnPage.forEach(item => {
-                    item.classList.add('checked');
-                });
+                itemsOnPage.forEach(item => item.classList.add('checked'));
                 updateProgress();
             });
 
@@ -202,44 +188,36 @@
             function updateScrollState() {
                 const activeWrapper = document.querySelector('.page.active .scroll-wrapper');
                 if (!activeWrapper) return;
-
                 const contentHeight = activeWrapper.scrollHeight;
                 const containerHeight = pageContent.clientHeight;
                 const currentScroll = scrollPositions[currentPage];
                 const footerBuffer = 150;
-                
                 if (contentHeight <= containerHeight) {
                     scrollUpBtn.disabled = true;
                     scrollDownBtn.disabled = true;
                     return;
                 }
-
-                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
                 scrollUpBtn.disabled = currentScroll === 0;
+                const maxScroll = -(contentHeight - containerHeight + footerBuffer);
                 scrollDownBtn.disabled = currentScroll <= maxScroll;
             }
 
             function scrollContent(direction, amount = null) {
                 const activeWrapper = document.querySelector('.page.active .scroll-wrapper');
                 if (!activeWrapper) return;
-
                 const containerHeight = pageContent.clientHeight;
                 const contentHeight = activeWrapper.scrollHeight;
                 const scrollStep = amount !== null ? amount : containerHeight; 
-                
                 let newScrollY = scrollPositions[currentPage];
                 if (direction === 'down') {
                     newScrollY -= scrollStep;
                 } else {
                     newScrollY += scrollStep;
                 }
-                
                 const footerBuffer = 150; 
                 const maxScroll = -(contentHeight - containerHeight + footerBuffer);
-                
                 newScrollY = Math.max(newScrollY, maxScroll);
                 newScrollY = Math.min(newScrollY, 0);
-
                 scrollPositions[currentPage] = newScrollY;
                 activeWrapper.style.transform = `translateY(${newScrollY}px)`;
                 updateScrollState();
@@ -253,21 +231,17 @@
                 const currentPageElement = document.querySelector('.page.active');
                 const visibleCheckableItems = currentPageElement.querySelectorAll('.checklist-item');
                 const checkedVisibleItems = [...visibleCheckableItems].filter(item => item.classList.contains('checked'));
-                
                 const totalVisible = visibleCheckableItems.length;
                 const checkedCount = checkedVisibleItems.length;
                 const isTabComplete = checkedCount === totalVisible && totalVisible > 0;
-                
                 const proceedElements = ['deployment-proceed', 'piloting-proceed'];
                 if (currentPage < proceedElements.length) {
                     const proceedElement = document.getElementById(proceedElements[currentPage]);
                     if (proceedElement) {
                         const wasHidden = proceedElement.style.display === 'none' || proceedElement.style.display === '';
                         proceedElement.style.display = isTabComplete ? 'table-row' : 'none';
-                        
                         if (isTabComplete && wasHidden) {
                             setTimeout(() => {
-                                updateScrollState();
                                 const messageRect = proceedElement.getBoundingClientRect();
                                 const containerRect = pageContent.getBoundingClientRect();
                                 if (messageRect.bottom > containerRect.bottom - 100) { 
@@ -278,7 +252,6 @@
                         }
                     }
                 }
-                
                 const nextPageBtn = document.getElementById('next-page-btn');
                 if (nextPageBtn) {
                     if (isTabComplete && currentPage < totalPages - 1) {
@@ -293,7 +266,6 @@
             function updateFooter() {
                 const checkedCount = document.querySelectorAll('.checklist-item.checked').length;
                 const isComplete = checkedCount === totalItems;
-
                 if (isComplete && currentPage === totalPages - 1) {
                     pagerControls.style.display = 'none';
                     nextChecklistBtn.style.display = 'block';
@@ -306,37 +278,36 @@
             function updateProgress() {
                 const checkedCount = document.querySelectorAll('.checklist-item.checked').length;
                 progressText.textContent = `${checkedCount} / ${totalItems} ITEMS COMPLETE`;
-                
                 checkTabCompletion();
-                
                 if (checkedCount === totalItems) {
                     progressText.textContent += ' -- CHECKLIST COMPLETE';
                     progressText.style.color = 'var(--complete-color)';
                 } else {
                     progressText.style.color = 'var(--dim-text-color)';
                 }
-                
                 updateFooter();
             }
 
             function showPage(pageIndex) {
                 pages.forEach((page, index) => {
                     page.classList.toggle('active', index === pageIndex);
+                    const scrollWrapper = page.querySelector('.scroll-wrapper');
+                    if (scrollWrapper) {
+                        scrollWrapper.style.transform = `translateY(${scrollPositions[index]}px)`;
+                    }
                 });
                 subTabs.forEach((tab, index) => tab.classList.toggle('active', index === pageIndex));
                 tabTitle.textContent = pageTitles[pageIndex];
                 pageIndicator.textContent = `${pageIndex + 1} / ${totalPages}`;
                 prevBtn.disabled = pageIndex === 0;
                 nextBtn.disabled = pageIndex === totalPages - 1;
-                
                 const nextPageBtn = document.getElementById('next-page-btn');
                 if (nextPageBtn) {
                     nextPageBtn.classList.remove('highlighted');
                 }
-                
+                updateFooter();
+                updateScrollState();
                 setTimeout(() => {
-                    updateFooter();
-                    updateScrollState();
                     updateProgress();
                 }, 50);
             }
@@ -345,6 +316,25 @@
                 item.addEventListener('click', () => {
                     item.classList.toggle('checked');
                     updateProgress();
+
+                    const activeWrapper = document.querySelector('.page.active .scroll-wrapper');
+                    const itemsOnCurrentPage = [...activeWrapper.querySelectorAll('.checklist-item')];
+                    const containerRect = pageContent.getBoundingClientRect();
+                    const lastVisibleItem = itemsOnCurrentPage.filter(i => {
+                        const itemRect = i.getBoundingClientRect();
+                        return itemRect.top >= containerRect.top && itemRect.bottom <= containerRect.bottom;
+                    }).pop();
+
+                    if (item === lastVisibleItem) {
+                        const allVisibleChecked = [...itemsOnCurrentPage].filter(i => {
+                             const itemRect = i.getBoundingClientRect();
+                             return itemRect.top >= containerRect.top && itemRect.bottom <= containerRect.bottom;
+                        }).every(i => i.classList.contains('checked'));
+
+                        if (allVisibleChecked && !scrollDownBtn.disabled) {
+                            setTimeout(() => scrollContent('down', 100), 300);
+                        }
+                    }
                 });
             });
 
@@ -378,17 +368,14 @@
                     body.classList.add('light-mode');
                 }
                 themeToggle.textContent = body.classList.contains('light-mode') ? 'DARK' : 'LIGHT';
-
                 const savedZoom = parseFloat(localStorage.getItem('rovChecklistZoom')) || 1.0;
                 currentZoom = savedZoom;
                 applyZoom(currentZoom);
-
                 updateProgress();
                 showPage(currentPage);
             }
 
             window.addEventListener('resize', updateScrollState);
-
             initialize();
         });
     </script>
